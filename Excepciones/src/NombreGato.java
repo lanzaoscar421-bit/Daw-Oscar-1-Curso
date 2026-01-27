@@ -1,3 +1,5 @@
+package src;
+
 public class NombreGato extends RuntimeException {
 
     public String nombre;

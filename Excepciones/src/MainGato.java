@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,20 +40,10 @@ public class MainGato {
 
         //Ejercicio 6
 
-        ArrayList<Gato> gatos = new ArrayList<>();
-
-        Gato nuevoGato = null;
-
-        int contador = 0;
-
-        while (contador < 5) {
-
-            System.out.println("Introduce los dato del gato: " + (contador+1));
+        
 
 
-        }
-
-        System.out.println("Inserte 5 gatos");
+        
 
 
 
