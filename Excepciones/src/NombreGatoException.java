@@ -1,10 +1,10 @@
 package src;
 
-public class NombreGato extends RuntimeException {
+public class NombreGatoException extends Exception {
 
     public String nombre;
-    public NombreGato(String message) {
-        super("El nombre del gato no puede tener menos de dos letras, Asi que se puso por defecto Michi");
+    public NombreGatoException(String message) {
+        super("El nombre del gato no puede tener menos de dos letras, Asi que se puso por defecto Michi\n");
         this.nombre = message;
     }
 

@@ -5,7 +5,7 @@ public class Gato {
     private String nombre;
     private int edad;
 
-    public Gato(String nombre, int edad) {
+    public Gato(String nombre, int edad) throws NombreGatoException, EdadGatoException {
         setNombre(nombre);
         setEdad(edad);
     }
@@ -14,9 +14,9 @@ public class Gato {
         return nombre;
     }
 
-    public void setNombre(String nombre) throws NombreGato {
+    public void setNombre(String nombre) throws NombreGatoException {
         if (nombre == null || nombre.length() < 3) {
-            throw new NombreGato("El nombre debe tener 3 letras minimo");
+            throw new NombreGatoException("El nombre debe tener 3 letras minimo");
         }
         this.nombre = nombre;
     }
@@ -25,10 +25,13 @@ public class Gato {
         return edad;
     }
 
-    public void setEdad(int edad) throws EdadGato {
-        if (edad < 0) {
-            throw new EdadGato(edad);
+    public void setEdad(int edad) throws EdadGatoException {
+        if (edad < 0 ) {
+            throw new EdadGatoException(edad);
+        }else if (edad > 22) {
+            throw new EdadGatoException(edad);
         }
+
         this.edad = edad;
     }
 
