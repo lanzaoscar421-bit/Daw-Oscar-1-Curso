@@ -12,4 +12,16 @@ public class Persona {
         this.fechaNacimiento = fechaNacimiento;
 
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
 }

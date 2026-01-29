@@ -6,15 +6,15 @@ import java.util.ArrayList;
 public class CuentaBancaria {
 
     private String iban;
-    private String titular;
+    private Cliente cliente;
     private double saldo;
     private ArrayList<Movimientos> nuevoMovimiento;
 
     //Constructor
     public CuentaBancaria(String iban, String titular) {
         this.iban = iban;
-        this.titular = titular;
         this.saldo = 0;
+        this.cliente = cliente;
         this.nuevoMovimiento = new ArrayList<>();
     }
 
@@ -23,8 +23,8 @@ public class CuentaBancaria {
         return iban;
     }
 
-    public String getTitular() {
-        return titular;
+    public Cliente getCliente() {
+        return cliente;
     }
 
     public double getSaldo() {
@@ -57,6 +57,11 @@ public class CuentaBancaria {
 
 
         saldo += cantidad;
+        nuevoMovimiento.add(new Movimientos(cantidad, "ingreso"));
+
+        if (cantidad > 3000){
+            throw new AvisarHaciendaException(cliente.getNombre(),iban,"ingreso superior a 3000");
+        }
 
 
 

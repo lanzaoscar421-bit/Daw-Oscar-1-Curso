@@ -1,9 +1,0 @@
-diff a/VideoDaw-Oscar/src/GestionVideoDaw.java b/VideoDaw-Oscar/src/GestionVideoDaw.java	(rejected hunks)
-@@ -33,7 +33,6 @@
- 
-         if (!sc.hasNextInt()) {
-             System.out.println("Introduce un número (no letras).");
--            sc.nextLine(); // Medida para usuarios
-             sc.nextLine();
-             continue;
-         }
