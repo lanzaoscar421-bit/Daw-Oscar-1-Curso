@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-//Link GitHub https://github.com/lanzaoscar421-bit/Proyectos/tree/main/DawBank-Oscar
+//Link GitHub
 
 public class DawBank {
 
@@ -11,7 +11,6 @@ public class DawBank {
         Scanner sc = new Scanner(System.in);
 
 
-        //Primero pondremos para que el usuario ponga sus datos
 
         System.out.println("*********************************");
         System.out.println("Bienvenido a tu Cuenta de banco🧃");
@@ -59,7 +58,7 @@ public class DawBank {
 
             if (!sc.hasNextInt()) {
                 System.out.println("Introduce un número (no letras).");
-                sc.nextLine(); // Medida para usuarios
+                sc.nextLine();
                 continue;
             }
 
@@ -70,8 +69,8 @@ public class DawBank {
                 case 1:
 
                     System.out.println("Esta es tu informacion de la cuenta");
-                    Oscar.InformacionCuenta();
-                    System.out.println(Oscar.InformacionCuenta());
+                    Oscar.toString();
+                    System.out.println(Oscar.toString());
 
                     break;
 
