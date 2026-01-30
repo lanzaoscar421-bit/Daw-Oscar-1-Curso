@@ -64,18 +64,27 @@ public class CuentaBancaria {
         }
 
 
-
-
-
     }
 
     //Retirar
 
-    public void retirar (double cantidad){
+    public void retirar (double cantidad) throws AvisarHaciendaException{
+
+        int limite = 3000;
 
         if(cantidad <= 0){
             System.out.println("Porfavor retire un minimo de dinero");
         }
+
+        if (cantidad >= limite){
+            throw new AvisarHaciendaException(cliente.getNombre(),iban,"retirada superior a 3000");
+        }
+
+
+        saldo -= cantidad;
+        nuevoMovimiento.add(new Movimientos(cantidad, "retirado"));
+
+
 
         }
 
@@ -84,7 +93,7 @@ public class CuentaBancaria {
     public String toString() {
         return "CuentaBancaria{" +
                 "iban='" + iban + '\'' +
-                ", titular='" + titular + '\'' +
+                ", titular='" + cliente + '\'' +
                 ", saldo=" + saldo +
                 ", nuevoMovimiento=" + nuevoMovimiento +
                 '}';

@@ -33,8 +33,6 @@ public class DawBank {
 
         CuentaBancaria Oscar = new CuentaBancaria(Iban, Titular);  //Creamos un objeto el cual es mi cuenta bancaria
 
-        int limite =  -50;
-
 
         int opcion = 0;
         while (opcion != 8){
@@ -83,7 +81,7 @@ public class DawBank {
 
                 case 3:
                     System.out.println("Este es tu Titular: ");
-                    System.out.println(Oscar.getTitular());
+                    System.out.println(Oscar.getCliente());
 
                     break;
                 case 4:
@@ -93,39 +91,12 @@ public class DawBank {
                     break;
                 case 5:
                     System.out.println("Inserte la cantidad de dinero que desee ");
-                    int cantidad = sc.nextInt();
-                    sc.nextLine();
-                    Oscar.ingresar(cantidad);
+
 
                     break;
                 case 6:
 
-                    System.out.println("Advertencia: ");
-                    System.out.println("Si tu cuenta llega a -50$");
-                    System.out.println("No te dejara retirar mas dinero");
-                    System.out.println("***************************");
 
-                    int cantidad2;
-                    do {
-                        System.out.println("Inserte la cantidad de dinero que desea retirar");
-                        cantidad2 = sc.nextInt();
-                    } while (cantidad2 < 0);
-                    int saldodespues = (int) (Oscar.getSaldo() - cantidad2);
-                    if (saldodespues >= limite) {
-                        Oscar.retirar(cantidad2);
-                        System.out.println("El limite de retirar dinero son hasta -50");
-                        System.out.println("No podras retirar mas dinero");
-                    }else {
-                        System.out.println("Estas en numeros negativos");
-                        System.out.println("Porfavor inserte Dinero");
-                        System.out.println("**************************");
-                    }
-                    sc.nextLine();
-
-                    if (Oscar.getSaldo() <= limite) {
-                        System.out.println("Ingresa dinero en la cuenta para porder retirarlo");
-                        return;
-                    }
 
                     break;
                 case 7:
