@@ -11,14 +11,13 @@ public class CuentaBancaria {
     private ArrayList<Movimientos> nuevoMovimiento;
 
     //Constructor
-    public CuentaBancaria(String iban, String titular) {
+    public CuentaBancaria(String iban, Cliente cliente) {
         this.iban = iban;
         this.saldo = 0;
         this.cliente = cliente;
         this.nuevoMovimiento = new ArrayList<>();
     }
-
-
+    
     public String getIban() {
         return iban;
     }
@@ -84,6 +83,9 @@ public class CuentaBancaria {
         saldo -= cantidad;
         nuevoMovimiento.add(new Movimientos(cantidad, "retirado"));
 
+        if (cantidad > 3000){
+            throw new AvisarHaciendaException(cliente.getNombre(),iban,"retirada superior a 3000");
+        }
 
 
         }
@@ -93,7 +95,7 @@ public class CuentaBancaria {
     public String toString() {
         return "CuentaBancaria{" +
                 "iban='" + iban + '\'' +
-                ", titular='" + cliente + '\'' +
+                ", cliente=" + cliente +
                 ", saldo=" + saldo +
                 ", nuevoMovimiento=" + nuevoMovimiento +
                 '}';

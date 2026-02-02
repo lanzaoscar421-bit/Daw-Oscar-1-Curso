@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -5,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class DawBank {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AvisarHaciendaException {
 
 
         Scanner sc = new Scanner(System.in);
@@ -28,14 +29,68 @@ public class DawBank {
             Iban = sc.nextLine();
         }while (!patronIban(Iban));
 
-        System.out.println("Inserte el Titular de tu Cuenta Bancaria");     //Creamos cuenta primero ya que el usuario es tonto y puede ingresar dinero sin tener cuenta
-        String Titular = sc.nextLine();
+        System.out.println("Inserte el Titular de tu Cuenta Bancaria");
+        String cliente = sc.nextLine();
 
-        CuentaBancaria Oscar = new CuentaBancaria(Iban, Titular);  //Creamos un objeto el cual es mi cuenta bancaria
+        String DNI;
+        do {
+            sc = new Scanner(System.in);
+            System.out.println("Inserte SU DNI");
+            System.out.println("El DNI consta de 8 números + 1 letra ");
+            System.out.println("Ejemplo: 12345678Z");
+            DNI = sc.nextLine();
+            if (!PatronDNI(DNI)){
+                System.out.println("Error, vuelve a insertar el DNI");
+            }
+        } while (!PatronDNI(DNI));
 
 
-        int opcion = 0;
-        while (opcion != 8){
+        LocalDate fechaNacimiento = null;
+
+        System.out.println("Inserte su fecha de nacimiento");
+        System.out.println("Ejemplo: 2007-12-06");
+
+        while (fechaNacimiento == null) {
+            try {
+                fechaNacimiento = LocalDate.parse(sc.nextLine());
+            } catch (Exception e) {
+                System.out.println("Por favor, inserte bien el formato (YYYY-MM-DD)");
+            }
+        }
+
+        String  numeroTelefono;
+        do {
+            sc = new Scanner(System.in);
+            System.out.println("Inserte SU numero de telefono");
+            System.out.println("Ejemplo: 612345678");
+            numeroTelefono = sc.nextLine();
+            if (!PatronTelefono(numeroTelefono)){
+                System.out.println("Error, vuelve a insertar el DNI");
+            }
+        } while (!PatronTelefono(numeroTelefono));
+
+        String eMail;
+        do {
+            sc = new Scanner(System.in);
+            System.out.println("Inserte Email");
+            System.out.println("Ejemplo: prueba.email23@gmail.com");
+            eMail = sc.nextLine();
+            if (!PatronEmail(eMail)){
+                System.out.println("Error, vuelve a insertar el DNI");
+            }
+        } while (!PatronEmail(eMail));
+
+
+        System.out.println("Por ultimo, inserte su direccion");
+        String direccion;
+        direccion = sc.nextLine();
+
+        CuentaBancaria Oscar = new CuentaBancaria(Iban,new Cliente(cliente,DNI,fechaNacimiento,numeroTelefono,eMail,direccion));
+
+
+
+        String opcion = "0";
+        while (opcion != "8"){
 
             System.out.println("Pulse 1 para acceder a los datos de la cuenta ");
 
@@ -54,57 +109,59 @@ public class DawBank {
             System.out.println("Pulse 8 para salir de este programa");
 
 
-            if (!sc.hasNextInt()) {
-                System.out.println("Introduce un número (no letras).");
-                sc.nextLine();
-                continue;
-            }
 
-            opcion = sc.nextInt();
-            sc.nextLine();
+            opcion = sc.nextLine();
 
             switch (opcion) {
-                case 1:
+                case "1":
 
                     System.out.println("Esta es tu informacion de la cuenta");
-                    Oscar.toString();
                     System.out.println(Oscar.toString());
 
                     break;
 
-                case 2:
+                case "2":
 
                     System.out.println("Este es tu Iban: ");
-                    System.out.println(Oscar.getIban()); //Ponemos Get para llamar al Iban de Cuenta Bancaria
+                    System.out.println(Oscar.getIban());
 
                     break;
 
-                case 3:
+                case "3":
                     System.out.println("Este es tu Titular: ");
                     System.out.println(Oscar.getCliente());
 
                     break;
-                case 4:
+                case "4":
                     System.out.println("Este es tu Saldo: ");
                     System.out.println(Oscar.getSaldo());
 
                     break;
-                case 5:
-                    System.out.println("Inserte la cantidad de dinero que desee ");
+                case "5":
+                    System.out.println("Inserte la cantidad de dinero que dese ");
+                    double cantidadIngresar;
+                    try {
+                        cantidadIngresar = sc.nextDouble();
+                        Oscar.ingresar(cantidadIngresar);
+                    }catch (AvisarHaciendaException e){
+                        System.out.println(e.getMessage());
+                    }
+
+
 
 
                     break;
-                case 6:
+                case "6":
 
 
 
                     break;
-                case 7:
+                case "7":
                     System.out.println("Sus movimientos fueron : ");
                     Oscar.informacionMovimientos();
 
                     break;
-                case 8:
+                case "8":
                     System.out.println("***************");
                     System.out.println("Adios, Buen Dia");
                     System.out.println("***************");
@@ -124,5 +181,17 @@ public class DawBank {
         String Patron = "[A-Z]{2}[0-9]{22}";
 
         return Pattern.matches(Patron,Iban);
+    }
+    static boolean PatronDNI(String DNI){
+        String Patron = "[0-9]{8}[A-Z]";
+        return Pattern.matches(Patron,DNI);
+    }
+    static boolean PatronTelefono(String telefono) {
+        String Patron = "[0-9]{9}";
+        return Pattern.matches(Patron, telefono);
+    }
+    static boolean PatronEmail(String email) {
+        String Patron = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
+        return Pattern.matches(Patron, email);
     }
 }

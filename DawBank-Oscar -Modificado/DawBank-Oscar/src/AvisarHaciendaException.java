@@ -1,4 +1,4 @@
-public class AvisarHaciendaException extends RuntimeException {
+public class AvisarHaciendaException extends Exception {
     private String titular;
     private String iban;
     private String operacion;
