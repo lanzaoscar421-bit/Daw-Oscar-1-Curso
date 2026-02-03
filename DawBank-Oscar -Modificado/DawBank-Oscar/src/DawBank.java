@@ -91,6 +91,7 @@ public class DawBank {
 
         String opcion = "0";
         while (opcion != "8"){
+            sc = new Scanner(System.in);
 
             System.out.println("Pulse 1 para acceder a los datos de la cuenta ");
 
@@ -113,6 +114,7 @@ public class DawBank {
             opcion = sc.nextLine();
 
             switch (opcion) {
+
                 case "1":
 
                     System.out.println("Esta es tu informacion de la cuenta");
@@ -143,21 +145,30 @@ public class DawBank {
                     try {
                         cantidadIngresar = sc.nextDouble();
                         Oscar.ingresar(cantidadIngresar);
-                    }catch (AvisarHaciendaException e){
+                    }catch (AvisarHaciendaException e){ //Menos 50 minimo
                         System.out.println(e.getMessage());
                     }
-
-
 
 
                     break;
                 case "6":
 
 
+                    System.out.println("Inserte el dinero que desea retirar");
+
+                    double retirarDinero;
+                    try {
+                        retirarDinero = sc.nextDouble();
+                        Oscar.retirar(retirarDinero);
+                    }catch (AvisarHaciendaException e){
+                        System.out.println(e.getMessage());
+                    }catch (CuentaException e){
+                        System.out.println(e.getMessage());
+                    }
+
 
                     break;
                 case "7":
-                    System.out.println("Sus movimientos fueron : ");
                     Oscar.informacionMovimientos();
 
                     break;

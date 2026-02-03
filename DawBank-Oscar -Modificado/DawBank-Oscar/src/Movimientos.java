@@ -20,7 +20,17 @@ public class Movimientos {
         this.Tipo=tipo;
     }
 
+    public String getTipo() {
+        return Tipo;
+    }
 
+    public double getCantidad() {
+        return Cantidad;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
     //Metodos
 
     @Override

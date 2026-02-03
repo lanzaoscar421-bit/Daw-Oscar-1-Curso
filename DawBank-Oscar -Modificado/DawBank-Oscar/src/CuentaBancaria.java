@@ -17,7 +17,7 @@ public class CuentaBancaria {
         this.cliente = cliente;
         this.nuevoMovimiento = new ArrayList<>();
     }
-    
+
     public String getIban() {
         return iban;
     }
@@ -35,6 +35,16 @@ public class CuentaBancaria {
 
     //InformacionMovimientos
     public void informacionMovimientos(){
+
+        if(nuevoMovimiento.isEmpty()){
+            System.out.println("No hay movimientos registrados.");
+        }
+        System.out.println("Listado de movimientos de la cuenta " + iban + ":");
+        for (Movimientos m : nuevoMovimiento) {
+            System.out.println("Fecha: " + m.getFecha() +
+                    ", Tipo: " + m.getTipo() +
+                    ", Cantidad: " + m.getCantidad() + "€");
+        }
 
 
     }
@@ -67,9 +77,11 @@ public class CuentaBancaria {
 
     //Retirar
 
-    public void retirar (double cantidad) throws AvisarHaciendaException{
+    public void retirar (double cantidad) throws AvisarHaciendaException, CuentaException{
 
         int limite = 3000;
+        int negativo = -50;
+
 
         if(cantidad <= 0){
             System.out.println("Porfavor retire un minimo de dinero");
@@ -78,14 +90,13 @@ public class CuentaBancaria {
         if (cantidad >= limite){
             throw new AvisarHaciendaException(cliente.getNombre(),iban,"retirada superior a 3000");
         }
+        if (cantidad < negativo){
+            throw new CuentaException("");
+        }
 
 
         saldo -= cantidad;
         nuevoMovimiento.add(new Movimientos(cantidad, "retirado"));
-
-        if (cantidad > 3000){
-            throw new AvisarHaciendaException(cliente.getNombre(),iban,"retirada superior a 3000");
-        }
 
 
         }
