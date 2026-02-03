@@ -131,6 +131,8 @@ public class DawBank {
 
                 case "3":
                     System.out.println("Este es tu Titular: ");
+                    System.out.println(Oscar.getCliente().getNombre());
+                    System.out.println("Informacion del titular");
                     System.out.println(Oscar.getCliente());
 
                     break;

@@ -106,7 +106,7 @@ public class CuentaBancaria {
     public String toString() {
         return "CuentaBancaria{" +
                 "iban='" + iban + '\'' +
-                ", cliente=" + cliente +
+                ", Titular=" + cliente.getNombre() + cliente +
                 ", saldo=" + saldo +
                 ", nuevoMovimiento=" + nuevoMovimiento +
                 '}';
