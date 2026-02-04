@@ -80,23 +80,23 @@ public class CuentaBancaria {
     public void retirar (double cantidad) throws AvisarHaciendaException, CuentaException{
 
         int limite = 3000;
-        int negativo = -50;
+
 
 
         if(cantidad <= 0){
             System.out.println("Porfavor retire un minimo de dinero");
         }
-
-        if (cantidad >= limite){
-            throw new AvisarHaciendaException(cliente.getNombre(),iban,"retirada superior a 3000");
-        }
-        if (cantidad < negativo){
+        if (saldo - cantidad < -50){
             throw new CuentaException("");
         }
 
 
         saldo -= cantidad;
         nuevoMovimiento.add(new Movimientos(cantidad, "retirado"));
+
+        if (cantidad >= limite){
+            throw new AvisarHaciendaException(cliente.getNombre(),iban,"retirada superior a 3000");
+        }
 
 
         }

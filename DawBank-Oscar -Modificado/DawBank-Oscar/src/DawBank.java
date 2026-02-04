@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -6,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class DawBank {
 
-    public static void main(String[] args) throws AvisarHaciendaException {
+    public static void main(String[] args) {
 
 
         Scanner sc = new Scanner(System.in);
@@ -18,6 +19,116 @@ public class DawBank {
         System.out.println("*********************************");
 
 
+        CuentaBancaria Oscar = datosUsuario(sc);
+
+
+        String opcion = "0";
+        while (opcion != "8"){
+            sc = new Scanner(System.in);
+
+            menu();
+
+
+            opcion = sc.nextLine();
+
+            switch (opcion) {
+
+                case "1":
+
+                    System.out.println("Esta es tu informacion de la cuenta");
+                    System.out.println(Oscar.toString());
+
+                    break;
+
+                case "2":
+
+                    System.out.println("Este es tu Iban: ");
+                    System.out.println(Oscar.getIban());
+
+                    break;
+
+                case "3":
+                    System.out.println("Este es tu Titular: ");
+                    System.out.println(Oscar.getCliente().getNombre());
+                    System.out.println("Informacion del titular");
+                    System.out.println(Oscar.getCliente());
+
+                    break;
+                case "4":
+                    System.out.println("Este es tu Saldo: ");
+                    System.out.println(Oscar.getSaldo());
+
+                    break;
+                case "5":
+                    System.out.println("Inserte la cantidad de dinero que dese ");
+                    double cantidadIngresar;
+                    try {
+                        cantidadIngresar = sc.nextDouble();
+                        Oscar.ingresar(cantidadIngresar);
+                    }catch (AvisarHaciendaException e){ //Menos 50 minimo
+                        System.out.println(e.getMessage());
+                    }catch (InputMismatchException e){
+                        System.out.println("Porfavor inserte un numero para ingresar");
+                    }
+
+
+                    break;
+                case "6":
+
+
+                    System.out.println("Inserte el dinero que desea retirar");
+
+                    double retirarDinero;
+                    try {
+                        retirarDinero = sc.nextDouble();
+                        Oscar.retirar(retirarDinero);
+                    }catch (AvisarHaciendaException e){
+                        System.out.println(e.getMessage());
+                    }catch (CuentaException e){
+                        System.out.println(e.getMessage());
+                    }catch (InputMismatchException e){
+                        System.out.println("Porfavor inserte un numero para retirar");
+                    }
+
+                    break;
+                case "7":
+                    Oscar.informacionMovimientos();
+
+                    break;
+                case "8":
+                    System.out.println("***************");
+                    System.out.println("Adios, Buen Dia");
+                    System.out.println("***************");
+                    break;
+                default:
+                    System.out.println("Porfavor inserte un numero");
+                    break;
+            }
+
+
+        }
+
+    }
+
+    private static void menu() {
+        System.out.println("Pulse 1 para acceder a los datos de la cuenta ");
+
+        System.out.println("Pulse 2 para ver el Iban");
+
+        System.out.println("Pulse 3 para mostrar el titular");
+
+        System.out.println("Pulse 4 para mostrar el saldo");
+
+        System.out.println("Pulse 5 para insertar dinero en la cuenta");
+
+        System.out.println("Pulse 6 para retirar Dinero");
+
+        System.out.println("Pulsa 7 para ver los movimientos realizados de la cuenta");
+
+        System.out.println("Pulse 8 para salir de este programa");
+    }
+
+    private static CuentaBancaria datosUsuario(Scanner sc) {
         System.out.println("Empecemos!!!");
         String Iban;
         do {
@@ -86,113 +197,13 @@ public class DawBank {
         direccion = sc.nextLine();
 
         CuentaBancaria Oscar = new CuentaBancaria(Iban,new Cliente(cliente,DNI,fechaNacimiento,numeroTelefono,eMail,direccion));
-
-
-
-        String opcion = "0";
-        while (opcion != "8"){
-            sc = new Scanner(System.in);
-
-            System.out.println("Pulse 1 para acceder a los datos de la cuenta ");
-
-            System.out.println("Pulse 2 para ver el Iban");
-
-            System.out.println("Pulse 3 para mostrar el titular");
-
-            System.out.println("Pulse 4 para mostrar el saldo");
-
-            System.out.println("Pulse 5 para insertar dinero en la cuenta");
-
-            System.out.println("Pulse 6 para retirar Dinero");
-
-            System.out.println("Pulsa 7 para ver los movimientos realizados de la cuenta");
-
-            System.out.println("Pulse 8 para salir de este programa");
-
-
-
-            opcion = sc.nextLine();
-
-            switch (opcion) {
-
-                case "1":
-
-                    System.out.println("Esta es tu informacion de la cuenta");
-                    System.out.println(Oscar.toString());
-
-                    break;
-
-                case "2":
-
-                    System.out.println("Este es tu Iban: ");
-                    System.out.println(Oscar.getIban());
-
-                    break;
-
-                case "3":
-                    System.out.println("Este es tu Titular: ");
-                    System.out.println(Oscar.getCliente().getNombre());
-                    System.out.println("Informacion del titular");
-                    System.out.println(Oscar.getCliente());
-
-                    break;
-                case "4":
-                    System.out.println("Este es tu Saldo: ");
-                    System.out.println(Oscar.getSaldo());
-
-                    break;
-                case "5":
-                    System.out.println("Inserte la cantidad de dinero que dese ");
-                    double cantidadIngresar;
-                    try {
-                        cantidadIngresar = sc.nextDouble();
-                        Oscar.ingresar(cantidadIngresar);
-                    }catch (AvisarHaciendaException e){ //Menos 50 minimo
-                        System.out.println(e.getMessage());
-                    }
-
-
-                    break;
-                case "6":
-
-
-                    System.out.println("Inserte el dinero que desea retirar");
-
-                    double retirarDinero;
-                    try {
-                        retirarDinero = sc.nextDouble();
-                        Oscar.retirar(retirarDinero);
-                    }catch (AvisarHaciendaException e){
-                        System.out.println(e.getMessage());
-                    }catch (CuentaException e){
-                        System.out.println(e.getMessage());
-                    }
-
-
-                    break;
-                case "7":
-                    Oscar.informacionMovimientos();
-
-                    break;
-                case "8":
-                    System.out.println("***************");
-                    System.out.println("Adios, Buen Dia");
-                    System.out.println("***************");
-                    break;
-                default:
-                    System.out.println("Porfavor inserte un numero");
-                    break;
-            }
-
-
-        }
-
-
-
+        return Oscar;
     }
+
+    //Metodos patrones
+
     static boolean patronIban (String Iban){
         String Patron = "[A-Z]{2}[0-9]{22}";
-
         return Pattern.matches(Patron,Iban);
     }
     static boolean PatronDNI(String DNI){
