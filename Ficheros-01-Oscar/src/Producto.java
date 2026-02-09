@@ -40,6 +40,12 @@ public class Producto {
         this.precio = precio;
     }
 
+    //
+
+    public String toFileString() {
+        return codigo + ";" + nombre + ";" + cantidad + ";" + precio;
+    }
+
     //Metodos
     @Override
     public String toString() {
