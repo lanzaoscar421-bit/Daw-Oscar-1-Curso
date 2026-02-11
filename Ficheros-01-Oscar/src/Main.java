@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -30,19 +31,25 @@ public class Main {
 
             switch (opcion) {
                 case "1":
-                    System.out.println("Inserte el codigo");
-                    String codigoInsert = sc.nextLine();
 
-                    System.out.println("Inserte el nombre");
-                    String nombreInsert = sc.nextLine();
+                    try {
+                        System.out.println("Inserte el codigo");
+                        String codigoInsert = sc.nextLine();
 
-                    System.out.println("Inserte La cantidad");
-                    int cantidadInsert = sc.nextInt();
+                        System.out.println("Inserte el nombre");
+                        String nombreInsert = sc.nextLine();
 
-                    System.out.println("Inserte el precio");
-                    double precioInsert = sc.nextDouble();
+                        System.out.println("Inserte La cantidad");
+                        int cantidadInsert = sc.nextInt();
 
-                    listaProductos.add(new Producto(codigoInsert, nombreInsert, cantidadInsert, precioInsert));
+                        System.out.println("Inserte el precio");
+                        double precioInsert = sc.nextDouble();
+
+                        listaProductos.add(new Producto(codigoInsert, nombreInsert, cantidadInsert, precioInsert));
+
+                    }catch (InputMismatchException e){
+                        System.out.println("Error, porfavor inserte bien los datos");
+                    }
 
                     System.out.println("Producto añadido");
 
@@ -103,6 +110,8 @@ public class Main {
             System.out.println("Productos guardados en fichero.");
         } catch (IOException e) {
             System.out.println("Error al guardar: " + e.getMessage());
+        }catch (InputMismatchException e){
+            System.out.println("Error al guardar, inserte bien los datos: " + e.getMessage());
         }
     }
 
