@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+//https://github.com/lanzaoscar421-bit/Daw-Oscar-1-Curso/tree/main/Ficheros-Oscar-Act/Ficheros-01-Oscar
 public class Main {
     public static void main(String[] args) throws IOException {
 

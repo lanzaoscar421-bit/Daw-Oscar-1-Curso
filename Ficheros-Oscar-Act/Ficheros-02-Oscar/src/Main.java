@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
+//https://github.com/lanzaoscar421-bit/Daw-Oscar-1-Curso/tree/main/Ficheros-Oscar-Act/Ficheros-02-Oscar
 public class Main {
     public static void main(String[] args) throws IOException {
 
@@ -26,7 +28,7 @@ public class Main {
             Menu();
 
 
-            opcion = sc.nextLine();matcher = {Matcher@1135} "java.util.regex.Matcher[pattern=.*(\r\n|[\n\r  ])|.+$ region=0,2 lastmatch=1\n]"… View
+            opcion = sc.nextLine();
 
 
             switch (opcion) {
