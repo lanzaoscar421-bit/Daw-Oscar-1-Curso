@@ -26,7 +26,7 @@ public class Main {
             Menu();
 
 
-            opcion = sc.nextLine();
+            opcion = sc.nextLine();matcher = {Matcher@1135} "java.util.regex.Matcher[pattern=.*(\r\n|[\n\r  ])|.+$ region=0,2 lastmatch=1\n]"… View
 
 
             switch (opcion) {
@@ -49,11 +49,12 @@ public class Main {
 
                         listaProductos.add(new Producto(codigoInsert, nombreInsert, cantidadInsert, precioInsert));
 
+                        System.out.println("Producto añadido");
+
                     }catch (InputMismatchException e){
                         System.out.println("Error, porfavor inserte bien los datos");
                     }
 
-                    System.out.println("Producto añadido");
 
                     break;
                 case "2":
@@ -65,7 +66,7 @@ public class Main {
                             System.out.println(p);
                         }
                     }
-                    
+
                     break;
                 case "3":
 
@@ -73,15 +74,18 @@ public class Main {
                     String codigoEliminar = sc.nextLine();
 
 
-                    boolean eliminado = listaProductos.remove(codigoEliminar);
+                    boolean eliminado = false;
 
-                    if (eliminado) {
-                        System.out.println("Producto eliminado");
-                    }else{
-                        System.out.println("No existe el producto para eliminar el producto");
+                    for (Producto p : listaProductos) {
+                        if (p.getCodigo().equals(codigoEliminar)) {
+                            listaProductos.remove(p);
+                            eliminado = true;
+                            break;
+                        }
                     }
 
                     break;
+
                 case "4":
 
                     try(FileOutputStream file = new FileOutputStream(path + fileName,true);
