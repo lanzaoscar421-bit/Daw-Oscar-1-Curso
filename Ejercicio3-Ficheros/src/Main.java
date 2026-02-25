@@ -16,15 +16,6 @@ public class Main {
 
         LinkedList<Libro> libros = new LinkedList<>();
 
-//        try (ObjectInputStream in = new ObjectInputStream(
-//                new FileInputStream(path + fileName))) {
-//
-//            libros = (LinkedList<Libro>) in.readObject();
-//            System.out.println("Libros cargados desde el fichero");
-//
-//        }catch (Exception e) {
-//            System.out.println("No hay ficheros");
-//        }
 
         String opcion = "";
 
