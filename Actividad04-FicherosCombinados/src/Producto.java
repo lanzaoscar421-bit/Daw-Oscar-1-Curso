@@ -25,6 +25,15 @@ public class Producto implements Serializable {
         this.AplicarDto = aplicarDto;
     }
 
+
+    public Producto(String referencia, String tipo, int cantidad, double precio) {
+        this.Referencia = referencia;
+        this.tipo = tipo;
+        this.Cantidad = cantidad;
+        this.precio = precio;
+
+    }
+
     @Override
     public String toString() {
         return "Producto{" +
@@ -37,5 +46,9 @@ public class Producto implements Serializable {
                 ", iva=" + iva +
                 ", AplicarDto=" + AplicarDto +
                 '}';
+    }
+
+    public String getReferencia() {
+        return Referencia;
     }
 }

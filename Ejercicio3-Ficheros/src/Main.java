@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.IllegalFormatCodePointException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -70,18 +71,22 @@ public class Main {
                     String isbnDele = sc.nextLine();
                     boolean eliminado = false;
 
+                    Libro libroEliminado = null;
+
                     for (Libro libro : libros) {
                         if(libro.getISBN().equals(isbnDele)){
-                            libros.remove(libro);
-                            eliminado = true;
+                            libroEliminado = libro;
+                            break;
                         }
                     }
 
-                    if(eliminado){
+                    if (libroEliminado != null) {
+                        libros.remove(libroEliminado);
                         System.out.println("Libro eliminado correctamente");
                     }else{
                         System.out.println("ISBN inexistente");
                     }
+
 
                     break;
                 case "4":

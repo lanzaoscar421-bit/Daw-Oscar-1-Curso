@@ -101,7 +101,7 @@ public class Iventario {
                 buffer.writeObject(producto);
             }
 
-            System.out.println("Producto guardado exitosamente");
+            System.out.println("Vinilo guardado exitosamente");
 
         }catch(IOException e){
             System.out.println("Error al abrir el archivo" + e.getMessage());
@@ -113,6 +113,8 @@ public class Iventario {
 
         do {
 
+            sc = new Scanner(System.in);//Reiniciar Scanner
+
             Menu();
 
 
@@ -120,6 +122,9 @@ public class Iventario {
 
 
             switch (opcion) {
+
+
+
                 case "1":
 
                     System.out.println("Productos registrados:");
@@ -127,24 +132,55 @@ public class Iventario {
                     for(Producto producto : productos) {
                         System.out.println(producto.toString());
                     }
-
-
                     break;
                 case "2":
 
+                    System.out.println("Para eliminar el Producto/Vinilo, debe insertar Su numero de referencia");
+                    String referenciaDel = sc.nextLine();
+                    boolean eliminado = false;
+
+                    Producto productoEliminado = null;
+
+                    for(Producto producto : productos) {
+                        if (producto.getReferencia().equals(referenciaDel)) {
+                            productoEliminado = producto;
+                            break;
+                        }
+                    }
+
+                    if (productoEliminado != null) {
+                        productos.remove(productoEliminado);
+                        System.out.println(" eliminado exitosamente");
+                    }else{
+                        System.out.println("Hubo un error, vuelva a inserta la referencia");
+                    }
 
                     break;
                 case "3":
+                    System.out.println("Para registar un producto, inserte su referencia");
+                    String referenciaAdd = sc.nextLine();
+                    System.out.println("Ahora inserte el tipo");
+                    String tipoAdd = sc.nextLine();
+                    System.out.println("Ahora inserte el cantidad");
+                    int cantidadAdd = sc.nextInt();
+                    System.out.println("Ahora inserte el precio");
+                    double precioAdd = sc.nextDouble();
 
+                    Producto productonuevo = new Producto(referenciaAdd, tipoAdd, cantidadAdd, precioAdd);
+                    productos.add(productonuevo);
 
+                    try (FileOutputStream file = new FileOutputStream(path+fileName2,fileMode2);
+                    ObjectOutputStream buffer = new ObjectOutputStream(file)){
+                        buffer.writeObject(productonuevo);
 
+                    }catch(IOException e){
+                        System.out.println("Error al abrir el archivo" + e.getMessage());
+                    }
                     break;
                 case "4":
 
-                    break;
-                case "5":
-
                     System.out.println("Adios.");
+
                     break;
 
                 default:
@@ -161,8 +197,7 @@ public class Iventario {
     private static void Menu() {
         System.out.println("1. Mostrar Productos en el Inventario.");
         System.out.println("2. Eliminar Producto por referencia.");
-        System.out.println("3. Guardar y Salir (inventario.dat).");
-        System.out.println("4. Registrar producto en el Inventario."); //(no permitir referencias repetidas)
-        System.out.println("5. Guardar y Salir");
+        System.out.println("3. Registrar producto en el Inventario.");
+        System.out.println("4. Salir"); //(no permitir referencias repetidas)
     }
 }
