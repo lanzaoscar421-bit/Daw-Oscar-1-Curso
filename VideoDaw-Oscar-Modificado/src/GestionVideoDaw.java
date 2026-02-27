@@ -1,8 +1,15 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import Excepciones.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -10,6 +17,17 @@ public class GestionVideoDaw {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+
+        //Almacen Cliente
+        final String pathClientes = "./src/Resources/";
+        final String fileNameClientes = "Clientes.dat";
+        boolean fileModeCliente = false;
+
+
+        //Almacen Peliculas
+        final String pathPeliculas = "./src/Resources/";
+        final String fileNamePeliculas = "Peliculas.dat";
+        boolean fileModePeliculas = false;
 
         //Link
 
@@ -41,15 +59,15 @@ public class GestionVideoDaw {
 
             sc = new Scanner(System.in); // Reiniciar Scanner
 
-            System.out.println("Pulse 0 para ver informacion del los videoclubs");
+            System.out.println("Pulse 0 ver informacion del los videoclubs");
             System.out.println("Pulse 1 crear y registrar VideoClub en la franquicia.");
-            System.out.println("Pulse 2 para registrar pelicula en VideoClub");
-            System.out.println("Pulse 3 para crear y registrar cliente en video club");
-            System.out.println("Pulsa 4 para alquilar Pelicula");
-            System.out.println("Pulsa 5 para devolver pelicula");
-            System.out.println("Pulsa 6 para dar de baja al cliente");
-            System.out.println("Pulsa 7 para dar de baja a una pelicula");
-            System.out.println("Pulsa 8 para ver la informacion de usuarios y peliculas");
+            System.out.println("Pulse 2 crear y registrar pelicula");
+            System.out.println("Pulse 3 crear y registrar cliente");
+            System.out.println("Pulsa 4 alquilar Pelicula");
+            System.out.println("Pulsa 5 devolver pelicula");
+            System.out.println("Pulsa 6 dar de baja cliente");
+            System.out.println("Pulsa 7 dar de baja pelicula");
+            System.out.println("Pulsa 8 ver informacion usuarios y peliculas");
             System.out.println("Pulsa 9 si desea Salir");
 
             opcion = sc.nextLine();
@@ -68,6 +86,7 @@ public class GestionVideoDaw {
                     do {
                         System.out.println("Primero inserte el CIF del VideoClub:");
                         System.out.println("Te recuerdo que el CIF valido para la empresa (Ejemplo: A12345678)");
+                        System.out.println("EL Cif no puede ser repetido");
                         cifAdd = sc.nextLine();
                     } while (!PatronCIF(cifAdd));
 
@@ -82,14 +101,84 @@ public class GestionVideoDaw {
                         VideoDaw nuevoVideoDaw = new VideoDaw(cifAdd, NombreVideoDawadd, DireccionVideoDawadd);
                         videoDaws.add(nuevoVideoDaw);
                         System.out.println("VideoClub añadido correctamente");
-                    }catch (Validaciones e) {
+                    }catch (ValidacionesException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case "2":
-                    break;
 
+
+
+                    break;
                 case "3":
+
+                    String dniAdd;
+                    System.out.println("Primero inserte su DNI");
+                    do {
+                        System.out.println("El DNI consta de 8 números + 1 letra ");
+                        System.out.println("Ejemplo: 12345678Z");
+                        System.out.println("El Dni no se puede repetir");
+                        dniAdd = sc.nextLine();
+                    } while (!PatronDNI(dniAdd));
+
+                    System.out.println("Inserte su nombre");
+                    String NombreAdd = sc.nextLine();
+
+                    System.out.println("Ahora inserte la direccion:");
+                    String direccionAdd = sc.nextLine();
+
+                    LocalDate fechaNacimiento = null;
+
+                    System.out.println("Inserte su fecha de nacimiento");
+                    System.out.println("Ejemplo de formato: 2007-12-06");
+
+                    while (fechaNacimiento == null) {
+                        try {
+                            fechaNacimiento = LocalDate.parse(sc.nextLine());
+
+                        } catch (Exception e) {
+                            System.out.println("Por favor, inserte bien el formato (YYYY-MM-DD)");
+                        }
+                    }
+
+
+                    String numSocio;
+                    do {
+                        System.out.println("El numero de socio no se podra repetir");
+                        System.out.println("Introduce el numero de Socio del VideoClub");
+                        System.out.println("El formato el el siguiente:");
+                        System.out.println("Ejemplo:  S-0001");
+                        numSocio = sc.nextLine();
+                    }while (!PatronNumSocio(numSocio));
+
+
+
+                    try {
+                        videoDawPrimero.validarDni(dniAdd);
+
+                        videoDawPrimero.validarNumSocio(numSocio);
+
+                        Cliente nuevocliente = new Cliente(dniAdd,NombreAdd,direccionAdd,fechaNacimiento,numSocio);
+
+                        videoDawPrimero.addCliente(nuevocliente);
+
+
+                        try (FileOutputStream file = new FileOutputStream(pathClientes+fileNameClientes,fileModeCliente);
+                             ObjectOutputStream buffer = new ObjectOutputStream(file)){
+
+                            buffer.writeObject(nuevocliente);
+
+                        }catch (IOException e){
+                            System.err.println(e.getMessage());
+                        }
+
+                        System.out.println("Cliente insertado correctamente\n");
+
+                    }catch (ValidacionesException e){
+                        System.out.println(e.getMessage());
+                    }
+
+
                     break;
 
                 case "4":
@@ -105,6 +194,7 @@ public class GestionVideoDaw {
                     break;
 
                 case "8":
+                    videoDawPrimero.infoCliente();
                     break;
 
                 case "9":
@@ -126,14 +216,19 @@ public class GestionVideoDaw {
         String Patron = "[0-9]{8}[A-Z]";
         return Pattern.matches(Patron,DNI);
     }
+    static boolean PatronNumSocio(String numeroSocio){
+        String Patron = "S-[0-9]{4}";
+        return Pattern.matches(Patron, numeroSocio);
+    }
 
-    private static void validarCif(LinkedList<VideoDaw> videoDaws, String cif) throws Validaciones {
-
+    private static void validarCif(LinkedList<VideoDaw> videoDaws, String cif) throws ValidacionesException {
         for (VideoDaw videoDaw : videoDaws) {
             if(videoDaw.getCif().equals(cif)) {
-                throw new Validaciones("");
+                throw new ValidacionesException("Este CIF ya exsiste");
             }
         }
     }
+
+
 
 }
