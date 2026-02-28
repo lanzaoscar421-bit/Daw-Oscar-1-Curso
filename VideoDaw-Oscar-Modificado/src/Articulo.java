@@ -7,7 +7,7 @@ public class Articulo {
     private LocalDate fechaAlquiler;
     private LocalDate fechaBaja;
 
-    public Articulo(String codigo, String titulo, LocalDate fechaAlquiler, LocalDate fechaBaja) {
+    public Articulo(String codigo, String titulo) {
         this.codigo = codigo;
         this.titulo = titulo;
         this.fechaAlquiler = fechaAlquiler;

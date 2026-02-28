@@ -14,7 +14,7 @@ import Excepciones.*;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class GestionVideoDaw {
-    public static void main(String[] args) {
+    public static <buffer> void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
@@ -107,8 +107,61 @@ public class GestionVideoDaw {
                     break;
                 case "2":
 
+                    String codigoPeliculaADD;
+                    do {
+                        System.out.println("El codigo de la pelicula no se podra repetir");
+                        System.out.println("Introduce el numero de la pelicula");
+                        System.out.println("El formato el el siguiente:");
+                        System.out.println("Ejemplo:  P-0001");
+                        codigoPeliculaADD = sc.nextLine();
+                    }while (!PatronCodigoPeli(codigoPeliculaADD));
+
+                    System.out.println("Ahora Inserte el titulo de la pelicula");
+                    String tituloPeliculaAdd = sc.nextLine();
 
 
+                    System.out.println("Ahora inserte el Genero acontinuacion te pondre los disponibles");
+                    for (Genero g : Genero.values()) {
+                        System.out.println("- " + g);
+                    }
+
+                    Genero genero = null;
+
+                    while (genero == null){
+                        System.out.println("Escribe bien el nombre del genero");
+                        String entrada = sc.nextLine().toUpperCase();
+
+
+                        for (Genero g : Genero.values()){
+                            if (g.name().equalsIgnoreCase(entrada)){
+                                genero = g;
+                                break;
+                            }
+                        }
+                        if (genero == null){
+                            System.out.println("El genero que pusiste es invalido");
+                        }
+                    }
+
+                    try {
+                        videoDawPrimero.validarCodigoPelicula(codigoPeliculaADD);
+
+                        Pelicula nuevapelicula = new Pelicula(codigoPeliculaADD,tituloPeliculaAdd,genero);
+                        videoDawPrimero.addPelicula(nuevapelicula);
+
+                        try (FileOutputStream file = new FileOutputStream(pathPeliculas+fileNamePeliculas,fileModePeliculas);
+                        ObjectOutputStream buffer = new ObjectOutputStream(file)){
+                            buffer.writeObject(nuevapelicula);
+
+                            System.out.println("Se añadio correctamente al Array y al almacen");
+
+                        }catch (IOException e){
+                            System.out.println(e.getMessage());
+                        }
+
+                    }catch (ValidacionesException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "3":
 
@@ -152,7 +205,6 @@ public class GestionVideoDaw {
                     }while (!PatronNumSocio(numSocio));
 
 
-
                     try {
                         videoDawPrimero.validarDni(dniAdd);
 
@@ -178,10 +230,20 @@ public class GestionVideoDaw {
                         System.out.println(e.getMessage());
                     }
 
-
                     break;
-
                 case "4":
+
+
+                    System.out.println("Inserte el numero de socio");
+                    String numeroSocioAlquilar = sc.nextLine();
+
+                    System.out.println("Inserte el codigo de la pelicula");
+                    String codigoPeliculaAlquilar = sc.nextLine();
+
+
+
+
+
                     break;
 
                 case "5":
@@ -195,6 +257,8 @@ public class GestionVideoDaw {
 
                 case "8":
                     videoDawPrimero.infoCliente();
+                    System.out.println("");
+                    videoDawPrimero.infoPeliculas();
                     break;
 
                 case "9":
@@ -220,6 +284,10 @@ public class GestionVideoDaw {
         String Patron = "S-[0-9]{4}";
         return Pattern.matches(Patron, numeroSocio);
     }
+    static boolean PatronCodigoPeli(String codidoPeli){
+        String Patron = "P-[0-9]{4}";
+        return Pattern.matches(Patron, codidoPeli);
+    }
 
     private static void validarCif(LinkedList<VideoDaw> videoDaws, String cif) throws ValidacionesException {
         for (VideoDaw videoDaw : videoDaws) {
@@ -228,7 +296,5 @@ public class GestionVideoDaw {
             }
         }
     }
-
-
 
 }

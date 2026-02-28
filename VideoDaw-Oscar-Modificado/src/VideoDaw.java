@@ -114,6 +114,15 @@ public class VideoDaw {
         return resultado;
     }
 
+//    public Cliente buscarCliente (String numeroSocio){
+//
+//        for (Cliente cliente : clientes){
+//            if (cliente.getNumSocio().equalsIgnoreCase(numeroSocio){
+//
+//            }
+//        }
+//    }
+
 
     //Peliculas
     public void addPelicula(Pelicula pelicula){
@@ -130,6 +139,20 @@ public class VideoDaw {
             System.out.println(pelicula);
         }
     }
+
+    public boolean validarCodigoPelicula(String codigoPelicula) throws ValidacionesException {
+        boolean resultado = false;
+
+        for (Pelicula pelicula : peliculas){
+            if (pelicula.getCodigo().equals(codigoPelicula)) {
+                throw new ValidacionesException("El codigo de pelicula no se puede repetir");
+            }
+        }
+        return resultado;
+    }
+
+
+
 
 
 }

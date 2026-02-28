@@ -1,0 +1,25 @@
+import java.time.LocalDateTime;
+import java.util.Locale;
+
+public class Videojuego extends Articulo{
+
+    private GeneroVideoJuego genero;
+    private LocalDateTime FechaAlquiler;
+    private boolean isAquilida;
+
+    public Videojuego(String codigo, String titulo, GeneroVideoJuego genero, LocalDateTime fechaAlquiler, boolean isAquilida) {
+        super(codigo, titulo);
+        this.genero = genero;
+        FechaAlquiler = fechaAlquiler;
+        this.isAquilida = isAquilida;
+    }
+
+    @Override
+    public String toString() {
+        return "Videojuego{" +
+                "genero=" + genero +
+                ", FechaAlquiler=" + FechaAlquiler +
+                ", isAquilida=" + isAquilida +
+                '}';
+    }
+}

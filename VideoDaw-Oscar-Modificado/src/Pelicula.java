@@ -1,15 +1,19 @@
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Pelicula extends Articulo{
+public class Pelicula extends Articulo implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 6340542229054207743L;
     private Genero genero;
     private LocalDate fechaAlquiler;
     private boolean isAlquilada;
 
-    public Pelicula(String codigo, String titulo, LocalDate fechaAlquiler, LocalDate fechaBaja, Genero genero, LocalDate fechaAlquiler1, boolean isAlquilada) {
-        super(codigo, titulo, fechaAlquiler, fechaBaja);
+    public Pelicula(String codigo, String titulo, Genero genero) {
+        super(codigo, titulo);
         this.genero = genero;
-        this.fechaAlquiler = fechaAlquiler1;
+        this.fechaAlquiler = fechaAlquiler;
         this.isAlquilada = isAlquilada;
     }
 
