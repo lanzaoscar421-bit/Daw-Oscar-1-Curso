@@ -41,4 +41,18 @@ public class Cliente extends Persona implements Serializable {
                 "\nArtículos alquilados: " + ArticulosAlquilados +
                 "\n===================";
     }
+
+
+    public boolean sumarPelicula(Pelicula p){
+        boolean resultado = false;
+        if (p!=null){
+
+            
+
+
+
+
+        }
+        return resultado;
+    }
 }

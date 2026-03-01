@@ -17,6 +17,7 @@ public class Pelicula extends Articulo implements Serializable {
         this.isAlquilada = isAlquilada;
     }
 
+
     public Genero getGenero() {
         return genero;
     }
@@ -29,6 +30,8 @@ public class Pelicula extends Articulo implements Serializable {
     public boolean isAlquilada() {
         return isAlquilada;
     }
+
+
 
     @Override
     public String toString() {

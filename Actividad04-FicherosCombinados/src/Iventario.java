@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Iventario {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        //Link https://github.com/lanzaoscar421-bit/Daw-Oscar-1-Curso/tree/main/Actividad04-FicherosCombinados
 
 
 

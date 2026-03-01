@@ -123,6 +123,19 @@ public class VideoDaw {
 //        }
 //    }
 
+    //Metodo alquilar pelicula a cliente
+
+    public boolean alquilarPeli(Cliente c, Pelicula p){
+        boolean resultado = false;
+
+        if(p!=null && c!=null && p.isAlquilada() == false && p.getFechaBaja() == null && c.getFechaBaja() == null){
+
+            //
+        }
+
+        return resultado;
+    }
+
 
     //Peliculas
     public void addPelicula(Pelicula pelicula){
