@@ -4,8 +4,9 @@ import java.time.LocalDate;
 
 public class Cliente extends Persona implements Serializable {
 
+
     @Serial
-    private static final long serialVersionUID = 2157658521154845783L;
+    private static final long serialVersionUID = 6987292209768525570L;
     private String numSocio;
     private LocalDate fechaBaja;
     private String ArticulosAlquilados;
@@ -29,6 +30,11 @@ public class Cliente extends Persona implements Serializable {
         return ArticulosAlquilados;
     }
 
+    public Cliente setFechaBaja(LocalDate fechaBaja) {
+        this.fechaBaja = fechaBaja;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "\n===== Cliente =====" +
@@ -43,16 +49,4 @@ public class Cliente extends Persona implements Serializable {
     }
 
 
-    public boolean sumarPelicula(Pelicula p){
-        boolean resultado = false;
-        if (p!=null){
-
-            
-
-
-
-
-        }
-        return resultado;
-    }
 }

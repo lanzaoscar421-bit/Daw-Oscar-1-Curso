@@ -30,6 +30,11 @@ public class Articulo {
         return fechaBaja;
     }
 
+
+    public void setFechaBaja(LocalDate fechaBaja) {
+        this.fechaBaja = fechaBaja;
+    }
+
     @Override
     public String toString() {
         return "Articulo{" +

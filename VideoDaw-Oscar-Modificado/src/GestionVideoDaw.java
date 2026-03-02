@@ -2,11 +2,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import Excepciones.*;
@@ -101,7 +97,7 @@ public class GestionVideoDaw {
                         VideoDaw nuevoVideoDaw = new VideoDaw(cifAdd, NombreVideoDawadd, DireccionVideoDawadd);
                         videoDaws.add(nuevoVideoDaw);
                         System.out.println("VideoClub añadido correctamente");
-                    }catch (ValidacionesException e) {
+                    }catch (ValidacionCIF e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -159,7 +155,7 @@ public class GestionVideoDaw {
                             System.out.println(e.getMessage());
                         }
 
-                    }catch (ValidacionesException e){
+                    }catch (ValidacionCodPelicula e){
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -206,55 +202,95 @@ public class GestionVideoDaw {
 
 
                     try {
+
+                        videoDawPrimero.validacioMayoriaEdad(fechaNacimiento);
+
+                        videoDawPrimero.validarDni_NumSocio(numSocio, dniAdd);
+
                         videoDawPrimero.validarDni(dniAdd);
 
                         videoDawPrimero.validarNumSocio(numSocio);
 
-                        Cliente nuevocliente = new Cliente(dniAdd,NombreAdd,direccionAdd,fechaNacimiento,numSocio);
+                        Cliente nuevocliente = new Cliente(dniAdd, NombreAdd, direccionAdd, fechaNacimiento, numSocio);
 
                         videoDawPrimero.addCliente(nuevocliente);
 
 
-                        try (FileOutputStream file = new FileOutputStream(pathClientes+fileNameClientes,fileModeCliente);
-                             ObjectOutputStream buffer = new ObjectOutputStream(file)){
+                        try (FileOutputStream file = new FileOutputStream(pathClientes + fileNameClientes, fileModeCliente);
+                             ObjectOutputStream buffer = new ObjectOutputStream(file)) {
 
                             buffer.writeObject(nuevocliente);
 
-                        }catch (IOException e){
+                        } catch (IOException e) {
                             System.err.println(e.getMessage());
                         }
 
                         System.out.println("Cliente insertado correctamente\n");
 
-                    }catch (ValidacionesException e){
+                    }catch (ValidacionEdad e) {
+                            System.out.println(e.getMessage());
+                    }catch (ValidacionDNI_NumSocio e){
+                        System.out.println(e.getMessage());
+                    }catch (ValidacionDNI e){
+                        System.out.println(e.getMessage());
+                    }catch (ValidacionNumSocio e) {
                         System.out.println(e.getMessage());
                     }
+
 
                     break;
                 case "4":
 
 
-                    System.out.println("Inserte el numero de socio");
-                    String numeroSocioAlquilar = sc.nextLine();
-
-                    System.out.println("Inserte el codigo de la pelicula");
-                    String codigoPeliculaAlquilar = sc.nextLine();
-
-
-
-
-
+//                    System.out.println("Inserte el numero de socio");
+//                    String numeroSocioAlquilar = sc.nextLine();
+//
+//                    System.out.println("Inserte el codigo de la pelicula");
+//                    String codigoPeliculaAlquilar = sc.nextLine();
 
 
                     break;
 
                 case "5":
-                    break;
 
+
+                    break;
                 case "6":
+
+                    Cliente clienteSeleccionado;
+                    boolean resultadoClienteBaja;
+
+                    System.out.println("Inserte el numero de socio para darlo de baja");
+                    videoDawPrimero.infoCliente();
+                    String numSocioBaja = sc.nextLine();
+
+                    clienteSeleccionado = videoDawPrimero.buscarCliente(numSocioBaja);
+                    resultadoClienteBaja = videoDawPrimero.bajaCliente(clienteSeleccionado);
+                    if (resultadoClienteBaja) {
+                        System.out.println("Este socio se dio de baja");
+                    }else{
+                        System.out.println("Hubo fallo, mire mejor el numero del socio");
+                    }
                     break;
 
                 case "7":
+                    Pelicula peliculaSeleccionada;
+                    boolean resultadoPeliculaBaja;
+
+                    System.out.println("Inserte el codigo de pelicula para darla de baja");
+                    videoDawPrimero.infoPeliculas();
+                    String numeroPeliculaBaja = sc.nextLine();
+
+
+                    peliculaSeleccionada = videoDawPrimero.buscarPelicula(numeroPeliculaBaja);
+                    resultadoPeliculaBaja = videoDawPrimero.bajaPelicula(peliculaSeleccionada);
+
+
+                    if (resultadoPeliculaBaja) {
+                        System.out.println("Este pelicula se dio de baja");
+                    }else{
+                        System.out.println("Hubo fallo, mire mejor el numero de pelicula");
+                    }
                     break;
 
                 case "8":
@@ -291,10 +327,10 @@ public class GestionVideoDaw {
         return Pattern.matches(Patron, codidoPeli);
     }
 
-    private static void validarCif(LinkedList<VideoDaw> videoDaws, String cif) throws ValidacionesException {
+    private static void validarCif(LinkedList<VideoDaw> videoDaws, String cif) throws ValidacionCIF {
         for (VideoDaw videoDaw : videoDaws) {
             if(videoDaw.getCif().equals(cif)) {
-                throw new ValidacionesException("Este CIF ya exsiste");
+                throw new ValidacionCIF("Este CIF ya exsiste");
             }
         }
     }

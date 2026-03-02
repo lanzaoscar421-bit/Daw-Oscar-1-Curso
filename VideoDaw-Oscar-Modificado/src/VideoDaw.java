@@ -1,12 +1,7 @@
-import Excepciones.ValidacionesException;
+import Excepciones.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -76,9 +71,14 @@ public class VideoDaw {
 
     public void infoCliente(){
 
-        for(Cliente cliente : clientes){
-            System.out.println(cliente);
+        if(clientes.isEmpty()){
+            System.out.println("No existen clientes");
+        }else{
+            for(Cliente cliente : clientes){
+                System.out.println(cliente);
+            }
         }
+
     }
 
     private boolean comprobacionEdad (Cliente c) {
@@ -92,23 +92,23 @@ public class VideoDaw {
         return mayorEdad;
     }
 
-    public boolean validarDni(String dni) throws ValidacionesException {
+    public boolean validarDni(String dni) throws ValidacionDNI {
         boolean resultado = false;
 
         for (Cliente cliente : clientes) {
             if (cliente.getDni().equalsIgnoreCase(dni)) {
-                throw new ValidacionesException("El dni ya exsiste en el sistema");
+                throw new ValidacionDNI("El dni ya exsiste en el sistema");
             }
         }
         return resultado;
     }
 
-    public boolean validarNumSocio(String numSocio) throws ValidacionesException {
+    public boolean validarNumSocio(String numSocio) throws ValidacionNumSocio {
         boolean resultado = false;
 
         for (Cliente cliente : clientes) {
             if (cliente.getNumSocio().equals(numSocio)) {
-                throw new ValidacionesException("El numero de Socio ya existe en el sistema");
+                throw new ValidacionNumSocio("El numero de Socio ya existe en el sistema");
             }
         }
         return resultado;
@@ -136,6 +136,56 @@ public class VideoDaw {
         return resultado;
     }
 
+    public boolean bajaCliente(Cliente cliente){
+
+        boolean resultado = false;
+
+        if(cliente !=null && cliente.getFechaBaja() == null) {
+            cliente.setFechaBaja(LocalDate.now());
+            resultado = true;
+        }
+
+        return resultado;
+    }
+
+    public Cliente buscarCliente (String numSocio){
+        for (Cliente cliente : clientes) {
+            if (cliente.getNumSocio().equalsIgnoreCase(numSocio)) {
+                return cliente;
+            }
+        }
+        return null;
+    }
+
+
+    public void validarDni_NumSocio(String numSocio, String dni) throws ValidacionDNI_NumSocio {
+
+        if (numSocio == null || dni == null) {
+            return;
+        }
+        for (Cliente cliente : clientes) {
+            if(cliente.getNumSocio().equals(numSocio)&&cliente.getDni().equals(dni)){
+                throw new ValidacionDNI_NumSocio("");
+            }
+        }
+    }
+
+    public boolean validacioMayoriaEdad(LocalDate fechaNacimiento) throws ValidacionEdad {
+
+        int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
+
+        if (edad < 18) {
+            throw new ValidacionEdad("No se puede ser menor de edad");
+        }
+
+        return true;
+
+    }
+
+
+
+
+    //
 
     //Peliculas
     public void addPelicula(Pelicula pelicula){
@@ -148,20 +198,47 @@ public class VideoDaw {
 
     public void infoPeliculas(){
 
-        for(Pelicula pelicula : peliculas){
-            System.out.println(pelicula);
+
+        if (peliculas.isEmpty()){
+            System.out.println("No existen peliculas");
+        }else{
+            for(Pelicula pelicula : peliculas){
+                System.out.println(pelicula);
+            }
         }
+
     }
 
-    public boolean validarCodigoPelicula(String codigoPelicula) throws ValidacionesException {
+    public boolean validarCodigoPelicula(String codigoPelicula) throws ValidacionCodPelicula {
         boolean resultado = false;
 
         for (Pelicula pelicula : peliculas){
             if (pelicula.getCodigo().equals(codigoPelicula)) {
-                throw new ValidacionesException("El codigo de pelicula no se puede repetir");
+                throw new ValidacionCodPelicula("El codigo de pelicula no se puede repetir");
             }
         }
         return resultado;
+    }
+
+    public boolean bajaPelicula(Pelicula pelicula){
+
+        boolean resultado = false;
+
+        if(pelicula!=null && pelicula.getFechaBaja() == null) {
+            pelicula.setFechaBaja(LocalDate.now());
+            resultado = true;
+        }
+
+        return resultado;
+    }
+
+    public Pelicula buscarPelicula (String codPelicula){
+        for (Pelicula pelicula : peliculas) {
+            if (pelicula.getCodigo().equalsIgnoreCase(codPelicula)) {
+                return pelicula;
+            }
+        }
+        return null;
     }
 
 

@@ -4,8 +4,9 @@ import java.time.LocalDate;
 
 public class Pelicula extends Articulo implements Serializable {
 
+
     @Serial
-    private static final long serialVersionUID = 6340542229054207743L;
+    private static final long serialVersionUID = 5101913819089493166L;
     private Genero genero;
     private LocalDate fechaAlquiler;
     private boolean isAlquilada;
@@ -31,7 +32,10 @@ public class Pelicula extends Articulo implements Serializable {
         return isAlquilada;
     }
 
-
+    @Override
+    public void setFechaBaja(LocalDate fechaBaja) {
+        super.setFechaBaja(fechaBaja);
+    }
 
     @Override
     public String toString() {
