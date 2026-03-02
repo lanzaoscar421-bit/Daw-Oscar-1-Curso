@@ -114,14 +114,8 @@ public class VideoDaw {
         return resultado;
     }
 
-//    public Cliente buscarCliente (String numeroSocio){
-//
-//        for (Cliente cliente : clientes){
-//            if (cliente.getNumSocio().equalsIgnoreCase(numeroSocio){
-//
-//            }
-//        }
-//    }
+
+
 
     //Metodo alquilar pelicula a cliente
 
@@ -130,7 +124,27 @@ public class VideoDaw {
 
         if(p!=null && c!=null && p.isAlquilada() == false && p.getFechaBaja() == null && c.getFechaBaja() == null){
 
-            //
+            p.setAlquilador(c);
+            p.setAlquilada(true);
+            p.setFechaAlquiler(LocalDate.now());
+//            c.setArticulosAlquilados();
+            resultado = true;
+        }
+        return resultado;
+    }
+
+    //Devolver Pelicula
+
+    public boolean devolverPelicula(Cliente c,Pelicula p){
+        boolean resultado = false;
+
+        if (p!=null && c!=null && p.isAlquilada() == true && p.getFechaBaja() == null && c.getFechaBaja() == null){
+
+            p.setAlquilador(null);
+            p.setAlquilada(false);
+            p.setFechaAlquiler(null);
+
+            resultado = true;
         }
 
         return resultado;
@@ -181,9 +195,6 @@ public class VideoDaw {
         return true;
 
     }
-
-
-
 
     //
 

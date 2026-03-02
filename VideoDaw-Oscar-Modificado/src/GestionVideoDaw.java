@@ -242,16 +242,54 @@ public class GestionVideoDaw {
                 case "4":
 
 
-//                    System.out.println("Inserte el numero de socio");
-//                    String numeroSocioAlquilar = sc.nextLine();
-//
-//                    System.out.println("Inserte el codigo de la pelicula");
-//                    String codigoPeliculaAlquilar = sc.nextLine();
+                    Pelicula peliculaSeleccionadaAlquilar;
+                    Cliente clienteSeleccionadoAlquilar;
+
+                    System.out.println("Inserte el numero de socio");
+                    String numeroSocioAlquilar = sc.nextLine();
+
+                    System.out.println("Inserte el codigo de la pelicula");
+                    String codigoPeliculaAlquilar = sc.nextLine();
+
+                    clienteSeleccionadoAlquilar = videoDawPrimero.buscarCliente(numeroSocioAlquilar);
+                    peliculaSeleccionadaAlquilar = videoDawPrimero.buscarPelicula(codigoPeliculaAlquilar);
+
+
+                    boolean resultado = videoDawPrimero.alquilarPeli(clienteSeleccionadoAlquilar,peliculaSeleccionadaAlquilar);
+
+                    if (resultado){
+                        System.out.println("La pelicula fue alquilada con exsito");
+                    }else{
+                        System.out.println("Hubo un problea, revise si el numero del socio o el codigo de la peli son correctos");
+                    }
 
 
                     break;
 
                 case "5":
+
+                    Pelicula peliculaSeleccionadaDevolver;
+                    Cliente clienteSeleccionadoDevolver;
+
+                    System.out.println("Inserte el numero de socio");
+                    String numeroSocioDevolver = sc.nextLine();
+
+                    System.out.println("Inserte el codigo de la pelicula");
+                    String codigoPeliculaDevolver = sc.nextLine();
+
+                    clienteSeleccionadoDevolver = videoDawPrimero.buscarCliente(numeroSocioDevolver);
+                    peliculaSeleccionadaDevolver = videoDawPrimero.buscarPelicula(codigoPeliculaDevolver);
+
+
+                    boolean resultadoDevolver = videoDawPrimero.devolverPelicula(clienteSeleccionadoDevolver,peliculaSeleccionadaDevolver);
+
+                    if (resultadoDevolver){
+                        System.out.println("La pelicula fue devuelta con existo");
+                    }else{
+                        System.out.println("Hubo un problea, revise si el numero del socio o el codigo de la peli son correctos");
+                    }
+
+
 
 
                     break;

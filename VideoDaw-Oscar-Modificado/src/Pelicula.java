@@ -37,6 +37,14 @@ public class Pelicula extends Articulo implements Serializable {
         super.setFechaBaja(fechaBaja);
     }
 
+    public void setFechaAlquiler(LocalDate fechaAlquiler) {
+        this.fechaAlquiler = fechaAlquiler;
+    }
+
+    public void setAlquilada(boolean alquilada) {
+        isAlquilada = alquilada;
+    }
+
     @Override
     public String toString() {
         return "\n===== Pelicula =====" +

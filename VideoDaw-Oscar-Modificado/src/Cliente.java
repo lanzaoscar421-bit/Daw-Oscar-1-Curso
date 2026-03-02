@@ -1,6 +1,8 @@
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cliente extends Persona implements Serializable {
 
@@ -9,13 +11,13 @@ public class Cliente extends Persona implements Serializable {
     private static final long serialVersionUID = 6987292209768525570L;
     private String numSocio;
     private LocalDate fechaBaja;
-    private String ArticulosAlquilados;
+    private List <Pelicula> peliculasAlquilas;
 
     public Cliente(String dni, String nombre, String direccion, LocalDate fechaNacimiento, String numSocio ) {
         super(dni, nombre, direccion, fechaNacimiento);
         this.numSocio = numSocio;
         this.fechaBaja = fechaBaja;
-        this.ArticulosAlquilados = ArticulosAlquilados;
+        this.peliculasAlquilas = new ArrayList<>();
     }
 
     public String getNumSocio() {
@@ -26,13 +28,17 @@ public class Cliente extends Persona implements Serializable {
         return fechaBaja;
     }
 
-    public String getArticulosAlquilados() {
-        return ArticulosAlquilados;
+    public List<Pelicula> getArticulosAlquilados() {
+        return peliculasAlquilas;
     }
 
     public Cliente setFechaBaja(LocalDate fechaBaja) {
         this.fechaBaja = fechaBaja;
         return this;
+    }
+
+    public void setArticulosAlquilados(List<Pelicula> articulosAlquilados) {
+        peliculasAlquilas = articulosAlquilados;
     }
 
     @Override
@@ -44,7 +50,7 @@ public class Cliente extends Persona implements Serializable {
                 "\nFecha nacimiento: " + getFechaNacimiento() +
                 "\nNum. Socio: " + numSocio +
                 "\nFecha Baja: " + fechaBaja +
-                "\nArtículos alquilados: " + ArticulosAlquilados +
+                "\nArtículos alquilados: " + peliculasAlquilas +
                 "\n===================";
     }
 

@@ -6,6 +6,7 @@ public class Articulo {
     private String titulo;
     private LocalDate fechaAlquiler;
     private LocalDate fechaBaja;
+    private Cliente alquilador;
 
     public Articulo(String codigo, String titulo) {
         this.codigo = codigo;
@@ -22,6 +23,10 @@ public class Articulo {
         return titulo;
     }
 
+    public Cliente getAlquilador() {
+        return alquilador;
+    }
+
     public LocalDate getFechaAlquiler() {
         return fechaAlquiler;
     }
@@ -30,6 +35,9 @@ public class Articulo {
         return fechaBaja;
     }
 
+    public void setAlquilador(Cliente alquilador) {
+        this.alquilador = alquilador;
+    }
 
     public void setFechaBaja(LocalDate fechaBaja) {
         this.fechaBaja = fechaBaja;
@@ -44,4 +52,7 @@ public class Articulo {
                 ", fechaBaja=" + fechaBaja +
                 '}';
     }
+
+
+
 }
