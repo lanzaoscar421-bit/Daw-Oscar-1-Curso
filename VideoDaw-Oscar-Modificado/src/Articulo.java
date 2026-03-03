@@ -1,10 +1,11 @@
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Articulo {
 
     private String codigo;
     private String titulo;
-    private LocalDate fechaAlquiler;
+    private LocalDateTime fechaAlquiler;
     private LocalDate fechaBaja;
     private Cliente alquilador;
 
@@ -27,7 +28,7 @@ public class Articulo {
         return alquilador;
     }
 
-    public LocalDate getFechaAlquiler() {
+    public LocalDateTime getFechaAlquiler() {
         return fechaAlquiler;
     }
 

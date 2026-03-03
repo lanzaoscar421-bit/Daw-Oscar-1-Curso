@@ -221,6 +221,7 @@ public class GestionVideoDaw {
 
                             buffer.writeObject(nuevocliente);
 
+
                         } catch (IOException e) {
                             System.err.println(e.getMessage());
                         }

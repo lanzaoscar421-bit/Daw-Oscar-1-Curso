@@ -1,6 +1,7 @@
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Pelicula extends Articulo implements Serializable {
 
@@ -8,7 +9,7 @@ public class Pelicula extends Articulo implements Serializable {
     @Serial
     private static final long serialVersionUID = 5101913819089493166L;
     private Genero genero;
-    private LocalDate fechaAlquiler;
+    private LocalDateTime fechaAlquiler;
     private boolean isAlquilada;
 
     public Pelicula(String codigo, String titulo, Genero genero) {
@@ -24,7 +25,7 @@ public class Pelicula extends Articulo implements Serializable {
     }
 
     @Override
-    public LocalDate getFechaAlquiler() {
+    public LocalDateTime getFechaAlquiler() {
         return fechaAlquiler;
     }
 
@@ -37,7 +38,7 @@ public class Pelicula extends Articulo implements Serializable {
         super.setFechaBaja(fechaBaja);
     }
 
-    public void setFechaAlquiler(LocalDate fechaAlquiler) {
+    public void setFechaAlquiler(LocalDateTime fechaAlquiler) {
         this.fechaAlquiler = fechaAlquiler;
     }
 

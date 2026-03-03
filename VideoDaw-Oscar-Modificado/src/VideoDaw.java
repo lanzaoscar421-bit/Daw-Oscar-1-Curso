@@ -126,8 +126,9 @@ public class VideoDaw {
 
             p.setAlquilador(c);
             p.setAlquilada(true);
-            p.setFechaAlquiler(LocalDate.now());
-//            c.setArticulosAlquilados();
+            p.setFechaAlquiler(LocalDateTime.now());
+            c.getPeliculasAlquilas().add(p);
+
             resultado = true;
         }
         return resultado;
@@ -140,11 +141,26 @@ public class VideoDaw {
 
         if (p!=null && c!=null && p.isAlquilada() == true && p.getFechaBaja() == null && c.getFechaBaja() == null){
 
+
+            if (p.getFechaAlquiler() != null) {
+
+                long fechaActualEpoc = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+                long fechaAlquilerEpoc = p.getFechaAlquiler().toEpochSecond(ZoneOffset.UTC);
+
+                if (fechaActualEpoc - fechaAlquilerEpoc > 172800) {
+                    System.out.println("AVISO: Se devolvió con más de 48 horas de retraso");
+                }
+            }
+
             p.setAlquilador(null);
             p.setAlquilada(false);
+
             p.setFechaAlquiler(null);
 
+
+
             resultado = true;
+
         }
 
         return resultado;

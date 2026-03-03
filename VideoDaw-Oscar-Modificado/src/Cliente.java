@@ -16,7 +16,7 @@ public class Cliente extends Persona implements Serializable {
     public Cliente(String dni, String nombre, String direccion, LocalDate fechaNacimiento, String numSocio ) {
         super(dni, nombre, direccion, fechaNacimiento);
         this.numSocio = numSocio;
-        this.fechaBaja = fechaBaja;
+        this.fechaBaja = null;
         this.peliculasAlquilas = new ArrayList<>();
     }
 
@@ -28,7 +28,7 @@ public class Cliente extends Persona implements Serializable {
         return fechaBaja;
     }
 
-    public List<Pelicula> getArticulosAlquilados() {
+    public List<Pelicula> getPeliculasAlquilas() {
         return peliculasAlquilas;
     }
 
@@ -37,8 +37,9 @@ public class Cliente extends Persona implements Serializable {
         return this;
     }
 
-    public void setArticulosAlquilados(List<Pelicula> articulosAlquilados) {
-        peliculasAlquilas = articulosAlquilados;
+
+    public void setPeliculasAlquilas(List<Pelicula> peliculasAlquilas) {
+        this.peliculasAlquilas = peliculasAlquilas;
     }
 
     @Override
