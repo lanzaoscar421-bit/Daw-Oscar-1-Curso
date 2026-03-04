@@ -1,8 +1,13 @@
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
-public class Videojuego extends Articulo{
+public class Videojuego extends Articulo implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = 5661279320863049138L;
     private GeneroVideoJuego genero;
     private LocalDateTime FechaAlquiler;
     private boolean isAquilida;

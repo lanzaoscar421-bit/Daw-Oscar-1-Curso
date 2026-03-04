@@ -1,7 +1,6 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -14,39 +13,99 @@ public class GestionVideoDaw {
 
         Scanner sc = new Scanner(System.in);
 
-        //Almacen Cliente
-        final String pathClientes = "./src/Resources/";
-        final String fileNameClientes = "Clientes.dat";
-        boolean fileModeCliente = false;
+        LinkedList<VideoDaw> videoDaws = new LinkedList<>();
+
+        VideoDaw videoDawPrimero = null;
 
 
-        //Almacen Peliculas
-        final String pathPeliculas = "./src/Resources/";
-        final String fileNamePeliculas = "Peliculas.dat";
-        boolean fileModePeliculas = false;
 
+        //Almacen para el videoDAW
+        final String pathVideoDaw = "./src/Resources/";
+        final String fileNameVideoDaw= "VideoDaw.dat";
+        boolean fileModeVideodaw = false;
+        boolean eof = false;
+        boolean isReadingSerializable = false;
+
+        File vdFile = new File(pathVideoDaw+fileNameVideoDaw);
+
+        if (vdFile.exists()) {
+
+            System.out.print("Existe un VideoDaw.dat con datos de uso anteriormente." +
+                    "\nPresione 1 si desea usar este o presione cualquier otra tecla si desea usar los archivos por defecto en su lugar." +
+                    "\nEscoja su opcion: ");
+
+            Scanner sc1 = new  Scanner(System.in);
+
+            String input = sc1.nextLine();
+
+
+
+            if (!input.isEmpty() && input.charAt(0) == '1') {
+                isReadingSerializable = true;
+
+                //Lectura de Fichero Serializable
+                //Instanciamiento de lectura
+                try (FileInputStream fileReader = new FileInputStream(vdFile);
+                     ObjectInputStream bufferedReader = new ObjectInputStream(fileReader)) {
+
+                    //Loop hasta complecion
+                    while (eof == false) {
+
+                        //Lectura
+                        VideoDaw temp = (VideoDaw) bufferedReader.readObject();
+                        videoDaws.add(temp);
+
+                    }
+
+                    //Errores
+                } catch (EOFException e) {
+
+                    //Fin del Archivo
+                    eof = true;
+
+                } catch (IOException e) {
+                    //Fallo al intentar leer el archivo
+                    System.out.println("No se pudo usar el documento en el I/O");
+                    System.out.println(e.getMessage());
+                    return; //Programa se acaba
+                } catch (InputMismatchException e) {
+                    //Fallo al intentar insertar un dato
+                    System.out.println("Uno de los datos no se pudo leer");
+                    System.out.println(e.getMessage());
+                } catch (Exception e) {
+                    //Captura de Fallos imprevistos
+                    System.out.println("Algo fue mal");
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+        }
         //Link
 
         System.out.println("Bienvenido a Video Daw 🎮");
 
 
-        LinkedList<VideoDaw> videoDaws = new LinkedList<>();
+        if(!isReadingSerializable){
 
-        String cif;
-        do {
-            System.out.println("Primero inserte el CIF del VideoClub:");
-            System.out.println("Te recuerdo que el CIF valido para la empresa (Ejemplo: A12345678)\" \n");
-            cif = sc.nextLine();
-        }while (!PatronCIF(cif));
+            String cif;
+            do {
+                System.out.println("Primero inserte el CIF del VideoClub:");
+                System.out.println("Te recuerdo que el CIF valido para la empresa (Ejemplo: A12345678)\" \n");
+                cif = sc.nextLine();
+            }while (!PatronCIF(cif));
 
-        System.out.println("Inserte el nombre del VideoClub:");
-        String NombreVideoDaw = sc.nextLine();
+            System.out.println("Inserte el nombre del VideoClub:");
+            String NombreVideoDaw = sc.nextLine();
 
-        System.out.println("Ahora insete la direccion :");
-        String DireccionVideoDaw = sc.nextLine();
+            System.out.println("Ahora insete la direccion :");
+            String DireccionVideoDaw = sc.nextLine();
 
-        VideoDaw videoDawPrimero = new VideoDaw(cif, NombreVideoDaw, DireccionVideoDaw);
-        videoDaws.add(videoDawPrimero);
+            videoDawPrimero = new VideoDaw(cif, NombreVideoDaw, DireccionVideoDaw);
+            videoDaws.add(videoDawPrimero);
+        }
+
+        videoDawPrimero = videoDaws.get(0);
 
 
         String opcion = "";
@@ -64,7 +123,8 @@ public class GestionVideoDaw {
             System.out.println("Pulsa 6 dar de baja cliente");
             System.out.println("Pulsa 7 dar de baja pelicula");
             System.out.println("Pulsa 8 ver informacion usuarios y peliculas");
-            System.out.println("Pulsa 9 si desea Salir");
+            System.out.println("Pulsa 9 para guardar los datos en el almacen");
+            System.out.println("Pulsa 10 si desea Salir");
 
             opcion = sc.nextLine();
 
@@ -145,15 +205,6 @@ public class GestionVideoDaw {
                         Pelicula nuevapelicula = new Pelicula(codigoPeliculaADD,tituloPeliculaAdd,genero);
                         videoDawPrimero.addPelicula(nuevapelicula);
 
-                        try (FileOutputStream file = new FileOutputStream(pathPeliculas+fileNamePeliculas,fileModePeliculas);
-                        ObjectOutputStream buffer = new ObjectOutputStream(file)){
-                            buffer.writeObject(nuevapelicula);
-
-                            System.out.println("Se añadio correctamente al Array y al almacen");
-
-                        }catch (IOException e){
-                            System.out.println(e.getMessage());
-                        }
 
                     }catch (ValidacionCodPelicula e){
                         System.out.println(e.getMessage());
@@ -215,16 +266,6 @@ public class GestionVideoDaw {
 
                         videoDawPrimero.addCliente(nuevocliente);
 
-
-                        try (FileOutputStream file = new FileOutputStream(pathClientes + fileNameClientes, fileModeCliente);
-                             ObjectOutputStream buffer = new ObjectOutputStream(file)) {
-
-                            buffer.writeObject(nuevocliente);
-
-
-                        } catch (IOException e) {
-                            System.err.println(e.getMessage());
-                        }
 
                         System.out.println("Cliente insertado correctamente\n");
 
@@ -343,15 +384,29 @@ public class GestionVideoDaw {
                     break;
 
                 case "9":
-                    System.out.println("Adios.");
-                    break;
 
+                    try(FileOutputStream file = new FileOutputStream(pathVideoDaw+fileNameVideoDaw, fileModeVideodaw);
+                        ObjectOutputStream buffer = new ObjectOutputStream(file)){
+
+                        for (VideoDaw v: videoDaws){
+                          buffer.writeObject(v);
+                        }
+
+                    } catch (IOException e) {
+                        System.err.println("Ha habido un problema al guardar: " + e.getMessage());
+                    }
+
+
+                    break;
+                case "10":
+                        System.out.println("Adios.");
+                    break;
                 default:
                     System.out.println("Opcion no valida");
                     break;
             }
 
-        } while (!opcion.equals("9"));
+        } while (!opcion.equals("10"));
     }
     static boolean PatronCIF(String CIF) {
         String patron = "^[A-HJUV][0-9]{7}[A-Z0-9]$";
@@ -377,5 +432,6 @@ public class GestionVideoDaw {
             }
         }
     }
+
 
 }

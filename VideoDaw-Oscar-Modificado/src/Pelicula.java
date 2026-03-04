@@ -7,7 +7,7 @@ public class Pelicula extends Articulo implements Serializable {
 
 
     @Serial
-    private static final long serialVersionUID = 5101913819089493166L;
+    private static final long serialVersionUID = -4768993991450689188L;
     private Genero genero;
     private LocalDateTime fechaAlquiler;
     private boolean isAlquilada;

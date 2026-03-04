@@ -8,7 +8,7 @@ public class Cliente extends Persona implements Serializable {
 
 
     @Serial
-    private static final long serialVersionUID = 6987292209768525570L;
+    private static final long serialVersionUID = 7241247393840882058L;
     private String numSocio;
     private LocalDate fechaBaja;
     private List <Pelicula> peliculasAlquilas;

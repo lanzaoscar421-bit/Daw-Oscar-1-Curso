@@ -1,8 +1,13 @@
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Articulo {
+public class Articulo implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = -6837796801173722447L;
     private String codigo;
     private String titulo;
     private LocalDateTime fechaAlquiler;

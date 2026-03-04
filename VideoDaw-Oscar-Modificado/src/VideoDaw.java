@@ -1,16 +1,20 @@
 import Excepciones.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
-public class VideoDaw {
+public class VideoDaw implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = -1183256245915142359L;
     private String Cif;
     private String Direccion;
     private String fechaAlta;
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private String NombreVideo;
     private List <Cliente> clientes;
     private List <Pelicula> peliculas;
@@ -20,6 +24,7 @@ public class VideoDaw {
     VideoDaw(String Cif, String Direccion, String NombreVideo) {
         this.Cif = Cif;
         this.Direccion = Direccion;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         this.fechaAlta = LocalDateTime.now().format(dtf);
         this.NombreVideo = NombreVideo;
         this.clientes = new LinkedList<>();
@@ -39,7 +44,6 @@ public class VideoDaw {
                 "CIF: " + Cif + "\n" +
                 "Dirección: " + Direccion + "\n" +
                 "Fecha Alta: " + fechaAlta + "\n" +
-                "DTF: " + dtf + "\n" +
                 "Nombre Video: " + NombreVideo + "\n" +
                 "====================";
     }
