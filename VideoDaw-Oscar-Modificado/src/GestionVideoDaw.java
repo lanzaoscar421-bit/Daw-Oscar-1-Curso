@@ -282,15 +282,19 @@ public class GestionVideoDaw {
                     peliculaSeleccionadaDevolver = videoDawPrimero.buscarPelicula(codigoPeliculaDevolver);
 
 
-                    boolean resultadoDevolver = videoDawPrimero.devolverPelicula(clienteSeleccionadoDevolver,peliculaSeleccionadaDevolver);
 
-                    if (resultadoDevolver){
-                        System.out.println("La pelicula fue devuelta con existo");
-                    }else{
-                        System.out.println("Hubo un problea, revise si el numero del socio o el codigo de la peli son correctos");
+                    try {
+                        boolean resultadoDevolver = videoDawPrimero.devolverPelicula(clienteSeleccionadoDevolver,peliculaSeleccionadaDevolver);
+
+                        if (resultadoDevolver){
+                            System.out.println("La pelicula fue devuelta con existo");
+                        }else{
+                            System.out.println("Hubo un problea, revise si el numero del socio o el codigo de la peli son correctos");
+                        }
+
+                    }catch (ValidacionCaducacion e) {
+                        System.out.println(e.getMessage());
                     }
-
-
 
 
                     break;

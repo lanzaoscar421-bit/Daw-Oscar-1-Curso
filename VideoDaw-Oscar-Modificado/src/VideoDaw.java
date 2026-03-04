@@ -32,23 +32,6 @@ public class VideoDaw {
         return Cif;
     }
 
-    public String getDireccion() {
-        return Direccion;
-    }
-
-    public String getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public DateTimeFormatter getDtf() {
-        return dtf;
-    }
-
-    public String getNombreVideo() {
-        return NombreVideo;
-    }
-
-
     //Metodos
     @Override
     public String toString() {
@@ -136,11 +119,10 @@ public class VideoDaw {
 
     //Devolver Pelicula
 
-    public boolean devolverPelicula(Cliente c,Pelicula p){
+    public boolean devolverPelicula(Cliente c,Pelicula p) throws ValidacionCaducacion{
         boolean resultado = false;
 
         if (p!=null && c!=null && p.isAlquilada() == true && p.getFechaBaja() == null && c.getFechaBaja() == null){
-
 
             if (p.getFechaAlquiler() != null) {
 
@@ -148,16 +130,13 @@ public class VideoDaw {
                 long fechaAlquilerEpoc = p.getFechaAlquiler().toEpochSecond(ZoneOffset.UTC);
 
                 if (fechaActualEpoc - fechaAlquilerEpoc > 172800) {
-                    System.out.println("AVISO: Se devolvió con más de 48 horas de retraso");
+                    throw new ValidacionCaducacion("");
                 }
             }
 
             p.setAlquilador(null);
             p.setAlquilada(false);
-
             p.setFechaAlquiler(null);
-
-
 
             resultado = true;
 
@@ -267,11 +246,6 @@ public class VideoDaw {
         }
         return null;
     }
-
-
-
-
-
 }
 
 
