@@ -1,9 +1,6 @@
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -65,13 +62,16 @@ public class Main {
                     System.out.println("2. VideoJuego");
                     String tipo = sc.nextLine();
 
-                    System.out.println("Ingrese el título:");
-                    String titulo = sc.nextLine();
-
                     switch(tipo) {
                         case "1":
-                            System.out.println("Ingrese el id de la pelicula");
-                            String idPelicula = sc.nextLine();
+
+
+                            String idPelicula;
+                            do {
+                                System.out.println("Primero inserte el ID de la pelicula:");
+                                System.out.println("(Ejemplo: P-0001)");
+                                idPelicula = sc.nextLine();
+                            }while (!PatronIdPeli(idPelicula));
 
                             System.out.println("Ingrese el Titulo de la película:");
                             String tituloPelicula = sc.nextLine();
@@ -109,8 +109,14 @@ public class Main {
                             break;
                         case "2":
 
-                            System.out.println("Ingrese el id del Videojuego");
-                            String idVideojuego = sc.nextLine();
+                            String idVideojuego;
+
+                            do {
+                                System.out.println("Ingrese el id del Videojuego");
+                                System.out.println("(Ejemplo: V-0001)");
+                                idVideojuego = sc.nextLine();
+                            }while (!PatronVideoJuego(idVideojuego));
+
 
                             System.out.println("Ingrese el Titulo del Videojuego:");
                             String tituloVideojuego = sc.nextLine();
@@ -170,7 +176,27 @@ public class Main {
 
                     break;
 
+                case "3":
 
+
+                break;
+
+                case "4":
+
+
+                    break;
+
+                case "5":
+
+                    break;
+
+
+
+
+                case "6":
+
+
+                    break;
                 case "7":
 
                     mediaDawPrimero.infoArticulos();
@@ -208,4 +234,17 @@ public class Main {
         String patron = "^[A-HJUV][0-9]{7}[A-Z0-9]$";
         return Pattern.matches(patron,CIF);
     }
-}
+    static boolean PatronIdPeli(String codidoPeli){
+        String Patron = "P-[0-9]{4}";
+        return Pattern.matches(Patron, codidoPeli);
+    }
+    static boolean PatronVideoJuego(String codVideojuego) {
+        String Patron = "V-[0-9]{4}";
+        return Pattern.matches(Patron, codVideojuego);
+    }
+
+
+
+
+
+    }

@@ -1,8 +1,11 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-public class MediaDaw {
+public class MediaDaw implements Serializable {
 
+
+    private static final long serialVersionUID = -5286574360333094248L;
     private HashMap<String, Cliente> clientes;
     private HashMap<String,Articulo> articulos;
     private String cif;
@@ -61,6 +64,16 @@ public class MediaDaw {
                 System.out.println(articulo);
             }
         }
+
+    }
+
+    public boolean alquilarArticulo(Cliente c, Articulo a){
+        Boolean resultado = false;
+
+        if (a!=null && c!=null&& a.isDisponible() == true && a.ge) {
+
+        }
+
 
     }
 

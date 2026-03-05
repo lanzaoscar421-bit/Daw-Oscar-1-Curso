@@ -1,5 +1,9 @@
-public class Pelicula extends Articulo{
+import java.io.Serializable;
 
+public class Pelicula extends Articulo implements Serializable {
+
+
+    private static final long serialVersionUID = 6037712432852829433L;
     private double duracion;
     private Genero genero;
     private double precioFijo;

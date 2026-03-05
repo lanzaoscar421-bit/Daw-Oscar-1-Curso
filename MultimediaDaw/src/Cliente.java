@@ -1,5 +1,9 @@
-public class Cliente {
+import java.io.Serializable;
 
+public class Cliente implements Serializable {
+
+
+    private static final long serialVersionUID = -4617640573594032412L;
     private String dni;
     private String nombre;
     private int cantidadArticulos;

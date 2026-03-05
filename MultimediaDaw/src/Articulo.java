@@ -1,5 +1,6 @@
 public abstract class Articulo {
 
+
     private String id;
     private String titulo;
     private boolean disponible;
