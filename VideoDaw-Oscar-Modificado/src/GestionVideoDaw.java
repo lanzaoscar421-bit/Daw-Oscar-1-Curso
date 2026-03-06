@@ -401,6 +401,35 @@ public class GestionVideoDaw {
                 case "10":
                         System.out.println("Adios.");
                     break;
+
+
+                case "11":
+
+                    Cliente ClienteSeleccionadoDel;
+                    System.out.println("Para eliminar el Cliente debe insertar Su numero de referencia");
+                    String referenciaDel = sc.nextLine();
+
+
+                    ClienteSeleccionadoDel = videoDawPrimero.buscarCliente(referenciaDel);
+
+                    videoDawPrimero.eliminarCliente(ClienteSeleccionadoDel);
+
+                    break;
+
+
+                case "12":
+
+                    Pelicula peliculaSeleccionadaDel;
+
+                    System.out.println("Inserte el codigo de referencia para eliminar la Pelicula");
+                    String referenciaDelPel = sc.nextLine();
+
+                    peliculaSeleccionadaDel = videoDawPrimero.buscarPelicula(referenciaDelPel);
+                    videoDawPrimero.eliminarPelicula(peliculaSeleccionadaDel);
+
+
+
+                    break;
                 default:
                     System.out.println("Opcion no valida");
                     break;

@@ -102,6 +102,53 @@ public class VideoDaw implements Serializable {
     }
 
 
+    public boolean eliminarCliente (Cliente clienteEliminado){
+        boolean resultado = false;
+
+
+         clienteEliminado = null;
+
+        for (Cliente cliente : clientes) {
+            if(cliente.getNumSocio().equals(cliente.getNumSocio())){
+                clienteEliminado = cliente;
+                break;
+            }
+        }
+        if(clienteEliminado != null){
+            clientes.remove(clienteEliminado);
+            System.out.println("Cliente eliminado correctamente");
+        }else{
+            System.out.println("No existe el cliente");
+        }
+
+        return resultado;
+    }
+
+    //Eliminar Pelicula
+
+
+    public boolean eliminarPelicula(Pelicula peliculaEliminado){
+        boolean resultado = false;
+
+        peliculaEliminado = null;
+
+        for (Pelicula pelicula : peliculas) {
+            if (pelicula.getCodigo().equals(peliculaEliminado.getCodigo())) {
+                peliculaEliminado = pelicula;
+            }
+        }
+
+        if(peliculaEliminado != null){
+            peliculas.remove(peliculaEliminado);
+            System.out.println("Pelicula eliminada correctamente");
+        }else{
+            System.out.println("No existe el pelicula");
+        }
+
+        return  resultado;
+    }
+
+
 
 
     //Metodo alquilar pelicula a cliente
