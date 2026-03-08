@@ -14,6 +14,7 @@ public class GestionVideoDaw {
         Scanner sc = new Scanner(System.in);
 
         LinkedList<VideoDaw> videoDaws = new LinkedList<>();
+        //Link https://github.com/lanzaoscar421-bit/Daw-Oscar-1-Curso/tree/main/VideoDaw-Oscar-Modificado
 
         VideoDaw videoDawPrimero = null;
 
@@ -43,12 +44,10 @@ public class GestionVideoDaw {
             if (!input.isEmpty() && input.charAt(0) == '1') {
                 isReadingSerializable = true;
 
-                //Lectura de Fichero Serializable
-                //Instanciamiento de lectura
+
                 try (FileInputStream fileReader = new FileInputStream(vdFile);
                      ObjectInputStream bufferedReader = new ObjectInputStream(fileReader)) {
 
-                    //Loop hasta complecion
                     while (eof == false) {
 
                         //Lectura
@@ -57,23 +56,18 @@ public class GestionVideoDaw {
 
                     }
 
-                    //Errores
                 } catch (EOFException e) {
 
-                    //Fin del Archivo
                     eof = true;
 
                 } catch (IOException e) {
-                    //Fallo al intentar leer el archivo
                     System.out.println("No se pudo usar el documento en el I/O");
                     System.out.println(e.getMessage());
-                    return; //Programa se acaba
+                    return;
                 } catch (InputMismatchException e) {
-                    //Fallo al intentar insertar un dato
                     System.out.println("Uno de los datos no se pudo leer");
                     System.out.println(e.getMessage());
                 } catch (Exception e) {
-                    //Captura de Fallos imprevistos
                     System.out.println("Algo fue mal");
                     System.out.println(e.getMessage());
                     e.printStackTrace();
