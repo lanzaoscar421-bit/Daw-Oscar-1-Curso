@@ -1,6 +1,4 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -12,7 +10,7 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
-        //Link https://github.com/lanzaoscar421-bit/Daw-Oscar-1-Curso/tree/main/VideoDaw-Oscar-Modificado
+        Aldea konoha = null;
 
         final String pathVideoDaw = "./src/Resources/";
         final String fileNameVideoDaw= "VideoDaw.dat";
@@ -20,29 +18,45 @@ public class Main {
         boolean eof = false;
         boolean isReadingSerializable = false;
 
-        System.out.println("Bienvenido a Konoha"); System.out.println("Primero inserte el Nombre de la Aldea");
-        String nombreAldea = sc.nextLine();
 
-        System.out.println("Ahora inserte el nombre del Kage ");
-        System.out.print("Ejemplo: Tobirama Senju, Minato Namikaze");
-        System.out.println("");
-        String kage = sc.nextLine();
+        //Link https://github.com/lanzaoscar421-bit/Daw-Oscar-1-Curso/tree/main/VideoDaw-Oscar-Modificado
 
 
-        String codigoAldea;
-        do {
-            sc = new Scanner(System.in);
-            System.out.println("Inserte el codigo de la Aldea");
-            System.out.println("Este consta de 5 Letras Mayususculas y 5 digitos");
-            System.out.println("Ejemplo: ABZDE12345");
-            codigoAldea = sc.nextLine();
-            if (!patronAldea(codigoAldea)){
-                System.out.println("Error, vuelve a insertar el codigo de la Aldea");
-            }
-        } while (!patronAldea(codigoAldea));
+        System.out.println("Desea cargar los datos?");
+        System.out.println("Pulsa S si lo desea, si no pulsa N");
 
-        Aldea konoha = new Aldea(nombreAldea,kage,codigoAldea);
 
+        String cargarOpcion = sc.nextLine();
+
+        if (cargarOpcion.equals("S")){
+            konoha = cargarCuenta();
+        }else{
+
+            System.out.println("Bienvenido a Konoha");
+
+            System.out.println("Primero inserte el Nombre de la Aldea");
+            String nombreAldea = sc.nextLine();
+
+            System.out.println("Ahora inserte el nombre del Kage ");
+            System.out.print("Ejemplo: Tobirama Senju, Minato Namikaze");
+            System.out.println("");
+            String kage = sc.nextLine();
+
+
+            String codigoAldea;
+            do {
+                sc = new Scanner(System.in);
+                System.out.println("Inserte el codigo de la Aldea");
+                System.out.println("Este consta de 5 Letras Mayususculas y 5 digitos");
+                System.out.println("Ejemplo: ABZDE12345");
+                codigoAldea = sc.nextLine();
+                if (!patronAldea(codigoAldea)){
+                    System.out.println("Error, vuelve a insertar el codigo de la Aldea");
+                }
+            } while (!patronAldea(codigoAldea));
+
+            konoha = new Aldea(nombreAldea,kage,codigoAldea);
+        }
 
         String opcion = "";
 
@@ -245,6 +259,29 @@ public class Main {
         }while(!opcion.equals("11"));
 
 
+    }
+
+    private static Aldea cargarCuenta() {
+        final String pathVideoDaw = "./src/Resources/";
+        final String fileNameVideoDaw = "VideoDaw.dat";
+
+        try (FileInputStream file = new FileInputStream(pathVideoDaw + fileNameVideoDaw);
+             ObjectInputStream reader = new ObjectInputStream(file)) {
+
+            Object obj = reader.readObject();
+            if (obj instanceof Aldea) {
+                Aldea aldea = (Aldea) obj;
+                System.out.println("Datos cargados correctamente de la aldea: " + aldea.informacionAldea());
+                return aldea;
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("No se encontró el archivo para cargar los datos.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Ha habido un problema al cargar: " + e.getMessage());
+        }
+
+        return null;
     }
     static boolean PatronDNI(String DNI) {
         String Patron = "[0-9]{8}[A-Z]";

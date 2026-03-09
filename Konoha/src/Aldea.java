@@ -15,13 +15,13 @@ public class Aldea implements Serializable {
     private LocalDate fechaCreccion;
     private int maximoEquipos;
     private String kage;
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private List<Equipo> equipos;
 
     public Aldea(String nombreAldea, String codigoAldea,String kage) {
         this.nombreAldea = nombreAldea;
         this.codigoAldea = codigoAldea;
         this.fechaCreccion = LocalDate.from(LocalDateTime.now());
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         this.maximoEquipos = 0;
         this.kage = kage;
         this.equipos = new LinkedList<>();
