@@ -105,7 +105,6 @@ public class VideoDaw implements Serializable {
     public boolean eliminarCliente (Cliente clienteEliminado){
         boolean resultado = false;
 
-
          clienteEliminado = null;
 
         for (Cliente cliente : clientes) {

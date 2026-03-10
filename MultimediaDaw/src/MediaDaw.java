@@ -70,11 +70,11 @@ public class MediaDaw implements Serializable {
     public boolean alquilarArticulo(Cliente c, Articulo a){
         Boolean resultado = false;
 
-        if (a!=null && c!=null&& a.isDisponible() == true && a.ge) {
+        if (a!=null && c!=null&& a.isDisponible() == true ) {
 
         }
 
-
+        return resultado;
     }
 
 
