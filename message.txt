@@ -1,0 +1,218 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
+public class MyUtils {
+    //metodos lectura ficheros (tanto unicode como binarios)
+
+        static void leerFicheroUnicode() {
+
+
+            try(FileReader fr = new FileReader("productos.csv");
+                BufferedReader br = new BufferedReader(fr)){
+                //try-w/-resources file y buffer reader
+                String linea;
+
+                while((linea = br.readLine()) != null){ //mientras la linea leida no sea null
+                    String[] datos = linea.split("/");//dividir por barras
+
+                    if(datos.length == 4){//siempre que la longitud del archivo dea de 4 apartados cada uno
+                        Inventario.productos.add(new Producto(datos[0], datos[1], datos[2], datos[3]));
+                    }
+                }
+
+            }catch (FileNotFoundException e) {
+                System.out.println("El archivo CSV no se encontró: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("Error al leer el archivo CSV: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error inesperado: " + e.getMessage());
+                e.printStackTrace();
+            }
+    }
+
+    static void escribirFicheroUnicode() { //metodo escribir productos utf
+
+        try (FileWriter writer = new FileWriter("productos.csv");
+             BufferedWriter bw = new BufferedWriter(writer)) {
+            //try-w/-resources file y buffer writer
+            for (Producto p : Inventario.productos) { //recorrer productos de la lista inventarioUnicode
+                bw.write(p.getReferencia() + "/" + p.getNombre() + "/" + p.getDescripcion() + "/" + p.getTipo());
+                //escribir
+                bw.newLine();//salto de linea
+            }
+        } catch (IOException e) {
+            System.err.println("Error al escribir datos: " + e.getMessage());
+
+        }
+    }
+
+    static void leerFicheroBinario(){//metodo leer productos binario
+
+        try(FileInputStream fis = new FileInputStream("almacen.dat");
+        DataInputStream dis = new DataInputStream(fis)){
+            //try-w/-resources fileinput y datainput stream
+
+            int i = 0;
+
+            while(true){ 
+
+                int cantidad = dis.readInt(); //leer cantidad
+                double precio = dis.readDouble(); //leer precio
+                int descuento = dis.readInt(); //leer descuento
+                int iva = dis.readInt(); //leer iva
+                boolean aplicarDto = dis.readBoolean(); //leer aplicarDto
+
+                if(i < Inventario.productos.size()){
+                    Producto p = Inventario.productos.get(i);
+
+                    p.setCantidad(cantidad);
+                    p.setPrecio(precio);
+                    p.setDescuento(descuento);
+                    p.setIva(iva);
+                    p.setAplicarDto(aplicarDto);
+                }
+
+                i++;
+
+            }
+
+        }catch(EOFException e){
+            System.out.println("Datos binarios cargados correctamente.");
+
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    static void escrituraFicheroBinario(){ //metodo escribir productos binario
+
+        try(FileOutputStream fos = new FileOutputStream("almacen.dat");
+        DataOutputStream dos = new DataOutputStream(fos)){
+            //try-w/-resources fileoutput y dataoutput stream
+
+            for(Producto p : Inventario.productos){ //recorrer productos mediante lista
+                dos.writeInt(p.getCantidad()); //escribir cantidad como int
+                dos.writeDouble(p.getPrecio()); //escribir precio como double
+                dos.writeInt(p.getDescuento()); //escribir descuento como int
+                dos.writeInt(p.getIva()); //escribir iva como int
+                dos.writeBoolean(p.isAplicarDto()); //escribir aplicarDto como booleano
+            }
+
+        }catch(EOFException e){
+            System.out.println(e.getMessage());
+
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    static void mostrarProductos(){ //metodo para recorrer productos
+
+            for(Producto p : Inventario.productos){
+                System.out.println(p);
+            }
+    }
+
+    //Eliminar producto según referencia
+    static void eliminarProducto(Scanner scanner){ //metodo para eliminar un producto
+
+        if(Inventario.productos.isEmpty()){
+            System.out.println("No hay productos");
+            return;
+        }
+        for(Producto p : Inventario.productos){
+            System.out.println(p.getReferencia() + " / " + p.getDescripcion());
+        }
+        System.out.println("Ingrese la referencia del producto a eliminar");
+        String referencia = scanner.nextLine();
+
+        int index = -1;
+        
+        for(int i = 0; i < Inventario.productos.size(); i++){
+            if(Inventario.productos.get(i).getReferencia().equals(referencia)){
+                index = i;
+                break;
+            }
+        }
+        
+        if(index != -1){
+            Inventario.productos.remove(index);
+        }
+    }
+
+    //crear productos
+    static void registrarProducto(Scanner sc){ //metodo para registrar producto
+            
+            System.out.println("Ingrese la referencia del producto");
+            String referencia = sc.nextLine();
+            
+            for (Producto p : Inventario.productos) {
+                if (p.getReferencia().equals(referencia)) {
+                    System.out.println("La referencia ya existe. No se puede registrar.");
+                    return;
+                }
+            }
+
+            System.out.println("Ingrese el nombre del producto");
+            String nombre = sc.nextLine();
+            
+            System.out.println("Ingrese la descripcion del producto");
+            String descripcion = sc.nextLine();
+            
+            System.out.print("Ingrese el tipo: ");
+            String tipo = sc.nextLine();
+
+            System.out.println("Ingrese la cantidad del producto");
+            int cantidad = sc.nextInt();
+            sc.nextLine();
+            
+            System.out.println("Ingrese el precio del producto");
+            double precio = sc.nextDouble();
+            sc.nextLine();
+            System.out.print("Ingrese el descuento: ");
+            int descuento = sc.nextInt();
+            sc.nextLine();
+            
+            System.out.print("Ingrese el IVA: ");
+            int IVA = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("¿Aplicar descuento? (true/false): ");
+            boolean aplicarDto = sc.nextBoolean();
+            sc.nextLine();
+
+            Inventario.productos.add(new Producto(referencia, nombre, descripcion, tipo, cantidad, precio, descuento, IVA, aplicarDto));
+            System.out.println("Producto registrado exitosamente.");
+        
+    }
+
+    static void guardarInventario(){ //metodo guardar inventario (llama a escribirFicheros tanto binario como Unicode)
+        escrituraFicheroBinario();
+        escribirFicheroUnicode();
+    }
+
+    static void cargarDatos(){ //metodo cargarDatos (llama tanto a leer datos binario como unicode)
+        Inventario.productos.clear();
+        leerFicheroUnicode(); // 1 - crear productos
+        leerFicheroBinario(); // 2 - completarlos
+    }
+
+    static void escribirProductoSerial(){
+        try(FileOutputStream fos = new FileOutputStream("productos.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos)){
+            //try-with-resources file y object outputstream
+
+            oos.writeObject(Inventario.productos); //escribir todo la lista de productos ya completa unicode-binario
+
+            System.out.println("Se completo la escritura");
+
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+}
