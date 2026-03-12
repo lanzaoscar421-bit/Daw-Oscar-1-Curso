@@ -1,3 +1,4 @@
+import java.io.*;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -12,18 +13,116 @@ public class DawBank {
 
         Scanner sc = new Scanner(System.in);
 
+        CuentaBancaria Oscar = null;
+
+
+        final String pathDawBank = "./src/Resources/";
+        final String fileNameDawBank= "DawBank.dat";
+        boolean fileModeVideodaw = false;
+
 
 
         System.out.println("*********************************");
         System.out.println("Bienvenido a tu Cuenta de banco🧃");
         System.out.println("*********************************");
 
+        System.out.println("Desea cargar los datos?");
+        System.out.println("Pulsa S si lo desea, si no pulsa N");
 
-        CuentaBancaria Oscar = datosUsuario(sc);
+        String cargarOpcion = sc.nextLine();
+
+        if (cargarOpcion.equalsIgnoreCase("S")){
+            try (FileInputStream file = new FileInputStream(pathDawBank + fileNameDawBank);
+                 ObjectInputStream reader = new ObjectInputStream(file)) {
+
+                Object obj = reader.readObject();
+                if (obj instanceof CuentaBancaria) {
+                    Oscar = (CuentaBancaria) obj;
+                    System.out.println("Datos cargados correctamente de la aldea: " + Oscar.toString());
+                }
+
+            } catch (FileNotFoundException e) {
+                System.out.println("No se encontró el archivo para cargar los datos.");
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Ha habido un problema al cargar: " + e.getMessage());
+            }
+
+
+        }else{
+            System.out.println("Empecemos!!!");
+            String Iban;
+            do {
+                System.out.println("Inserte el Iban");
+                System.out.println("Instrucciones");
+                System.out.println("***************");
+                System.out.println("El Iban se compone de dos letras AL PRINCIPIO y despues 22 numeros (Los que quiera)");
+                System.out.println("Ejemplo: ES6621000418401234567891");
+                Iban = sc.nextLine();
+            }while (!patronIban(Iban));
+
+            System.out.println("Inserte el Titular de tu Cuenta Bancaria");
+            String cliente = sc.nextLine();
+
+            String DNI;
+            do {
+                sc = new Scanner(System.in);
+                System.out.println("Inserte SU DNI");
+                System.out.println("El DNI consta de 8 números + 1 letra ");
+                System.out.println("Ejemplo: 12345678Z");
+                DNI = sc.nextLine();
+                if (!PatronDNI(DNI)){
+                    System.out.println("Error, vuelve a insertar el DNI");
+                }
+            } while (!PatronDNI(DNI));
+
+
+            LocalDate fechaNacimiento = null;
+
+            System.out.println("Inserte su fecha de nacimiento");
+            System.out.println("Ejemplo: 2007-12-06");
+
+            while (fechaNacimiento == null) {
+                try {
+                    fechaNacimiento = LocalDate.parse(sc.nextLine());
+                } catch (Exception e) {
+                    System.out.println("Por favor, inserte bien el formato (YYYY-MM-DD)");
+                }
+            }
+
+            String  numeroTelefono;
+            do {
+                sc = new Scanner(System.in);
+                System.out.println("Inserte SU numero de telefono");
+                System.out.println("Ejemplo: 612345678");
+                numeroTelefono = sc.nextLine();
+                if (!PatronTelefono(numeroTelefono)){
+                    System.out.println("Error, vuelve a insertar el DNI");
+                }
+            } while (!PatronTelefono(numeroTelefono));
+
+            String eMail;
+            do {
+                sc = new Scanner(System.in);
+                System.out.println("Inserte Email");
+                System.out.println("Ejemplo: prueba.email23@gmail.com");
+                eMail = sc.nextLine();
+                if (!PatronEmail(eMail)){
+                    System.out.println("Error, vuelve a insertar el DNI");
+                }
+            } while (!PatronEmail(eMail));
+
+
+            System.out.println("Por ultimo, inserte su direccion");
+            String direccion;
+            direccion = sc.nextLine();
+
+             Oscar = new CuentaBancaria(Iban,new Cliente(cliente,DNI,fechaNacimiento,numeroTelefono,eMail,direccion));
+        }
+
 
 
         String opcion = "0";
-        while (opcion != "8"){
+        while (!opcion.equals("9")){
             sc = new Scanner(System.in);
 
             menu();
@@ -95,7 +194,23 @@ public class DawBank {
                     Oscar.informacionMovimientos();
 
                     break;
+
                 case "8":
+
+
+                    try(FileOutputStream file = new FileOutputStream(pathDawBank+fileNameDawBank, fileModeVideodaw);
+                        ObjectOutputStream buffer = new ObjectOutputStream(file)){
+
+                        buffer.writeObject(Oscar);
+                        System.out.println("Todo se guardo Correctamente");
+
+
+                    } catch (IOException e) {
+                        System.err.println("Ha habido un problema al guardar: " + e.getMessage());
+                    }
+
+                    break;
+                case "9":
                     System.out.println("***************");
                     System.out.println("Adios, Buen Dia");
                     System.out.println("***************");
@@ -125,80 +240,11 @@ public class DawBank {
 
         System.out.println("Pulsa 7 para ver los movimientos realizados de la cuenta");
 
-        System.out.println("Pulse 8 para salir de este programa");
+        System.out.println("Pulsa 8 para guardar datos");
+
+        System.out.println("Pulse 9 para salir de este programa");
     }
 
-    private static CuentaBancaria datosUsuario(Scanner sc) {
-        System.out.println("Empecemos!!!");
-        String Iban;
-        do {
-            System.out.println("Inserte el Iban");
-            System.out.println("Instrucciones");
-            System.out.println("***************");
-            System.out.println("El Iban se compone de dos letras AL PRINCIPIO y despues 22 numeros (Los que quiera)");
-            System.out.println("Ejemplo: ES6621000418401234567891");
-            Iban = sc.nextLine();
-        }while (!patronIban(Iban));
-
-        System.out.println("Inserte el Titular de tu Cuenta Bancaria");
-        String cliente = sc.nextLine();
-
-        String DNI;
-        do {
-            sc = new Scanner(System.in);
-            System.out.println("Inserte SU DNI");
-            System.out.println("El DNI consta de 8 números + 1 letra ");
-            System.out.println("Ejemplo: 12345678Z");
-            DNI = sc.nextLine();
-            if (!PatronDNI(DNI)){
-                System.out.println("Error, vuelve a insertar el DNI");
-            }
-        } while (!PatronDNI(DNI));
-
-
-        LocalDate fechaNacimiento = null;
-
-        System.out.println("Inserte su fecha de nacimiento");
-        System.out.println("Ejemplo: 2007-12-06");
-
-        while (fechaNacimiento == null) {
-            try {
-                fechaNacimiento = LocalDate.parse(sc.nextLine());
-            } catch (Exception e) {
-                System.out.println("Por favor, inserte bien el formato (YYYY-MM-DD)");
-            }
-        }
-
-        String  numeroTelefono;
-        do {
-            sc = new Scanner(System.in);
-            System.out.println("Inserte SU numero de telefono");
-            System.out.println("Ejemplo: 612345678");
-            numeroTelefono = sc.nextLine();
-            if (!PatronTelefono(numeroTelefono)){
-                System.out.println("Error, vuelve a insertar el DNI");
-            }
-        } while (!PatronTelefono(numeroTelefono));
-
-        String eMail;
-        do {
-            sc = new Scanner(System.in);
-            System.out.println("Inserte Email");
-            System.out.println("Ejemplo: prueba.email23@gmail.com");
-            eMail = sc.nextLine();
-            if (!PatronEmail(eMail)){
-                System.out.println("Error, vuelve a insertar el DNI");
-            }
-        } while (!PatronEmail(eMail));
-
-
-        System.out.println("Por ultimo, inserte su direccion");
-        String direccion;
-        direccion = sc.nextLine();
-
-        CuentaBancaria Oscar = new CuentaBancaria(Iban,new Cliente(cliente,DNI,fechaNacimiento,numeroTelefono,eMail,direccion));
-        return Oscar;
-    }
 
     //Metodos patrones
 

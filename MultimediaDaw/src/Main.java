@@ -1,6 +1,4 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -11,6 +9,8 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
+        MediaDaw mediaDawPrimero = null;
+
         final String pathVideoDaw = "./src/resources/";
         final String fileNameVideoDaw= "MediaDaw.dat";
         boolean fileModeVideodaw = false;
@@ -18,19 +18,47 @@ public class Main {
 
 
 
-        System.out.println("Primero inserte el Cif de tu mediaDaw");
-        String cif;
-        do {
-            System.out.println("Primero inserte el CIF del VideoClub:");
-            System.out.println("Te recuerdo que el CIF valido para la empresa (Ejemplo: A12345678)\" \n");
-            cif = sc.nextLine();
-        }while (!PatronCIF(cif));
+        System.out.println("Desea cargar los datos?");
+        System.out.println("Pulsa S si lo desea, si no pulsa N");
 
-        System.out.println("Inserte el nombre");
-        String nombreVideoDaw = sc.nextLine();
+        String cargarOpcion = sc.nextLine();
 
-        MediaDaw mediaDawPrimero= new MediaDaw(cif, nombreVideoDaw);
 
+
+        if (cargarOpcion.equalsIgnoreCase("S")){
+
+            try (FileInputStream file = new FileInputStream(pathVideoDaw + fileNameVideoDaw);
+                 ObjectInputStream reader = new ObjectInputStream(file)) {
+
+                Object obj = reader.readObject();
+                if (obj instanceof MediaDaw) {
+                    mediaDawPrimero = (MediaDaw) obj;
+                    System.out.println("Datos cargados correctamente de la aldea: " + mediaDawPrimero.toString());
+                }
+
+            } catch (FileNotFoundException e) {
+                System.out.println("No se encontró el archivo para cargar los datos.");
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Ha habido un problema al cargar: " + e.getMessage());
+            }
+
+
+        }else{
+
+            System.out.println("Primero inserte el Cif de tu mediaDaw");
+            String cif;
+            do {
+                System.out.println("Primero inserte el CIF del VideoClub:");
+                System.out.println("Te recuerdo que el CIF valido para la empresa (Ejemplo: A12345678)\" \n");
+                cif = sc.nextLine();
+            }while (!PatronCIF(cif));
+
+            System.out.println("Inserte el nombre");
+            String nombreVideoDaw = sc.nextLine();
+
+            mediaDawPrimero= new MediaDaw(cif, nombreVideoDaw);
+
+        }
 
 
         String opcion = "";

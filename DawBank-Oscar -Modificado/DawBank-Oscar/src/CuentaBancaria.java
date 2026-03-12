@@ -1,10 +1,15 @@
 import javax.naming.NamingEnumeration;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class CuentaBancaria {
+public class CuentaBancaria implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = 839179344965353399L;
     private String iban;
     private Cliente cliente;
     private double saldo;

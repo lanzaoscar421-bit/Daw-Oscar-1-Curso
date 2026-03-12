@@ -30,7 +30,8 @@ public class Aldea implements Serializable {
 
 
 
-    public String informacionAldea() {
+    @Override
+    public String toString() {
         String info = "";
         info += "===== INFORMACIÓN DE LA Aldea =====\n";
         info += "Nombre: " + this.nombreAldea + "\n";
@@ -47,19 +48,65 @@ public class Aldea implements Serializable {
     //Ver todos los Equipos
     public void verTodosEquipos(){
         for (Equipo equipo : equipos){
-            System.out.println(equipo.informacionEquipo());
+            System.out.println(equipo);
         }
     }
     //Ver todos los equipos por id
-    public void buscarEquipo (String idEquipo){
 
-        for (Equipo equipo :equipos){
-            if (equipo.getCodigoEquipo().equalsIgnoreCase(idEquipo)){
-                equipo.toString();
+    public  boolean buscarEquipoid(Equipo idEquipo){
+
+
+
+        for (Equipo equipo : equipos){
+            if (equipo.getCodigoEquipo().equals(idEquipo.getCodigoEquipo())){
+                System.out.println(equipo);
+                return true;
             }
         }
 
+        System.out.println("Equipo no exsiste");
+        return  false;
     }
+
+    public Equipo buscarEquipo (String idEquipo){
+        for (Equipo equipo : equipos) {
+            if (equipo.getCodigoEquipo().equalsIgnoreCase(idEquipo)) {
+                return equipo;
+            }
+        }
+        return null;
+    }
+
+    public void agregarNinjaEquipo(String codEquipo, Ninja ninja){
+        for (Equipo equipo : equipos){
+            if (equipo.getCodigoEquipo().equals(codEquipo)){
+                equipo.addNinja(ninja);
+                System.out.println("Ninja Añadido");
+            }
+
+        }
+
+    }
+    public int numeroNinjas(){
+
+        int total = 0;
+
+        for (Equipo e : equipos){
+            total += e.numeroNinjas();
+        }
+
+        if (total == 0){
+            System.out.println("No hay ninjas");
+        }
+
+        return total;
+    }
+
+
+//    public void numeroDeNinjas(){
+//
+//        for (Ninja ninja: ninjas)
+//    }
 
 
 }

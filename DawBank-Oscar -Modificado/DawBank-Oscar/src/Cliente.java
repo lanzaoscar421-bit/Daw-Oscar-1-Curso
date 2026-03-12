@@ -1,7 +1,12 @@
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Cliente extends Persona {
+public class Cliente extends Persona implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = 9202232201750434854L;
     private String telefono;
     private String email;
     private String direccion;

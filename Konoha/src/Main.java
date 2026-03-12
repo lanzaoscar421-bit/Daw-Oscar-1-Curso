@@ -28,7 +28,7 @@ public class Main {
 
         String cargarOpcion = sc.nextLine();
 
-        if (cargarOpcion.equals("S")){
+        if (cargarOpcion.equalsIgnoreCase("S")){
             konoha = cargarCuenta();
         }else{
 
@@ -74,7 +74,8 @@ public class Main {
             System.out.println("7. Calcular estadísticas de toda la Aldea.\n");
             System.out.println("8. Cambiar ninja de un equipo.\n");
             System.out.println("9. Eliminar ninja de la aldea\n");
-            System.out.println("10. Salir \n");
+            System.out.println("10. Guarda todos los cambios \n");
+            System.out.println("11. Salir \n");
 
 
             opcion = sc.nextLine();
@@ -190,18 +191,34 @@ public class Main {
                     do{
                         System.out.println("Inserte el nivel de ataque entre el 1-100");
                         defensa = sc.nextDouble();
+                        sc.nextLine();
 
                     }while (defensa<0 || defensa>100);
-
 
                     Ninja nuevoNinja = new Ninja(nombreNinja,direccion,fechaNacimiento,chakra ,rango ,idNinja,tecnicaSecreta,ataque,defensa);
 
 
+                    System.out.println("Ahora te enseñare todos los equipos en la aldea para asignar este ninja");
+
+                    konoha.verTodosEquipos();
+
+                    System.out.println("Inserta el codigo del equipo");
+
+
+                    String codigoEquipoADDNinja = sc.nextLine();
+
+
+                    konoha.agregarNinjaEquipo(codigoEquipoADDNinja,nuevoNinja);
+
 
 
                     break;
-
                 case "3":
+
+
+
+                    konoha.numeroNinjas();
+
 
                     break;
 
@@ -210,7 +227,11 @@ public class Main {
                     System.out.println("Buscar un Equipo, inserte el ID");
                     String buscarEquipoId = sc.nextLine();
 
+                    Equipo equipoSeleccionado;
 
+                    equipoSeleccionado = konoha.buscarEquipo(buscarEquipoId);
+
+                    konoha.buscarEquipoid(equipoSeleccionado);
 
                     break;
 
@@ -220,11 +241,12 @@ public class Main {
 
                 case "6":
 
-//                    System.out.println(konoha.informacionAldea());
+                    System.out.println(konoha);
 
                     break;
 
                 case "7":
+
 
                     break;
 
@@ -241,6 +263,7 @@ public class Main {
                         ObjectOutputStream buffer = new ObjectOutputStream(file)){
 
                             buffer.writeObject(konoha);
+                            System.out.println("Todo se guardo Correctamente");
 
 
                     } catch (IOException e) {
@@ -271,7 +294,7 @@ public class Main {
             Object obj = reader.readObject();
             if (obj instanceof Aldea) {
                 Aldea aldea = (Aldea) obj;
-                System.out.println("Datos cargados correctamente de la aldea: " + aldea.informacionAldea());
+                System.out.println("Datos cargados correctamente de la aldea: " + aldea.toString());
                 return aldea;
             }
 

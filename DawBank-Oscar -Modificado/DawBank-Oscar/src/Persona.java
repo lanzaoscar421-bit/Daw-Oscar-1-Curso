@@ -1,7 +1,12 @@
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Persona {
+public class Persona implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = -4133781778175645558L;
     private String nombre;
     private String dni;
     private LocalDate fechaNacimiento;

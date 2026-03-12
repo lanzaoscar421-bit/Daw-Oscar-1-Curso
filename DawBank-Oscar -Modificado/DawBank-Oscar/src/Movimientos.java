@@ -1,11 +1,16 @@
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class Movimientos {
+public class Movimientos implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = 1214428286972484478L;
     private int IDmovimiento;
     private LocalDateTime fecha;
     private double Cantidad;

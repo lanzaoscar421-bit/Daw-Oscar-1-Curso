@@ -33,7 +33,9 @@ public class Ninja extends Persona implements Serializable {
         return idNinja;
     }
 
-    public String informacionNinja() {
+
+    @Override
+    public String toString() {
         String info = "";
         info += "===== INFORMACIÓN DE Ninja =====\n";
         info += "Nombre: " + this.getNombre() + "\n";

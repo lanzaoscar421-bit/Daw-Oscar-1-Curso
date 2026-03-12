@@ -33,21 +33,48 @@ public class Equipo implements Serializable {
         return codigoEquipo;
     }
 
-    public String informacionEquipo() {
+    @Override
+    public String toString() {
         String info = "";
         info += "===== INFORMACIÓN DEl Equipo =====\n";
         info += "Nombre: " + this.nombreEquipo + "\n";
         info += "Cod: " + this.codigoEquipo + "\n";
         info += "Fecha creacion: " + this.fechaCreacion + "\n";
         info += "Sensei: " + this.sensei + "\n";
+        if (ninjas.isEmpty()){
+            info += "Este Equipo no tiene Ninjas";
+        }
+        for (Ninja ninja : ninjas.values()){
+            info += ninja+"\n";
+        }
         info += "--------------------------------------\n";
         return info;
     }
 
 
     //Añadir Ninja
+
+
     public void addNinja(Ninja ninja){
         ninjas.put(ninja.getIdNinja(),ninja);
     }
+    public int numeroNinjas(){
+
+        return ninjas.size();
+    }
     //Ver todos info de ninjas
+
+//    public void numeroNinjasAldea(){
+//
+//        int contadorNinjas = 0;
+//
+//        for (Ninja ninja : ninjas.values()){
+//            contadorNinjas++;
+//        }
+//
+//        System.out.println("Estos son los ninjas de la Aldea" + contadorNinjas);
+
+
+//    }
+
 }
