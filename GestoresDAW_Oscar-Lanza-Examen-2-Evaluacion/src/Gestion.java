@@ -14,7 +14,7 @@ public class Gestion{
 
         Scanner sc = new Scanner(System.in);
 
-        //Link Github 
+        //Link Github https://github.com/lanzaoscar421-bit/Daw-Oscar-1-Curso/tree/main/GestoresDAW_Oscar-Lanza
 
         Empresa nuevaEmpresa = null;
 
