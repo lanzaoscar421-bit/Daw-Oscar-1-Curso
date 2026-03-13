@@ -1,0 +1,1 @@
+Director{nombre='das', fechNacimiento=2007-12-06, dni='12345678Z', direccion='boo', numeroSS='1234567899', email='nose', salario=0.0, departamento=direccion, numeroTelefono=123456789, cocheEmpresa=nose}
