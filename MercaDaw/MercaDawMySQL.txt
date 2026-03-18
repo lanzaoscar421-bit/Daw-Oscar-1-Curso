@@ -1,0 +1,58 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema mercaDaw
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema dcuniverse
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mercaDaw` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `mercaDaw` ;
+
+-- -----------------------------------------------------
+-- Table `mercaDaw`.`productos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mercaDaw`.`products` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `referencia` VARCHAR(50) NOT NULL,
+  `nombre` VARCHAR(100) NULL DEFAULT NULL,
+  `descripcion` VARCHAR(300) NULL DEFAULT NULL,
+  `tipo` int NULL DEFAULT NULL,
+  `cantidad` int NULL DEFAULT NULL,
+  `precio` double NULL DEFAULT NULL,
+  `descuento` int NULL DEFAULT NULL,
+  `iva` int NULL DEFAULT NULL,
+  `aplicarDto` boolean NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id` (`id` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+-- Insertar los datos en la tabla characters
+INSERT INTO products (referencia, nombre, descripcion, tipo, cantidad, precio, descuento, iva, aplicarDto) VALUES
+('REF001', 'Portátil HP', 'Portátil de 15 pulgadas con 16GB RAM', 1, 10, 899.99, 10, 21, true),
+('REF002', 'Ratón Logitech', 'Ratón inalámbrico ergonómico', 2, 50, 29.99, 5, 21, true),
+('REF003', 'Teclado Mecánico', 'Teclado RGB switches blue', 2, 30, 79.99, 0, 21, false),
+('REF004', 'Monitor Samsung', 'Monitor 24 pulgadas Full HD', 1, 20, 149.99, 15, 21, true),
+('REF005', 'Disco SSD 1TB', 'Almacenamiento rápido SSD', 3, 40, 99.99, 10, 21, true),
+('REF006', 'Memoria USB 64GB', 'Pendrive USB 3.0', 3, 100, 14.99, 0, 21, false),
+('REF007', 'Impresora Canon', 'Impresora multifunción', 1, 15, 129.99, 20, 21, true),
+('REF008', 'Auriculares Sony', 'Auriculares inalámbricos con cancelación de ruido', 2, 25, 199.99, 10, 21, true);
