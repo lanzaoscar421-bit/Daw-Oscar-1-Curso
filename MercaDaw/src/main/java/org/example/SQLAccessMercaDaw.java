@@ -118,4 +118,32 @@ public class SQLAccessMercaDaw {
         return producto;
     }
 
+
+    //Insertar Producto
+
+    public static int insertarProducto(Product product) {
+        int response = -1;
+
+        String sqlStatement = "INSERT INTO products (referencia, name, description, cantidad, price, descuento, iva, aplicarDTO) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = SQLDataManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sqlStatement)){
+
+
+            statement.setString(1, product.getReferencia());
+            statement.setString(2, product.getName());
+            statement.setString(3, product.getDescription());
+            statement.setInt(4, product.getCantidad());
+            statement.setDouble(5, product.getPrice());
+            statement.setInt(6, product.getDescuento());
+            statement.setInt(7, product.getIva());
+            statement.setBoolean(8, product.isAplicarDTO());
+
+            response = statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response;
+    }
+
 }

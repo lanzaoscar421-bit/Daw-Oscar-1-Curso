@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -41,15 +42,74 @@ public class Main {
                     break;
                 case "3":
 
+                    //Buscar Producto por tipo
+
                     break;
 
                 case "4":
 
-                    System.out.println("Inserte una cantidad para ver los productos con esa cantidad");
-                    int cantidad = sc.nextInt();
+                    // Busqueda por cantidad
+//                    System.out.println("Inserte una cantidad para ver los productos con esa cantidad");
+//                    int cantidad = sc.nextInt();
+//
+//                    Product cant = SQLAccessMercaDaw.getProductoCantatidad(cantidad);
+//                    System.out.println(cant);
 
-                    Product cant = SQLAccessMercaDaw.getProductoCantatidad(cantidad);
-                    System.out.println(cant);
+                    break;
+
+                case "5":
+
+
+                    String referenciaADD;
+                    do {
+                        System.out.println("Ingresa la referencia del producto");
+                        System.out.println("Patron: 'REF000' ");
+                        referenciaADD = sc.nextLine();
+                    }while (!PatronReferencia(referenciaADD));
+
+                    System.out.println("Inserte el nombre del producto");
+                    String nombreADD = sc.nextLine();
+
+                    System.out.println("Inserte la descripcion del producto");
+                    String descripcionADD = sc.nextLine();
+
+                    System.out.println("Inserte la cantidad del producto");
+                    int cantidadADD = sc.nextInt();
+
+                    System.out.println("Inserte la precio del producto");
+                    double precioADD = sc.nextDouble();
+
+                    System.out.println("Inserte el descuento del producto");
+                    int descuentoADD = sc.nextInt();
+
+                    int iva = 21;
+
+                    boolean aplicarDPT = false;
+                    String opcionDescuento;
+
+                    do {
+                        System.out.println("Inserte desea aplicar el descuento");
+                        System.out.println("S-N");
+                         opcionDescuento = sc.nextLine();
+                    }while (!opcionDescuento.equalsIgnoreCase("S") && !opcionDescuento.equalsIgnoreCase("N"));
+
+                    if (opcionDescuento.equals("S")) {
+                        aplicarDPT = true;
+                    }else if (opcionDescuento.equals("N")) {
+                        aplicarDPT = false;
+                    }else{
+                        System.out.println("");
+                    }
+
+
+                    Product nuevoProducto = new Product(-1,referenciaADD,nombreADD,descripcionADD,cantidadADD,precioADD,descuentoADD,iva,aplicarDPT);
+                    int addProducto = SQLAccessMercaDaw.insertarProducto(nuevoProducto);
+
+                    List<Product> productos = SQLAccessMercaDaw.getProductos();
+
+                    for(Product producto : productos){
+                        System.out.println(producto);
+                    }
 
                     break;
             }
@@ -101,5 +161,10 @@ public class Main {
         for(Product producto : productos){
             System.out.println(producto);
         }
+    }
+
+    static boolean PatronReferencia(String referencia) {
+        String Patron = "^REF\\d{3}$";
+        return Pattern.matches(Patron, referencia);
     }
 }
