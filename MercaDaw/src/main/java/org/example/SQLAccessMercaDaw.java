@@ -124,7 +124,7 @@ public class SQLAccessMercaDaw {
     public static int insertarProducto(Product product) {
         int response = -1;
 
-        String sqlStatement = "INSERT INTO products (referencia, name, description, cantidad, price, descuento, iva, aplicarDTO) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO products (referencia, nombre, descripcion, cantidad, precio, descuento, iva, aplicarDto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = SQLDataManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlStatement)){
 
@@ -144,6 +144,67 @@ public class SQLAccessMercaDaw {
         }
 
         return response;
+    }
+
+    public static int delProductRef(String ref) {
+
+        int elements = -1;
+        String sqlStatement = "DELETE FROM products WHERE referencia = ?";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlStatement)){
+             statement.setString(1, ref);
+
+
+
+            elements = statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return elements;
+    }
+
+    public static int updateProducto(Product product) {
+        int response = -1;
+
+        //Actualizamos todos
+
+        // (descripción, cantidad, precio, descuento, AplicarDto)
+        String sqlStatment = "UPDATE products set descripcion = ?," + "cantidad = ?, precio = ?, descuento = ?,aplicarDTO = ? WHERE id = ?";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlStatment)){
+
+            statement.setString(1, product.getDescription());
+            statement.setInt(2, product.getCantidad());
+            statement.setDouble(3, product.getPrice());
+            statement.setInt(4, product.getDescuento());
+            statement.setBoolean(5, product.isAplicarDTO());
+            statement.setInt(6, product.getId());
+
+            response = statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return response;
+    }
+
+
+    public static Product buscarProducto(String ref) {
+        List<Product> productos = getProductos();
+
+        for (Product producto : productos) {
+            if (producto.getReferencia().equalsIgnoreCase(ref)) {
+                return producto;
+            }
+        }
+
+        return null;
     }
 
 }

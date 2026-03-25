@@ -49,6 +49,11 @@ public class Product {
         return aplicarDTO;
     }
 
+    public Product setAplicarDTO(boolean aplicarDTO) {
+        this.aplicarDTO = aplicarDTO;
+        return this;
+    }
+
     public Product(int id, String referencia, String name, String description, int cantidad, double price, int descuento, int iva, boolean aplicarDTO) {
         this.id = id;
         this.referencia = referencia;
@@ -58,6 +63,15 @@ public class Product {
         this.price = price;
         this.descuento = descuento;
         this.iva = iva;
+        this.aplicarDTO = aplicarDTO;
+    }
+
+    public Product(int id, String description, int cantidad, double price, int descuento, boolean aplicarDTO) {
+        this.id = id;
+        this.description = description;
+        this.cantidad = cantidad;
+        this.price = price;
+        this.descuento = descuento;
         this.aplicarDTO = aplicarDTO;
     }
 

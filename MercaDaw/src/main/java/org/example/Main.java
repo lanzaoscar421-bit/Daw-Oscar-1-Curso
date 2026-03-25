@@ -29,6 +29,8 @@ public class Main {
 
 
             menu();
+
+
             opcion = sc.nextLine();
 
             switch (opcion) {
@@ -48,12 +50,8 @@ public class Main {
 
                 case "4":
 
-                    // Busqueda por cantidad
-//                    System.out.println("Inserte una cantidad para ver los productos con esa cantidad");
-//                    int cantidad = sc.nextInt();
-//
-//                    Product cant = SQLAccessMercaDaw.getProductoCantatidad(cantidad);
-//                    System.out.println(cant);
+                     // Busqueda por cantidad
+                    busquedaCANT(sc);
 
                     break;
 
@@ -82,6 +80,9 @@ public class Main {
                     System.out.println("Inserte el descuento del producto");
                     int descuentoADD = sc.nextInt();
 
+                    //
+                    sc.nextLine();
+
                     int iva = 21;
 
                     boolean aplicarDPT = false;
@@ -93,7 +94,7 @@ public class Main {
                          opcionDescuento = sc.nextLine();
                     }while (!opcionDescuento.equalsIgnoreCase("S") && !opcionDescuento.equalsIgnoreCase("N"));
 
-                    if (opcionDescuento.equals("S")) {
+                    if (opcionDescuento.equalsIgnoreCase("S")) {
                         aplicarDPT = true;
                     }else if (opcionDescuento.equals("N")) {
                         aplicarDPT = false;
@@ -112,9 +113,98 @@ public class Main {
                     }
 
                     break;
+
+                case "6":
+
+                    List<Product> productos3 = SQLAccessMercaDaw.getProductos();
+
+                    for(Product producto : productos3){
+                        System.out.println(producto);
+                    }
+
+                    System.out.println("Ahora inserte la referencia para eliminar");
+                    String referenciaDel = sc.nextLine();
+
+                    int delProucto = SQLAccessMercaDaw.delProductRef(referenciaDel);
+
+                    if(delProucto == 0){
+                        System.out.println("No se encontro el referencia del producto");
+                    }else{
+                        System.out.println("Se borro correctamente");
+                    }
+
+                    break;
+
+                case "7":
+
+                    List<Product> productos4 = SQLAccessMercaDaw.getProductos();
+
+                    for(Product producto : productos4){
+                        System.out.println(producto);
+                    }
+
+
+                    System.out.println("Ingrese el ID del producto a actualizar:");
+                    int idProductoUpdate = sc.nextInt();
+                    sc.nextLine(); // limpiar buffer
+
+                    System.out.println("Inserte la nueva descripcion del producto");
+                    String updateDescripcion = sc.nextLine();
+
+                    System.out.println("Inserte la nueva cantidad del producto");
+                    int cantidadNueva = sc.nextInt();
+
+                    System.out.println("Inserte el nuevo precio del producto");
+                    double precioNueva = sc.nextDouble();
+
+                    System.out.println("Inserte el nuevo descuento del producto");
+                    int descuentoNueva = sc.nextInt();
+
+                    System.out.println("Inserte Si quiere descuento");
+                    boolean aplicarDPTUpdate = false;
+                    String opcionDescuentoUpdate;
+                    do {
+                        System.out.println("Inserte desea aplicar el descuento");
+                        System.out.println("S-N");
+                        opcionDescuentoUpdate = sc.nextLine();
+                    }while (!opcionDescuentoUpdate.equalsIgnoreCase("S") && !opcionDescuentoUpdate.equalsIgnoreCase("N"));
+
+                    if (opcionDescuentoUpdate.equals("S")) {
+                        aplicarDPTUpdate = true;
+                    }else if (opcionDescuentoUpdate.equals("N")) {
+                        aplicarDPTUpdate = false;
+                    }else{
+                        System.out.println("");
+                    }
+
+
+                    Product productoSeleccionado = new Product(idProductoUpdate,updateDescripcion, cantidadNueva, precioNueva, descuentoNueva, aplicarDPTUpdate);
+
+                    int resultado = SQLAccessMercaDaw.updateProducto(productoSeleccionado);
+
+                    if(resultado == 0){
+                        System.out.println("No se encontro el producto a actualizar");
+                    }else{
+                        System.out.println("Se Actualizo correctamente");
+                    }
+
+
+                    break;
             }
         }while (!opcion.equals("9"));
 
+    }
+
+    private static void busquedaCANT(Scanner sc) {
+        System.out.println("Inserte una cantidad para ver los productos con esa cantidad");
+        int cantidad = sc.nextInt();
+
+        Product cant = SQLAccessMercaDaw.getProductoCantatidad(cantidad);
+        if(cant != null) {
+            System.out.println(cant);
+        }else{
+            System.out.println("No existen productos con esa cantidad");
+        }
     }
 
     private static void menu() {
@@ -134,15 +224,15 @@ public class Main {
         if (conn != null) {
             try {
                 if (!conn.isClosed()) {
-                    System.out.println("✅ Ping correcto: conexión establecida con MySQL\n");
+                    System.out.println("Ping correcto: conexión establecida con MySQL\n");
                 }
                 conn.close();
             } catch (SQLException e) {
-                System.out.println("❌ Error");
+                System.out.println("Eror");
                 e.printStackTrace();
             }
         } else {
-            System.out.println("❌ No se pudo conectar a la base de datos");
+            System.out.println("No se pudo conectar a la base de datos");
         }
     }
 
