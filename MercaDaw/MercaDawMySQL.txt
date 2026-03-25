@@ -18,8 +18,17 @@ CREATE SCHEMA IF NOT EXISTS `mercaDaw` DEFAULT CHARACTER SET utf8mb4 COLLATE utf
 USE `mercaDaw` ;
 
 -- -----------------------------------------------------
--- Table `mercaDaw`.`productos`
+-- Table `mercaDaw`.`tipo-productos`
 -- -----------------------------------------------------
+
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
 CREATE TABLE IF NOT EXISTS `mercaDaw`.`products` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `referencia` VARCHAR(50) NOT NULL,
@@ -40,19 +49,34 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- Insertar los datos en la tabla productos
+INSERT INTO products (referencia, nombre, tipo, cantidad, precio, descuento, iva, aplicarDto) VALUES
+('REF001', 'Portátil HP', 1, 10, 899.99, 10, 21, true),
+('REF002', 'Ratón Logitech', 2, 50, 29.99, 5, 21, true),
+('REF003', 'Teclado Mecánico', 2, 30, 79.99, 0, 21, false),
+('REF004', 'Monitor Samsung', 1, 20, 149.99, 15, 21, true),
+('REF005', 'Disco SSD 1TB', 3, 40, 99.99, 10, 21, true),
+('REF006', 'Memoria USB 64GB', 3, 100, 14.99, 5, 21, false),
+('REF007', 'Impresora Canon', 1, 15, 129.99, 20, 21, true),
+('REF008', 'Auriculares Sony', 2, 25, 199.99, 10, 21, true);
 
 
 
--- Insertar los datos en la tabla characters
-INSERT INTO products (referencia, nombre, descripcion, tipo, cantidad, precio, descuento, iva, aplicarDto) VALUES
-('REF001', 'Portátil HP', 'Portátil de 15 pulgadas con 16GB RAM', 1, 10, 899.99, 10, 21, true),
-('REF002', 'Ratón Logitech', 'Ratón inalámbrico ergonómico', 2, 50, 29.99, 5, 21, true),
-('REF003', 'Teclado Mecánico', 'Teclado RGB switches blue', 2, 30, 79.99, 0, 21, false),
-('REF004', 'Monitor Samsung', 'Monitor 24 pulgadas Full HD', 1, 20, 149.99, 15, 21, true),
-('REF005', 'Disco SSD 1TB', 'Almacenamiento rápido SSD', 3, 40, 99.99, 10, 21, true),
-('REF006', 'Memoria USB 64GB', 'Pendrive USB 3.0', 3, 100, 14.99, 0, 21, false),
-('REF007', 'Impresora Canon', 'Impresora multifunción', 1, 15, 129.99, 20, 21, true),
-('REF008', 'Auriculares Sony', 'Auriculares inalámbricos con cancelación de ruido', 2, 25, 199.99, 10, 21, true);
+
+-- Paso 1: Ver cuántos duplicados hay (opcional)
+SELECT referencia, COUNT(*) AS total
+FROM products
+GROUP BY referencia
+HAVING total > 1;
+
+-- Paso 2: Borrar duplicados dejando solo el registro con el ID más bajo
+DELETE p1
+FROM products p1
+INNER JOIN products p2
+WHERE
+    p1.id > p2.id
+    AND p1.referencia = p2.referencia;
+
+-- Paso 3: Verificar que se eliminaron los duplicados
+SELECT * FROM products;
+
