@@ -45,6 +45,28 @@ public class Main {
                 case "3":
 
                     //Buscar Producto por tipo
+                    List<String> tipos = SQLAccessMercaDaw.getTipos();
+
+                    int i = 1;
+                    for (String tipo : tipos) {
+                        System.out.println(i + ". " + tipo);
+                        i++;
+                    }
+
+                    int tipoBuscar;
+                    do {
+                        System.out.println("Elige el tipo (numero):");
+                        tipoBuscar = sc.nextInt();
+                    } while (tipoBuscar <= 0 || tipoBuscar > tipos.size());
+
+                    sc.nextLine();
+
+                    Product tipoSeleccionado;
+
+                    tipoSeleccionado = SQLAccessMercaDaw.getProductoTipo(tipoBuscar);
+
+                    System.out.println(tipoSeleccionado);
+
 
                     break;
 
@@ -64,6 +86,26 @@ public class Main {
                         System.out.println("Patron: 'REF000' ");
                         referenciaADD = sc.nextLine();
                     }while (!PatronReferencia(referenciaADD));
+
+                    System.out.println("Ahora inserta los tipos");
+                    System.out.println("Tipos disponibles:");
+
+                    List<String> tiposADD = SQLAccessMercaDaw.getTipos();
+
+                    int iadd = 1;
+                    for (String tipo : tiposADD) {
+                        System.out.println(iadd + ". " + tipo);
+                        iadd++;
+                    }
+
+                    int tipoADD;
+                    do {
+                        System.out.println("Elige el tipo (numero):");
+                        tipoADD = sc.nextInt();
+                    } while (tipoADD <= 0 || tipoADD > tiposADD.size());
+
+                    sc.nextLine();
+
 
                     System.out.println("Inserte el nombre del producto");
                     String nombreADD = sc.nextLine();
@@ -103,7 +145,7 @@ public class Main {
                     }
 
 
-                    Product nuevoProducto = new Product(-1,referenciaADD,nombreADD,descripcionADD,cantidadADD,precioADD,descuentoADD,iva,aplicarDPT);
+                    Product nuevoProducto = new Product(-1,referenciaADD,tipoADD,nombreADD,descripcionADD,cantidadADD,precioADD,descuentoADD,iva,aplicarDPT);
                     int addProducto = SQLAccessMercaDaw.insertarProducto(nuevoProducto);
 
                     List<Product> productos = SQLAccessMercaDaw.getProductos();
@@ -116,83 +158,103 @@ public class Main {
 
                 case "6":
 
-                    List<Product> productos3 = SQLAccessMercaDaw.getProductos();
-
-                    for(Product producto : productos3){
-                        System.out.println(producto);
-                    }
-
-                    System.out.println("Ahora inserte la referencia para eliminar");
-                    String referenciaDel = sc.nextLine();
-
-                    int delProucto = SQLAccessMercaDaw.delProductRef(referenciaDel);
-
-                    if(delProucto == 0){
-                        System.out.println("No se encontro el referencia del producto");
-                    }else{
-                        System.out.println("Se borro correctamente");
-                    }
+                    productDel(sc);
 
                     break;
 
                 case "7":
 
-                    List<Product> productos4 = SQLAccessMercaDaw.getProductos();
-
-                    for(Product producto : productos4){
-                        System.out.println(producto);
-                    }
+                    updateProduct(sc);
 
 
-                    System.out.println("Ingrese el ID del producto a actualizar:");
-                    int idProductoUpdate = sc.nextInt();
-                    sc.nextLine(); // limpiar buffer
+                    break;
 
-                    System.out.println("Inserte la nueva descripcion del producto");
-                    String updateDescripcion = sc.nextLine();
-
-                    System.out.println("Inserte la nueva cantidad del producto");
-                    int cantidadNueva = sc.nextInt();
-
-                    System.out.println("Inserte el nuevo precio del producto");
-                    double precioNueva = sc.nextDouble();
-
-                    System.out.println("Inserte el nuevo descuento del producto");
-                    int descuentoNueva = sc.nextInt();
-
-                    System.out.println("Inserte Si quiere descuento");
-                    boolean aplicarDPTUpdate = false;
-                    String opcionDescuentoUpdate;
-                    do {
-                        System.out.println("Inserte desea aplicar el descuento");
-                        System.out.println("S-N");
-                        opcionDescuentoUpdate = sc.nextLine();
-                    }while (!opcionDescuentoUpdate.equalsIgnoreCase("S") && !opcionDescuentoUpdate.equalsIgnoreCase("N"));
-
-                    if (opcionDescuentoUpdate.equals("S")) {
-                        aplicarDPTUpdate = true;
-                    }else if (opcionDescuentoUpdate.equals("N")) {
-                        aplicarDPTUpdate = false;
-                    }else{
-                        System.out.println("");
-                    }
+                case "8":
 
 
-                    Product productoSeleccionado = new Product(idProductoUpdate,updateDescripcion, cantidadNueva, precioNueva, descuentoNueva, aplicarDPTUpdate);
+                    break;
 
-                    int resultado = SQLAccessMercaDaw.updateProducto(productoSeleccionado);
 
-                    if(resultado == 0){
-                        System.out.println("No se encontro el producto a actualizar");
-                    }else{
-                        System.out.println("Se Actualizo correctamente");
-                    }
+                case "9":
 
+                    System.out.println("Adios.");
 
                     break;
             }
         }while (!opcion.equals("9"));
 
+    }
+
+    private static void updateProduct(Scanner sc) {
+        List<Product> productos4 = SQLAccessMercaDaw.getProductos();
+
+        for(Product producto : productos4){
+            System.out.println(producto);
+        }
+
+
+        System.out.println("Ingrese el ID del producto a actualizar:");
+        int idProductoUpdate = sc.nextInt();
+        sc.nextLine(); // limpiar buffer
+
+        System.out.println("Inserte la nueva descripcion del producto");
+        String updateDescripcion = sc.nextLine();
+
+        System.out.println("Inserte la nueva cantidad del producto");
+        int cantidadNueva = sc.nextInt();
+
+        System.out.println("Inserte el nuevo precio del producto");
+        double precioNueva = sc.nextDouble();
+
+        System.out.println("Inserte el nuevo descuento del producto");
+        int descuentoNueva = sc.nextInt();
+
+        System.out.println("Inserte Si quiere descuento");
+        boolean aplicarDPTUpdate = false;
+        String opcionDescuentoUpdate;
+        do {
+            System.out.println("Inserte desea aplicar el descuento");
+            System.out.println("S-N");
+            opcionDescuentoUpdate = sc.nextLine();
+        }while (!opcionDescuentoUpdate.equalsIgnoreCase("S") && !opcionDescuentoUpdate.equalsIgnoreCase("N"));
+
+        if (opcionDescuentoUpdate.equals("S")) {
+            aplicarDPTUpdate = true;
+        }else if (opcionDescuentoUpdate.equals("N")) {
+            aplicarDPTUpdate = false;
+        }else{
+            System.out.println("");
+        }
+
+
+        Product productoSeleccionado = new Product(idProductoUpdate,updateDescripcion, cantidadNueva, precioNueva, descuentoNueva, aplicarDPTUpdate);
+
+        int resultado = SQLAccessMercaDaw.updateProducto(productoSeleccionado);
+
+        if(resultado == 0){
+            System.out.println("No se encontro el producto a actualizar");
+        }else{
+            System.out.println("Se Actualizo correctamente");
+        }
+    }
+
+    private static void productDel(Scanner sc) {
+        List<Product> productos3 = SQLAccessMercaDaw.getProductos();
+
+        for(Product producto : productos3){
+            System.out.println(producto);
+        }
+
+        System.out.println("Ahora inserte la referencia para eliminar");
+        String referenciaDel = sc.nextLine();
+
+        int delProucto = SQLAccessMercaDaw.delProductRef(referenciaDel);
+
+        if(delProucto == 0){
+            System.out.println("No se encontro el referencia del producto");
+        }else{
+            System.out.println("Se borro correctamente");
+        }
     }
 
     private static void busquedaCANT(Scanner sc) {

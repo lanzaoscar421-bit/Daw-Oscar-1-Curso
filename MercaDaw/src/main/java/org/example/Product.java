@@ -5,6 +5,7 @@ public class Product {
 
     private int id;
     private String referencia;
+    private int tipo;
     private String name;
     private String description;
     private int cantidad;
@@ -19,6 +20,10 @@ public class Product {
 
     public String getReferencia() {
         return referencia;
+    }
+
+    public int getTipo() {
+        return tipo;
     }
 
     public String getName() {
@@ -54,9 +59,10 @@ public class Product {
         return this;
     }
 
-    public Product(int id, String referencia, String name, String description, int cantidad, double price, int descuento, int iva, boolean aplicarDTO) {
+    public Product(int id, String referencia, int tipo, String name, String description, int cantidad, double price, int descuento, int iva, boolean aplicarDTO) {
         this.id = id;
         this.referencia = referencia;
+        this.tipo = tipo;
         this.name = name;
         this.description = description;
         this.cantidad = cantidad;
@@ -80,6 +86,7 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", referencia='" + referencia + '\'' +
+                ", tipo=" + tipo +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", cantidad=" + cantidad +
@@ -90,3 +97,5 @@ public class Product {
                 '}';
     }
 }
+
+

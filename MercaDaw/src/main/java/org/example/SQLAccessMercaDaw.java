@@ -24,25 +24,44 @@ public class SQLAccessMercaDaw {
             while (resultSets.next()) {
                 int id = resultSets.getInt(1);
                 String referencia = resultSets.getString(2);
-                String name = resultSets.getString(3);
-                String description = resultSets.getString(4);
-                int cantidad = resultSets.getInt(5);
-                double price = resultSets.getDouble(6);
-                int descuento = resultSets.getInt(7);
-                int iva = resultSets.getInt(8);
-                boolean aplicarDTO = resultSets.getBoolean(9);
+                int tipo = resultSets.getInt(3);
+                String name = resultSets.getString(4);
+                String description = resultSets.getString(5);
+                int cantidad = resultSets.getInt(6);
+                double price = resultSets.getDouble(7);
+                int descuento = resultSets.getInt(8);
+                int iva = resultSets.getInt(9);
+                boolean aplicarDTO = resultSets.getBoolean(10);
 
-                productos.add(new Product(id,referencia,name,description,cantidad,price,descuento,iva, aplicarDTO));
-
-
+                productos.add(new Product(id, referencia, tipo, name, description, cantidad, price, descuento, iva, aplicarDTO));
             }
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         return productos;
+    }
+
+    //Ver todos los tipos que hay
+    public static List<String> getTipos() {
+
+        List<String> tipos = new LinkedList<>();
+        String sql = "SELECT nombre FROM tipos";
+
+        try (Connection con = SQLDataManager.getConnection();
+             Statement statement = con.createStatement();
+             ResultSet resultSets = statement.executeQuery(sql)) {
+
+            while (resultSets.next()) {
+                tipos.add(resultSets.getString("nombre"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener tipos");
+        }
+
+        return tipos;
     }
 
 
@@ -62,15 +81,16 @@ public class SQLAccessMercaDaw {
             while (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 String ref = resultSet.getString(2);
-                String name = resultSet.getString(3);
-                String description = resultSet.getString(4);
-                int cantidad = resultSet.getInt(5);
-                double price = resultSet.getDouble(6);
-                int descuento = resultSet.getInt(7);
-                int iva = resultSet.getInt(8);
-                boolean aplicarDTO = resultSet.getBoolean(9);
+                int tipo = resultSet.getInt(3);
+                String name = resultSet.getString(4);
+                String description = resultSet.getString(5);
+                int cantidad = resultSet.getInt(6);
+                double price = resultSet.getDouble(7);
+                int descuento = resultSet.getInt(8);
+                int iva = resultSet.getInt(9);
+                boolean aplicarDTO = resultSet.getBoolean(10);
 
-                producto = new Product(id,ref,name,description,cantidad,price,descuento,iva, aplicarDTO);
+                producto = new Product(id,ref,tipo,name,description,cantidad,price,descuento,iva, aplicarDTO);
             }
 
 
@@ -80,6 +100,46 @@ public class SQLAccessMercaDaw {
 
         return producto;
     }
+
+    //Buscar por tipo
+
+    public static Product getProductoTipo(int tipo){
+        Product product = null;
+
+
+        //Consulta MYSql
+        String sqlTipo = "SELECT * FROM products WHERE tipo = ?";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlTipo)){
+
+            statement.setInt(1, tipo);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String ref = resultSet.getString(2);
+                int tipo2 = resultSet.getInt(3);
+                String name = resultSet.getString(4);
+                String description = resultSet.getString(5);
+                int cantidad1 = resultSet.getInt(6);
+                double price = resultSet.getDouble(7);
+                int descuento = resultSet.getInt(8);
+                int iva = resultSet.getInt(9);
+                boolean aplicarDTO = resultSet.getBoolean(10);
+
+                product = new Product(id,ref,tipo2,name,description,cantidad1,price,descuento,iva, aplicarDTO);
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return product;
+
+    }
+
     //Buscar producto por cantidad.
 
     public static Product getProductoCantatidad(int cantidad){
@@ -99,15 +159,16 @@ public class SQLAccessMercaDaw {
             while (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 String ref = resultSet.getString(2);
-                String name = resultSet.getString(3);
-                String description = resultSet.getString(4);
-                int cantidad1 = resultSet.getInt(5);
-                double price = resultSet.getDouble(6);
-                int descuento = resultSet.getInt(7);
-                int iva = resultSet.getInt(8);
-                boolean aplicarDTO = resultSet.getBoolean(9);
+                int tipo = resultSet.getInt(3);
+                String name = resultSet.getString(4);
+                String description = resultSet.getString(5);
+                int cantidad1 = resultSet.getInt(6);
+                double price = resultSet.getDouble(7);
+                int descuento = resultSet.getInt(8);
+                int iva = resultSet.getInt(9);
+                boolean aplicarDTO = resultSet.getBoolean(10);
 
-                producto = new Product(id,ref,name,description,cantidad1,price,descuento,iva, aplicarDTO);
+                producto = new Product(id,ref,tipo,name,description,cantidad1,price,descuento,iva, aplicarDTO);
             }
 
 
@@ -124,19 +185,20 @@ public class SQLAccessMercaDaw {
     public static int insertarProducto(Product product) {
         int response = -1;
 
-        String sqlStatement = "INSERT INTO products (referencia, nombre, descripcion, cantidad, precio, descuento, iva, aplicarDto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO products (referencia, nombre, tipo, descripcion, cantidad, precio, descuento, iva, aplicarDto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = SQLDataManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlStatement)){
 
 
             statement.setString(1, product.getReferencia());
             statement.setString(2, product.getName());
-            statement.setString(3, product.getDescription());
-            statement.setInt(4, product.getCantidad());
-            statement.setDouble(5, product.getPrice());
-            statement.setInt(6, product.getDescuento());
-            statement.setInt(7, product.getIva());
-            statement.setBoolean(8, product.isAplicarDTO());
+            statement.setInt(3, product.getTipo());
+            statement.setString(4, product.getDescription());
+            statement.setInt(5, product.getCantidad());
+            statement.setDouble(6, product.getPrice());
+            statement.setInt(7, product.getDescuento());
+            statement.setInt(8, product.getIva());
+            statement.setBoolean(9, product.isAplicarDTO());
 
             response = statement.executeUpdate();
         } catch (SQLException e) {

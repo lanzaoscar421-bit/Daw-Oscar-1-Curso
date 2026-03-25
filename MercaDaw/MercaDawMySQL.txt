@@ -1,82 +1,43 @@
--- MySQL Workbench Forward Engineering
+CREATE DATABASE IF NOT EXISTS mercaDaw;
+USE mercaDaw;
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+-- Tabla de tipos de producto
+CREATE TABLE tipos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema mercaDaw
--- -----------------------------------------------------
+-- Tabla de productos
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    referencia VARCHAR(50) NOT NULL UNIQUE,
+    tipo INT,
+    nombre VARCHAR(100),
+    descripcion VARCHAR(300),
+    cantidad INT,
+    precio DOUBLE,
+    descuento INT,
+    iva INT,
+    aplicarDto BOOLEAN,
 
--- -----------------------------------------------------
--- Schema dcuniverse
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mercaDaw` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `mercaDaw` ;
+    FOREIGN KEY (tipo) REFERENCES tipos(id)
+);
 
--- -----------------------------------------------------
--- Table `mercaDaw`.`tipo-productos`
--- -----------------------------------------------------
+-- Datos de ejemplo en tipos
+INSERT INTO tipos (nombre) VALUES
+('Informática'),
+('Periféricos'),
+('Almacenamiento');
 
+-- Datos de ejemplo en productos
+INSERT INTO products (referencia, tipo, nombre, descripcion, cantidad, precio, descuento, iva, aplicarDto) VALUES
+('REF001', 1, 'Portátil HP', 'Portátil 15 pulgadas', 10, 899.99, 10, 21, true),
+('REF002', 2, 'Ratón Logitech', 'Ratón inalámbrico', 50, 29.99, 5, 21, true),
+('REF003', 2, 'Teclado Mecánico', 'Teclado gaming', 30, 79.99, 0, 21, false),
+('REF004', 3, 'Disco SSD 1TB', 'Alta velocidad', 40, 99.99, 10, 21, true);
 
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
-CREATE TABLE IF NOT EXISTS `mercaDaw`.`products` (
-  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `referencia` VARCHAR(50) NOT NULL,
-  `nombre` VARCHAR(100) NULL DEFAULT NULL,
-  `descripcion` VARCHAR(300) NULL DEFAULT NULL,
-  `tipo` int NULL DEFAULT NULL,
-  `cantidad` int NULL DEFAULT NULL,
-  `precio` double NULL DEFAULT NULL,
-  `descuento` int NULL DEFAULT NULL,
-  `iva` int NULL DEFAULT NULL,
-  `aplicarDto` boolean NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id` (`id` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
-
--- Insertar los datos en la tabla productos
-INSERT INTO products (referencia, nombre, tipo, cantidad, precio, descuento, iva, aplicarDto) VALUES
-('REF001', 'Portátil HP', 1, 10, 899.99, 10, 21, true),
-('REF002', 'Ratón Logitech', 2, 50, 29.99, 5, 21, true),
-('REF003', 'Teclado Mecánico', 2, 30, 79.99, 0, 21, false),
-('REF004', 'Monitor Samsung', 1, 20, 149.99, 15, 21, true),
-('REF005', 'Disco SSD 1TB', 3, 40, 99.99, 10, 21, true),
-('REF006', 'Memoria USB 64GB', 3, 100, 14.99, 5, 21, false),
-('REF007', 'Impresora Canon', 1, 15, 129.99, 20, 21, true),
-('REF008', 'Auriculares Sony', 2, 25, 199.99, 10, 21, true);
-
-
-
-
--- Paso 1: Ver cuántos duplicados hay (opcional)
-SELECT referencia, COUNT(*) AS total
-FROM products
-GROUP BY referencia
-HAVING total > 1;
-
--- Paso 2: Borrar duplicados dejando solo el registro con el ID más bajo
-DELETE p1
-FROM products p1
-INNER JOIN products p2
-WHERE
-    p1.id > p2.id
-    AND p1.referencia = p2.referencia;
-
--- Paso 3: Verificar que se eliminaron los duplicados
 SELECT * FROM products;
+SELECT * FROM tipos;
 
+-- TRUNCATE TABLE products;
+-- DELETE FROM products;
