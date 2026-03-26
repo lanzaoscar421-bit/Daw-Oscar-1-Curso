@@ -44,28 +44,7 @@ public class Main {
                     break;
                 case "3":
 
-                    //Buscar Producto por tipo
-                    List<String> tipos = SQLAccessMercaDaw.getTipos();
-
-                    int i = 1;
-                    for (String tipo : tipos) {
-                        System.out.println(i + ". " + tipo);
-                        i++;
-                    }
-
-                    int tipoBuscar;
-                    do {
-                        System.out.println("Elige el tipo (numero):");
-                        tipoBuscar = sc.nextInt();
-                    } while (tipoBuscar <= 0 || tipoBuscar > tipos.size());
-
-                    sc.nextLine();
-
-                    Product tipoSeleccionado;
-
-                    tipoSeleccionado = SQLAccessMercaDaw.getProductoTipo(tipoBuscar);
-
-                    System.out.println(tipoSeleccionado);
+                    buscarMetodoTipo(sc);
 
 
                     break;
@@ -155,26 +134,22 @@ public class Main {
                     }
 
                     break;
-
                 case "6":
 
                     productDel(sc);
 
                     break;
-
                 case "7":
 
                     updateProduct(sc);
 
-
                     break;
-
                 case "8":
 
+                    insertarTipos(sc);
+
 
                     break;
-
-
                 case "9":
 
                     System.out.println("Adios.");
@@ -183,6 +158,45 @@ public class Main {
             }
         }while (!opcion.equals("9"));
 
+    }
+
+    private static void insertarTipos(Scanner sc) {
+        System.out.println("Inserte el nuevo tipo que quieres insertar");
+        String tipoNuevoADD = sc.nextLine();
+
+        SQLAccessMercaDaw.insertarTipo(tipoNuevoADD);
+
+        List<String> tiposVER = SQLAccessMercaDaw.getTipos();
+        for (String tipo : tiposVER) {
+            System.out.println(tipo + "\n" );
+        }
+    }
+
+    private static void buscarMetodoTipo(Scanner sc) {
+        //Buscar Producto por tipo
+        List<String> tipos = SQLAccessMercaDaw.getTipos();
+
+        int i = 1;
+        for (String tipo : tipos) {
+            System.out.println(i + ". " + tipo);
+            i++;
+        }
+
+        int tipoBuscar;
+        do {
+            System.out.println("Elige el tipo (numero):");
+            tipoBuscar = sc.nextInt();
+        } while (tipoBuscar <= 0 || tipoBuscar > tipos.size());
+
+        sc.nextLine();
+
+        List<Product> productoPorTipo;
+
+        productoPorTipo = SQLAccessMercaDaw.getProductoTipo(tipoBuscar);
+
+        for (Product producto : productoPorTipo) {
+            System.out.println(producto);
+        }
     }
 
     private static void updateProduct(Scanner sc) {

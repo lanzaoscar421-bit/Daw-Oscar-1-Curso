@@ -103,8 +103,8 @@ public class SQLAccessMercaDaw {
 
     //Buscar por tipo
 
-    public static Product getProductoTipo(int tipo){
-        Product product = null;
+    public static List <Product> getProductoTipo(int tipo){
+        List<Product> productos = new ArrayList<>();
 
 
         //Consulta MYSql
@@ -128,7 +128,7 @@ public class SQLAccessMercaDaw {
                 int iva = resultSet.getInt(9);
                 boolean aplicarDTO = resultSet.getBoolean(10);
 
-                product = new Product(id,ref,tipo2,name,description,cantidad1,price,descuento,iva, aplicarDTO);
+                productos.add( new Product(id,ref,tipo2,name,description,cantidad1,price,descuento,iva, aplicarDTO));
             }
 
 
@@ -136,7 +136,7 @@ public class SQLAccessMercaDaw {
             throw new RuntimeException(e);
         }
 
-        return product;
+        return productos;
 
     }
 
@@ -267,6 +267,26 @@ public class SQLAccessMercaDaw {
         }
 
         return null;
+    }
+
+
+
+    public static int insertarTipo(String nombre) {
+        int response = -1;
+
+        String sqlStatement = "INSERT INTO tipos (nombre) VALUES (?)";
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlStatement)){
+
+
+            statement.setString(1, nombre);
+
+            response = statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response;
     }
 
 }
