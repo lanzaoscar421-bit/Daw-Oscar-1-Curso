@@ -47,14 +47,15 @@ public class SQLAccessMercaDaw {
     public static List<String> getTipos() {
 
         List<String> tipos = new LinkedList<>();
-        String sql = "SELECT nombre FROM tipos";
+        String sql = "SELECT * FROM tipos\n" +
+                "ORDER BY id DESC;";
 
         try (Connection con = SQLDataManager.getConnection();
              Statement statement = con.createStatement();
-             ResultSet resultSets = statement.executeQuery(sql)) {
+             ResultSet rs = statement.executeQuery(sql)) {
 
-            while (resultSets.next()) {
-                tipos.add(resultSets.getString("nombre"));
+            while (rs.next()) {
+                tipos.add(rs.getInt("id") + " - " + rs.getString("nombre"));
             }
 
         } catch (SQLException e) {
@@ -63,7 +64,6 @@ public class SQLAccessMercaDaw {
 
         return tipos;
     }
-
 
     //Metodo para buscar Producto por referencia
     public static Product getProductoREF(String referencia){
@@ -142,10 +142,8 @@ public class SQLAccessMercaDaw {
 
     //Buscar producto por cantidad.
 
-    public static Product getProductoCantatidad(int cantidad){
-        Product producto = null;
-        
-
+    public static List <Product> getProductoCantatidad(int cantidad){
+        List<Product> productos = new ArrayList<>();
 
         //Consulta MySql
         String sqlProductosREF = "SELECT * FROM products WHERE cantidad = ?";
@@ -168,7 +166,7 @@ public class SQLAccessMercaDaw {
                 int iva = resultSet.getInt(9);
                 boolean aplicarDTO = resultSet.getBoolean(10);
 
-                producto = new Product(id,ref,tipo,name,description,cantidad1,price,descuento,iva, aplicarDTO);
+                productos.add( new Product(id,ref,tipo,name,description,cantidad1,price,descuento,iva, aplicarDTO));
             }
 
 
@@ -176,7 +174,7 @@ public class SQLAccessMercaDaw {
             throw new RuntimeException(e);
         }
 
-        return producto;
+        return productos;
     }
 
 
@@ -256,6 +254,18 @@ public class SQLAccessMercaDaw {
         return response;
     }
 
+
+    public static boolean validarReferencia(String referencia) throws RefException {
+        boolean resultado = false;
+
+        for (Product product : getProductos()){
+            if (product.getReferencia().equals(referencia)){
+                throw new RefException("");
+            }
+        }
+
+        return resultado;
+    }
 
     public static Product buscarProducto(String ref) {
         List<Product> productos = getProductos();

@@ -34,7 +34,7 @@ INSERT INTO products (referencia, tipo, nombre, descripcion, cantidad, precio, d
 ('REF001', 1, 'Portátil HP', 'Portátil 15 pulgadas', 10, 899.99, 10, 21, true),
 ('REF002', 2, 'Ratón Logitech', 'Ratón inalámbrico', 50, 29.99, 5, 21, true),
 ('REF003', 2, 'Teclado Mecánico', 'Teclado gaming', 30, 79.99, 0, 21, false),
-('REF004', 3, 'Disco SSD 1TB', 'Alta velocidad', 40, 99.99, 10, 21, true);
+('REF004', 3, 'Disco SSD 1TB', 'Alta velocidad', 10, 99.99, 10, 21, true);
 
 SELECT * FROM products;
 SELECT * FROM tipos;
