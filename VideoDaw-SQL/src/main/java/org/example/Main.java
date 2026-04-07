@@ -1,6 +1,8 @@
 package org.example;
 
-import com.google.protobuf.Internal;
+// import com.google.protobuf.Internal;
+
+import org.example.Exceptions.ValidacionDNI;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -81,11 +83,16 @@ public class Main {
                     int nextNuCliente = SQLAccessVideoDaw.contarClientes() + 1;
                     String numClienteADD = String.format("SOC%03d", nextNuCliente);
 
-                    //Controlar el Dni que no se pueda repetir
-                    Cliente nuevoCliente = new Cliente(-1,dniAdd,nombre,direccion,fechaNacimiento,numClienteADD);
-                    int addCliente = SQLAccessVideoDaw.insertarCliente(nuevoCliente);
-                    System.out.println("Insertado Correctamente");
 
+                    try {
+                        //Controlar el Dni que no se pueda repetir
+                        SQLAccessVideoDaw.validarDni(dniAdd);
+                        Cliente nuevoCliente = new Cliente(-1,dniAdd,nombre,direccion,fechaNacimiento,numClienteADD);
+                        int addCliente = SQLAccessVideoDaw.insertarCliente(nuevoCliente);
+                        System.out.println("Insertado Correctamente");
+                    }catch (ValidacionDNI e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "7":
                     //Ver Clientes y Vinilos
@@ -161,7 +168,7 @@ public class Main {
     }
 
     private static void verClientes() {
-        System.out.println("Clientes: ");
+        System.err.println("Clientes: ");
         List <Cliente> clientes = SQLAccessVideoDaw.getClientes();
 
         for(Cliente c : clientes) {
@@ -170,7 +177,7 @@ public class Main {
     }
 
     private static void verVinilos() {
-        System.out.println("Vinilos: ");
+        System.err.println("Vinilos: ");
         List <Vinilo> vinilos = SQLAccessVideoDaw.getVinilos();
         for(Vinilo v : vinilos) {
             System.out.println(v + "\n");

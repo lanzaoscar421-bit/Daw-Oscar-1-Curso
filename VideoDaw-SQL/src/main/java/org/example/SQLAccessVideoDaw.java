@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.Exceptions.ValidacionDNI;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -163,6 +165,20 @@ public class SQLAccessVideoDaw {
         }
 
         return total;
+    }
+
+    //Validar DNI Controlado con Excepcio
+    public static boolean validarDni (String dni) throws ValidacionDNI{
+        boolean resultado = false;
+
+        for (Cliente cliente : getClientes()){
+            if (cliente.getDni().equalsIgnoreCase(dni)){
+                throw new ValidacionDNI("");
+            }
+        }
+
+
+        return resultado;
     }
 
     //Contador de clientes
