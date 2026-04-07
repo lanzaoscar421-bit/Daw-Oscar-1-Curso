@@ -1,7 +1,9 @@
 
+
 DROP DATABASE IF EXISTS videodaw;
 CREATE DATABASE videodaw;
 USE videodaw;
+
 
 CREATE TABLE generos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,16 +17,18 @@ CREATE TABLE clientes (
     dni VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(100),
     direccion VARCHAR(150),
-    fechaNacimiento DATE,
+    fechaNacimiento date,
     numSocio VARCHAR(50) UNIQUE,
     fechaBaja DATE
 );
 
 CREATE TABLE vinilos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    codigo VARCHAR(50) NOT NULL UNIQUE,
+    codigo VARCHAR(50) UNIQUE,
+    banda VARCHAR(100),
     titulo VARCHAR(100),
     genero INT,
+    pa BOOLEAN,
     isAlquilado BOOLEAN,
 
     FOREIGN KEY (genero) REFERENCES generos(id)
@@ -53,13 +57,23 @@ INSERT INTO clientes (dni, nombre, direccion, fechaNacimiento, numSocio, fechaBa
 ('87654321B', 'Maria Lopez', 'Calle B', '1998-03-20', 'SOC002', NULL);
 
 
-INSERT INTO vinilos (codigo, titulo, genero, isAlquilado) VALUES
-('VIN001', 'Dark Side of the Moon', 1, false),
-('VIN002', 'Illmatic ', 3, false),
-('VIN003', 'The Eminem Show', 3, false);
+INSERT INTO vinilos (codigo, banda, titulo, genero, pa, isAlquilado) VALUES
+('VIN001', 'Pink Floyd' ,'Dark Side of the Moon', 1, true, false),
+('VIN002',  'NAS','Illmatic ', 3, true ,false),
+('VIN003', 'Eminem' ,'The Eminem Show', 3, true,false);
+
+
 
 SELECT * FROM clientes;
 SELECT * FROM vinilos;
 SELECT * FROM generos;
 SELECT * FROM generos ORder by id asc;
 SELECT * FROM alquileres;
+
+
+
+
+
+
+
+

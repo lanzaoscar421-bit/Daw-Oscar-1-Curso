@@ -1,8 +1,7 @@
 package org.example;
 
-import java.security.PrivilegedAction;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Cliente {
 
@@ -10,11 +9,11 @@ public class Cliente {
     private String dni;
     private String nombre;
     private String direccion;
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
     private String numSocio;
-    private Date fechaBaja;
+    private LocalDate fechaBaja;
 
-    public Cliente(int id ,String dni, String nombre, String direccion, Date fechaNacimiento) {
+    public Cliente(int id ,String dni, String nombre, String direccion, LocalDate fechaNacimiento, String numSocio) {
         this.id = id;
         this.dni = dni;
         this.nombre = nombre;
@@ -24,7 +23,7 @@ public class Cliente {
         this.fechaBaja = fechaBaja;
     }
 
-    public Cliente(int id, String dni, String nombre, String direccion, Date fechaNacimiento, String numSocio, Date fechaBaja) {
+    public Cliente(int id, String dni, String nombre, String direccion, LocalDate fechaNacimiento, String numSocio, LocalDate fechaBaja) {
         this.id = id;
         this.dni = dni;
         this.nombre = nombre;
@@ -50,7 +49,7 @@ public class Cliente {
         return direccion;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
@@ -58,7 +57,7 @@ public class Cliente {
         return numSocio;
     }
 
-    public Date getFechaBaja() {
+    public LocalDate getFechaBaja() {
         return fechaBaja;
     }
 

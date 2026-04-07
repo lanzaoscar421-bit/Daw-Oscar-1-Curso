@@ -1,10 +1,14 @@
 package org.example;
 
+import com.google.protobuf.Internal;
+
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -37,8 +41,50 @@ public class Main {
 
             switch (opcion) {
                 case "1":
+                    //Metodo Insertar vinilos
+                    insertarVinilo(sc);
+
+                    break;
+                case "2":
 
 
+                    String dniAdd;
+                    do {
+                        System.out.println("El DNI consta de 8 números + 1 letra ");
+                        System.out.println("Ejemplo: 12345678Z");
+                        System.out.println("El Dni no se puede repetir");
+                        dniAdd = sc.nextLine();
+                    }while (!PatronDNI(dniAdd));
+
+                    System.out.println("Inserte su nombre");
+                    String nombre = sc.nextLine();
+
+                    System.out.println("Inserte su direccion");
+                    String direccion = sc.nextLine();
+
+                    System.out.println("Inserte su fecha de Nacimiento");
+
+                    LocalDate fechaNacimiento = null;
+
+                    System.out.println("Inserte su fecha de nacimiento");
+                    System.out.println("Ejemplo de formato: 2007-12-06");
+
+                    while (fechaNacimiento == null) {
+                        try {
+                            fechaNacimiento = LocalDate.parse(sc.nextLine());
+
+                        } catch (Exception e) {
+                            System.out.println("Por favor, inserte bien el formato (YYYY-MM-DD)");
+                        }
+                    }
+
+                    int nextNuCliente = SQLAccessVideoDaw.contarClientes() + 1;
+                    String numClienteADD = String.format("SOC%03d", nextNuCliente);
+
+                    //Controlar el Dni que no se pueda repetir
+                    Cliente nuevoCliente = new Cliente(-1,dniAdd,nombre,direccion,fechaNacimiento,numClienteADD);
+                    int addCliente = SQLAccessVideoDaw.insertarCliente(nuevoCliente);
+                    System.out.println("Insertado Correctamente");
 
                     break;
                 case "7":
@@ -47,23 +93,71 @@ public class Main {
                     //
                     verVinilos();
                     break;
-
                 case "8":
                     //Ver genero de Vinilos
                     verGeneros();
-
                     break;
                 case "9":
                     //Ver todos los alquileres
 
                     break;
                 case "10":
-
+                    //Despedida
                     System.out.println("Adios.");
                     break;
             }
         }while(!opcion.equals("10"));
+    }
 
+    static boolean PatronDNI(String DNI){
+        String Patron = "[0-9]{8}[A-Z]";
+        return Pattern.matches(Patron,DNI);
+    }
+
+
+    private static void insertarVinilo(Scanner sc) {
+        System.out.println("Inserta la banda del Vinilo");
+        String bandaADD = sc.nextLine();
+
+        System.out.println("Inserta el titulo del Vinilo");
+        String tituloADD = sc.nextLine();
+
+        System.out.println("Inserta el  numero del genero del Vinilo");
+        List <String> generos = SQLAccessVideoDaw.getGeneros();
+        for(String s : generos) {
+            System.out.println(s);
+        }
+        int opcionGenero;
+
+        do {
+            System.out.println("Elige el un numero de los disponibles para insertar un genero");
+            opcionGenero = sc.nextInt();
+        } while (opcionGenero <= 0 || opcionGenero > generos.size());
+
+
+        String opcionPA;
+        boolean paADD = false;
+
+        sc.nextLine();
+        do {
+            System.out.println("Este vinilo tiene Parental Advisory?");
+            System.out.println("S-N");
+            opcionPA = sc.nextLine();
+        }while (!opcionPA.equalsIgnoreCase("N") && !opcionPA.equalsIgnoreCase("S"));
+
+        if(opcionPA.equalsIgnoreCase("S")){
+            paADD = true;
+        }else {
+            paADD = false;
+        }
+
+
+        int nextId = SQLAccessVideoDaw.contarVinilos() + 1;
+        String codigoADD = String.format("VIN%03d", nextId);
+
+        Vinilo nuevoVinilo = new Vinilo(-1,codigoADD ,bandaADD,tituloADD,opcionGenero,paADD);
+        int addVinilo = SQLAccessVideoDaw.insertarVinilo(nuevoVinilo);
+        System.out.println("Vinilo Insertado exitosamente");
     }
 
     private static void verClientes() {
