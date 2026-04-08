@@ -202,4 +202,90 @@ public class SQLAccessVideoDaw {
         return total;
     }
 
+
+    //Buscar usuario por dni
+    public static  int getClienteDNI (String dni){
+        int response = -1;
+
+        String sql = "SELECT id FROM clientes WHERE dni = ?";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, dni);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                response = rs.getInt("id");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response;
+    }
+
+    //Buscar vinilo por codigo
+    public static int getIdViniloPorCodigo(String codigo) {
+        int response = -1;
+
+        String sql = "SELECT id FROM vinilos WHERE codigo = ? AND isAlquilado = false";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, codigo);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                response = rs.getInt("id");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response;
+    }
+
+    //Alquilar Vinilo a Usuario
+    public static int insertarCompra(String dni,String codigo){
+        int response = -1;
+
+        int clienteId = getClienteDNI(dni.trim());
+        int viniloId = getIdViniloPorCodigo(codigo.trim());
+
+        if (clienteId == -1) {
+            System.out.println("Cliente no existe");
+            return response;
+        }
+
+        if (viniloId == -1) {
+            System.out.println("Vinilo no disponible o no existe");
+            return response;
+        }
+
+        String sqlInsert = "INSERT INTO compras (cliente_id, vinilo_id, fechaAlquiler, fechaDevolucion) VALUES (?, ?, CURDATE(), NULL)";
+        String sqlUpdate = "UPDATE vinilos SET isAlquilado = true WHERE id = ?";
+
+        try (Connection connection = SQLDataManager.getConnection()) {
+
+            PreparedStatement stInsert = connection.prepareStatement(sqlInsert);
+            stInsert.setInt(1, clienteId);
+            stInsert.setInt(2, viniloId);
+            response = stInsert.executeUpdate();
+
+            PreparedStatement stUpdate = connection.prepareStatement(sqlUpdate);
+            stUpdate.setInt(1, viniloId);
+            stUpdate.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response;
+    }
+
+
     }

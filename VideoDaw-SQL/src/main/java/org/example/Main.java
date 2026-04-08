@@ -30,7 +30,7 @@ public class Main {
 
             System.out.println("Pulse 1 crear y registrar Vinilo");
             System.out.println("Pulse 2 crear y registrar cliente");
-            System.out.println("Pulsa 3 alquilar Vinilo");
+            System.out.println("Pulsa 3 compra Vinilo");
             System.out.println("Pulsa 4 devolver Vinilo");
             System.out.println("Pulsa 5 dar de baja cliente");
             System.out.println("Pulsa 6 dar de baja Vinilo");
@@ -94,6 +94,33 @@ public class Main {
                         System.out.println(e.getMessage());
                     }
                     break;
+
+
+                case "3":
+
+                    System.out.println("Inserte primero el Dni: ");
+
+                    verClientes();
+
+                    String dniAL;
+                    do {
+                        System.out.println("El DNI consta de 8 números + 1 letra ");
+                        System.out.println("Ejemplo: 12345678Z");
+                        dniAL = sc.nextLine();
+                    }while (!PatronDNI(dniAL));
+
+
+                    verVinilos();
+
+                    System.out.println("Ahora inserte el codigo del vinilo que quieres alquilar");
+                    String codigoViniloAL = sc.nextLine();
+
+                    int compra = SQLAccessVideoDaw.insertarCompra(dniAL,codigoViniloAL);
+
+                    System.out.println("Comprado Correctamente");
+
+
+                    break;
                 case "7":
                     //Ver Clientes y Vinilos
                     verClientes();
@@ -106,6 +133,7 @@ public class Main {
                     break;
                 case "9":
                     //Ver todos los alquileres
+
 
                     break;
                 case "10":
