@@ -8,16 +8,16 @@ public class Vinilo {
     private String titulo;
     private int genero;
     private boolean pa;
-    private boolean isAlquilida;
+    private boolean isComprada;
 
-    public Vinilo(int id, String codigo, String banda, String titulo, int genero ,boolean pa, boolean isAlquilida) {
+    public Vinilo(int id, String codigo, String banda, String titulo, int genero ,boolean pa, boolean isComprada) {
         this.id = id;
         this.codigo = codigo;
         this.banda = banda;
         this.titulo = titulo;
         this.genero = genero;
         this.pa = pa;
-        this.isAlquilida = isAlquilida;
+        this.isComprada = isComprada;
     }
 
     public Vinilo(int id, String codigo,String banda ,String titulo, int genero,boolean pa) {
@@ -53,8 +53,8 @@ public class Vinilo {
         return pa;
     }
 
-    public boolean isAlquilida() {
-        return isAlquilida;
+    public boolean isComprada() {
+        return isComprada;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Vinilo {
                 ", titulo='" + titulo + '\'' +
                 ", genero=" + genero +
                 ", pa=" + pa +
-                ", isAlquilida=" + isAlquilida +
+                ", Comprada=" + isComprada +
                 '}';
     }
 }

@@ -64,8 +64,8 @@ public class SQLAccessVideoDaw {
                 String titulo = resultSets.getString(4);
                 int genero = resultSets.getInt(5);
                 boolean pa = resultSets.getBoolean(6);
-                boolean isAlquilada = resultSets.getBoolean(7);
-                vinilos.add(new Vinilo(id, codigo, banda,titulo, genero, pa ,isAlquilada));
+                boolean isComprada = resultSets.getBoolean(7);
+                vinilos.add(new Vinilo(id, codigo, banda,titulo, genero, pa ,isComprada));
             }
 
 
@@ -74,6 +74,79 @@ public class SQLAccessVideoDaw {
         }
 
 
+        return vinilos;
+    }
+    //Ver todos los alquileres
+    public static List<String> getCompras() {
+        List<String> compras = new ArrayList<>();
+
+        String sqlcompras= "SELECT c.id, cl.dni, cl.nombre, v.codigo, v.titulo, c.fechaCompra, c.fechaDevolucion " +
+                "FROM compras c " +
+                "JOIN clientes cl ON c.cliente_id = cl.id " +
+                "JOIN vinilos v ON c.vinilo_id = v.id";
+
+        try (Connection connection = SQLDataManager.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(sqlcompras)) {
+
+            while (rs.next()) {
+                System.out.println(
+                        "ID: " + rs.getInt("id") +
+                                " | DNI: " + rs.getString("dni") +
+                                " | Nombre: " + rs.getString("nombre") +
+                                " | Código: " + rs.getString("codigo") +
+                                " | Título: " + rs.getString("titulo") +
+                                " | Fecha compra: " + rs.getDate("fechaCompra") +
+                                " | Fecha devolución: " + rs.getDate("fechaDevolucion")
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return compras;
+    }
+
+    //Ver vinilos los cuales son comprados y no fueron devueltos
+    public static List <String> verVinilosCompradosNoDevueltos() {
+
+        List<String> vinilos = new ArrayList<>();
+
+        String sql = "SELECT c.id, cl.dni, cl.nombre, v.codigo, v.titulo, c.fechaCompra " +
+                "FROM compras c " +
+                "JOIN clientes cl ON c.cliente_id = cl.id " +
+                "JOIN vinilos v ON c.vinilo_id = v.id " +
+                "WHERE c.fechaDevolucion IS NULL " +
+                "ORDER BY c.fechaCompra ASC";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
+
+            System.out.println("Vinilos Comprados que no fueron devueltos");
+
+            boolean hayDatos = false;
+
+            while (rs.next()) {
+                hayDatos = true;
+                System.out.println(
+                        "ID Compra: " + rs.getInt("id") +
+                                " | DNI: " + rs.getString("dni") +
+                                " | Cliente: " + rs.getString("nombre") +
+                                " | Código Vinilo: " + rs.getString("codigo") +
+                                " | Título: " + rs.getString("titulo") +
+                                " | Fecha Compra: " + rs.getDate("fechaCompra")
+                );
+            }
+
+            if (!hayDatos) {
+                System.out.println("No hay vinilos comprados que no fueron devueltos.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return vinilos;
     }
 
@@ -230,7 +303,29 @@ public class SQLAccessVideoDaw {
     public static int getIdViniloPorCodigo(String codigo) {
         int response = -1;
 
-        String sql = "SELECT id FROM vinilos WHERE codigo = ? AND isAlquilado = false";
+        String sql = "SELECT id FROM vinilos WHERE codigo = ? AND isComprada = false";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, codigo);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                response = rs.getInt("id");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response;
+    }
+
+    public static int getIdViniloPorCodigoDev(String codigo) {
+        int response = -1;
+
+        String sql = "SELECT id FROM vinilos WHERE codigo = ? and isComprada = true";
 
         try (Connection connection = SQLDataManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -254,7 +349,7 @@ public class SQLAccessVideoDaw {
         int response = -1;
 
         int clienteId = getClienteDNI(dni.trim());
-        int viniloId = getIdViniloPorCodigo(codigo.trim());
+        int viniloId = getIdViniloPorCodigoDev(codigo.trim());
 
         if (clienteId == -1) {
             System.out.println("Cliente no existe");
@@ -266,8 +361,8 @@ public class SQLAccessVideoDaw {
             return response;
         }
 
-        String sqlInsert = "INSERT INTO compras (cliente_id, vinilo_id, fechaAlquiler, fechaDevolucion) VALUES (?, ?, CURDATE(), NULL)";
-        String sqlUpdate = "UPDATE vinilos SET isAlquilado = true WHERE id = ?";
+        String sqlInsert = "INSERT INTO compras (cliente_id, vinilo_id, fechaCompra, fechaDevolucion) VALUES (?, ?, CURDATE(), NULL)";
+        String sqlUpdate = "UPDATE vinilos SET isComprada = true WHERE id = ?";
 
         try (Connection connection = SQLDataManager.getConnection()) {
 
@@ -283,6 +378,47 @@ public class SQLAccessVideoDaw {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        return response;
+    }
+
+    public static int devolverVinilo(String dni,String codigo){
+        int response = -1;
+
+        int clienteId = getClienteDNI(dni.trim());
+        int viniloId = getIdViniloPorCodigoDev(codigo.trim());
+
+        if (clienteId == -1) {
+            System.out.println("Cliente no existe");
+            return response;
+        }
+
+        if (viniloId == -1) {
+            System.out.println("Vinilo no disponible o no existe");
+            return response;
+        }
+
+        String sqlUpdateCompra = "UPDATE compras SET fechaDevolucion = CURDATE() " +
+                "WHERE cliente_id = ? AND vinilo_id = ? AND fechaDevolucion IS NULL";
+
+        String sqlUpdateVinilo = "UPDATE vinilos SET isComprada = false WHERE id = ?";
+
+
+        try (Connection connection = SQLDataManager.getConnection()) {
+
+            PreparedStatement stInsert = connection.prepareStatement(sqlUpdateCompra);
+            stInsert.setInt(1, clienteId);
+            stInsert.setInt(2, viniloId);
+            response = stInsert.executeUpdate();
+
+            PreparedStatement stUpdate = connection.prepareStatement(sqlUpdateVinilo);
+            stUpdate.setInt(1, viniloId);
+            stUpdate.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
         return response;
     }

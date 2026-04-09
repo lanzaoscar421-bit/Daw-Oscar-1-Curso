@@ -45,11 +45,8 @@ public class Main {
                 case "1":
                     //Metodo Insertar vinilos
                     insertarVinilo(sc);
-
                     break;
                 case "2":
-
-
                     String dniAdd;
                     do {
                         System.out.println("El DNI consta de 8 números + 1 letra ");
@@ -115,9 +112,44 @@ public class Main {
                     System.out.println("Ahora inserte el codigo del vinilo que quieres alquilar");
                     String codigoViniloAL = sc.nextLine();
 
-                    int compra = SQLAccessVideoDaw.insertarCompra(dniAL,codigoViniloAL);
+                    int compra = SQLAccessVideoDaw.insertarCompra(dniAL, codigoViniloAL);
 
-                    System.out.println("Comprado Correctamente");
+                    if (compra > 0) {
+                        System.out.println("Comprado correctamente");
+                    } else {
+                        System.out.println("Error al realizar la compra");
+                    }
+                    break;
+                case "4":
+
+                    verVinilosCompradosNoDevueltos();
+
+
+                    System.out.println("Inserte el Dni del cliente: ");
+                    String dniClienteDev = sc.nextLine();
+
+                    System.out.println("Inserte el codigo del vinilo: ");
+                    String codigoViniloDev = sc.nextLine();
+
+
+
+                    int devolucion = SQLAccessVideoDaw.devolverVinilo(dniClienteDev, codigoViniloDev);
+                    if (devolucion > 0) {
+                        System.out.println("Devolucion correctamente");
+                    }else {
+                        System.out.println("Error al devolver vinilo");
+                    }
+
+                    break;
+
+                case "5":
+                    //Dar de baja clientes
+
+
+                    break;
+                case "6":
+                    //Dar de baja Vinilos
+
 
 
                     break;
@@ -132,9 +164,8 @@ public class Main {
                     verGeneros();
                     break;
                 case "9":
-                    //Ver todos los alquileres
-
-
+                    //Ver todos los Compras
+                    verCompras();
                     break;
                 case "10":
                     //Despedida
@@ -142,6 +173,21 @@ public class Main {
                     break;
             }
         }while(!opcion.equals("10"));
+    }
+
+    private static void verVinilosCompradosNoDevueltos() {
+        List<String> verVinilosNoDevueltos = SQLAccessVideoDaw.verVinilosCompradosNoDevueltos();
+        for(String vinilo : verVinilosNoDevueltos) {
+            System.out.println(vinilo);
+        }
+    }
+
+    private static void verCompras() {
+        System.out.println("Compras: ");
+        List<String> compras = SQLAccessVideoDaw.getCompras();
+        for(String str : compras) {
+            System.out.println(str);
+        }
     }
 
     static boolean PatronDNI(String DNI){
@@ -196,7 +242,7 @@ public class Main {
     }
 
     private static void verClientes() {
-        System.err.println("Clientes: ");
+        System.out.println("Clientes: ");
         List <Cliente> clientes = SQLAccessVideoDaw.getClientes();
 
         for(Cliente c : clientes) {
@@ -205,7 +251,8 @@ public class Main {
     }
 
     private static void verVinilos() {
-        System.err.println("Vinilos: ");
+        System.out.println("Vinilos: ");
+
         List <Vinilo> vinilos = SQLAccessVideoDaw.getVinilos();
         for(Vinilo v : vinilos) {
             System.out.println(v + "\n");
