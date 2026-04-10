@@ -144,12 +144,35 @@ public class Main {
 
                 case "5":
                     //Dar de baja clientes
+                    verClientes();
+                    System.out.println("Inserte el Dni del cliente que quieres dar de Baja");
+                    String dniClienteBaja = sc.nextLine();
+
+
+                    int bajaCliente =  SQLAccessVideoDaw.bajaCliente(dniClienteBaja);
+
+                    if (bajaCliente > 0) {
+                        System.out.println("Baja correctamente");
+                    }else{
+                        System.out.println("Error al baja cliente");
+                    }
 
 
                     break;
                 case "6":
                     //Dar de baja Vinilos
 
+                    verVinilos();
+                    System.out.println("Inserte el codigo de vinilo que quieres dar de baja");
+                    String codigoViniloBaja = sc.nextLine();
+
+                    int bajaVinilo = SQLAccessVideoDaw.bajaVinilo(codigoViniloBaja);
+
+                    if (bajaVinilo > 0) {
+                        System.out.println("Baja correctamente");
+                    }else{
+                        System.out.println("Error al baja al vinilo");
+                    }
 
 
                     break;

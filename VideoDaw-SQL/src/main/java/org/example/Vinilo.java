@@ -1,5 +1,7 @@
 package org.example;
 
+import java.time.LocalDate;
+
 public class Vinilo {
 
     private int id;
@@ -9,8 +11,9 @@ public class Vinilo {
     private int genero;
     private boolean pa;
     private boolean isComprada;
+    private LocalDate fechaBaja;
 
-    public Vinilo(int id, String codigo, String banda, String titulo, int genero ,boolean pa, boolean isComprada) {
+    public Vinilo(int id, String codigo, String banda, String titulo, int genero ,boolean pa, boolean isComprada, LocalDate fechaBaja) {
         this.id = id;
         this.codigo = codigo;
         this.banda = banda;
@@ -18,6 +21,7 @@ public class Vinilo {
         this.genero = genero;
         this.pa = pa;
         this.isComprada = isComprada;
+        this.fechaBaja = fechaBaja;
     }
 
     public Vinilo(int id, String codigo,String banda ,String titulo, int genero,boolean pa) {
@@ -57,6 +61,7 @@ public class Vinilo {
         return isComprada;
     }
 
+
     @Override
     public String toString() {
         return "Vinilo{" +
@@ -66,7 +71,8 @@ public class Vinilo {
                 ", titulo='" + titulo + '\'' +
                 ", genero=" + genero +
                 ", pa=" + pa +
-                ", Comprada=" + isComprada +
+                ", isComprada=" + isComprada +
+                ", fechaBaja=" + fechaBaja +
                 '}';
     }
 }

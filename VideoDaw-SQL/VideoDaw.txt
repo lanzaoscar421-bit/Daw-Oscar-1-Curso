@@ -1,5 +1,4 @@
 
-
 DROP DATABASE IF EXISTS videodaw;
 CREATE DATABASE videodaw;
 USE videodaw;
@@ -29,21 +28,24 @@ CREATE TABLE vinilos (
     titulo VARCHAR(100),
     genero INT,
     pa BOOLEAN,
-    isAlquilado BOOLEAN,
+    isComprada BOOLEAN,
+    fechaBaja DATE,
 
     FOREIGN KEY (genero) REFERENCES generos(id)
 );
 
-CREATE TABLE alquileres (
+CREATE TABLE compras (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT,
     vinilo_id INT,
-    fechaAlquiler DATE,
+    fechaCompra DATE,
     fechaDevolucion DATE,
 
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
     FOREIGN KEY (vinilo_id) REFERENCES vinilos(id)
 );
+
+select * from vinilos
 
 INSERT INTO generos (nombre) VALUES
 ('ROCK'),
@@ -51,13 +53,14 @@ INSERT INTO generos (nombre) VALUES
 ('RAP'),
 ('NU METAL'),
 ('HIP HOP');
-	
+
 INSERT INTO clientes (dni, nombre, direccion, fechaNacimiento, numSocio, fechaBaja) VALUES
 ('12345678A', 'Juan Perez', 'Calle A', '2000-05-10', 'SOC001', NULL),
 ('87654321B', 'Maria Lopez', 'Calle B', '1998-03-20', 'SOC002', NULL);
 
 
-INSERT INTO vinilos (codigo, banda, titulo, genero, pa, isAlquilado) VALUES
+
+INSERT INTO vinilos (codigo, banda, titulo, genero, pa, isComprada) VALUES
 ('VIN001', 'Pink Floyd' ,'Dark Side of the Moon', 1, true, false),
 ('VIN002',  'NAS','Illmatic ', 3, true ,false),
 ('VIN003', 'Eminem' ,'The Eminem Show', 3, true,false);
@@ -68,7 +71,19 @@ SELECT * FROM clientes;
 SELECT * FROM vinilos;
 SELECT * FROM generos;
 SELECT * FROM generos ORder by id asc;
-SELECT * FROM alquileres;
+
+SELECT * FROM compras;
+
+SELECT c.id, cl.dni, cl.nombre, v.codigo, v.titulo, c.fechaCompra, c.fechaDevolucion
+FROM compras c
+JOIN clientes cl ON c.cliente_id = cl.id
+JOIN vinilos v ON c.vinilo_id = v.id
+WHERE c.fechaDevolucion IS NULL;
+
+SELECT * FROM clientes WHERE dni = '12345678A';
+SELECT * FROM vinilos WHERE codigo = 'VIN001';
+SELECT DATABASE();
+
 
 
 

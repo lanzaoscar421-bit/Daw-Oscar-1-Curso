@@ -65,7 +65,10 @@ public class SQLAccessVideoDaw {
                 int genero = resultSets.getInt(5);
                 boolean pa = resultSets.getBoolean(6);
                 boolean isComprada = resultSets.getBoolean(7);
-                vinilos.add(new Vinilo(id, codigo, banda,titulo, genero, pa ,isComprada));
+                java.sql.Date fechaBajaSQL = resultSets.getDate(8);
+                LocalDate fechaBaja = (fechaBajaSQL != null) ? fechaBajaSQL.toLocalDate() : null;
+
+                vinilos.add(new Vinilo(id, codigo, banda,titulo, genero, pa ,isComprada, fechaBaja));
             }
 
 
@@ -299,7 +302,30 @@ public class SQLAccessVideoDaw {
         return response;
     }
 
-    //Buscar vinilo por codigo
+    //Bucar Vinilo solo por codigo
+    public static int getViniloCodigo(String codigo){
+        int response = -1;
+        String sql = "SELECT id FROM vinilos WHERE codigo = ?";
+
+        try (Connection con = SQLDataManager.getConnection();
+        PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, codigo);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                response = rs.getInt("id");
+            }
+
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return response;
+    }
+
+
+
+    //Buscar vinilo por codigo cuando no es comprado
     public static int getIdViniloPorCodigo(String codigo) {
         int response = -1;
 
@@ -339,6 +365,55 @@ public class SQLAccessVideoDaw {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+
+        return response;
+    }
+
+    //Dar de baja a Cliente
+    public static int bajaCliente(String dni) {
+        int response = -1;
+
+        int clienteId = getClienteDNI(dni);
+        if (clienteId == -1) {
+            System.out.println("Cliente no encontrado");
+        }
+
+        String sqlUpdate = "UPDATE clientes SET fechaBaja = CURDATE() WHERE id = ?";
+
+        try (Connection connection =  SQLDataManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sqlUpdate)) {
+
+            statement.setInt(1, clienteId);
+            response=statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return  response;
+    }
+
+    //Dar de baja Vinilo
+    public static int bajaVinilo(String codigo) {
+        int response = -1;
+
+        int codigoVin = getViniloCodigo(codigo);
+        if (codigoVin == -1) {
+            System.out.println("Vinilo no encontrado");
+        }
+
+        String sqlUpdate = "Update vinilos set fechaBaja = CURDATE() WHERE id = ?";
+
+        try (Connection connection = SQLDataManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sqlUpdate)) {
+
+            statement.setInt(1, codigoVin);
+            response=statement.executeUpdate();
+
+        }catch (SQLException e){
+            e.getMessage();
         }
 
         return response;
