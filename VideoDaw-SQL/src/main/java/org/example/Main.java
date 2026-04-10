@@ -207,7 +207,7 @@ public class Main {
 
     private static void verCompras() {
         System.out.println("Compras: ");
-        List<String> compras = SQLAccessVideoDaw.getCompras();
+        List<String> compras = SQLAccessVideoDaw.getCompras(); 
         for(String str : compras) {
             System.out.println(str);
         }
