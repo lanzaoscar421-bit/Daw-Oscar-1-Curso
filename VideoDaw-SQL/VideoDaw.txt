@@ -45,7 +45,6 @@ CREATE TABLE compras (
     FOREIGN KEY (vinilo_id) REFERENCES vinilos(id)
 );
 
-select * from vinilos
 
 INSERT INTO generos (nombre) VALUES
 ('ROCK'),

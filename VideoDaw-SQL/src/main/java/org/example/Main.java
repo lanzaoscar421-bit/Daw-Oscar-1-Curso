@@ -37,7 +37,7 @@ public class Main {
             System.out.println("Pulsa 6 dar de baja Vinilo");
             System.out.println("Pulsa 7 ver informacion cliente y vinilos");
             System.out.println("Pulsa 8 ver los generos de los vinilos");
-            System.out.println("Pulsa 9 ver toda la info de los alquileres");
+            System.out.println("Pulsa 9 ver toda la info de las compras");
             System.out.println("Pulsa 10 si desea Salir");
 
             opcion = sc.nextLine();

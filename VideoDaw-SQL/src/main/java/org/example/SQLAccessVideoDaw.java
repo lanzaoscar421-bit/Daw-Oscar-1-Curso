@@ -329,25 +329,34 @@ public class SQLAccessVideoDaw {
 
     //Buscar vinilo por codigo cuando no es comprado
     public static int getIdViniloPorCodigo(String codigo) {
-        int response = -1;
 
-        String sql = "SELECT id FROM vinilos WHERE codigo = ? AND isComprada = false";
+        String sql = "SELECT id, isComprada FROM vinilos WHERE codigo = ?";
 
         try (Connection connection = SQLDataManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, codigo);
+            statement.setString(1, codigo.trim());
+
             ResultSet rs = statement.executeQuery();
 
             if (rs.next()) {
-                response = rs.getInt("id");
+
+                boolean isComprada = rs.getBoolean("isComprada");
+
+                if (isComprada) {
+                    System.out.println("Este vinilo ya está comprado");
+                    return -1;
+                }
+
+                return rs.getInt("id");
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
-        return response;
+        return -1;
+
     }
 
     public static int getIdViniloPorCodigoDev(String codigo) {
@@ -421,12 +430,12 @@ public class SQLAccessVideoDaw {
         return response;
     }
 
-    //Alquilar Vinilo a Usuario
+    //Comprar Vinilo a Usuario
     public static int insertarCompra(String dni,String codigo){
         int response = -1;
 
         int clienteId = getClienteDNI(dni.trim());
-        int viniloId = getIdViniloPorCodigoDev(codigo.trim());
+        int viniloId = getIdViniloPorCodigo(codigo.trim());
 
         if (clienteId == -1) {
             System.out.println("Cliente no existe");
