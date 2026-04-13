@@ -1,9 +1,11 @@
 package org.example;
 
 import org.example.Exceptions.ValidacionDNI;
+import org.example.Exceptions.ValidacionPA;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -496,6 +498,40 @@ public class SQLAccessVideoDaw {
 
 
         return response;
+    }
+
+
+    public static void validarCompra(String dni, String codigoVinilo) throws ValidacionPA {
+
+        String sql = "SELECT c.fechaNacimiento, v.pa " +
+                "FROM clientes c, vinilos v " +
+                "WHERE c.dni = ? AND v.codigo = ?";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, dni);
+            statement.setString(2, codigoVinilo);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                LocalDate fechaNacimiento = rs.getDate("fechaNacimiento").toLocalDate();
+                boolean pa = rs.getBoolean("pa");
+
+                int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
+
+                if (edad < 18 && pa) {
+                    throw new ValidacionPA("");
+                }
+
+            } else {
+                throw new ValidacionPA("");
+            }
+
+        } catch (SQLException e) {
+            e.getMessage();
+        }
     }
 
 

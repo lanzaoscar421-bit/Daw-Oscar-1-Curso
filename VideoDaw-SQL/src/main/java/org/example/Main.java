@@ -3,6 +3,7 @@ package org.example;
 // import com.google.protobuf.Internal;
 
 import org.example.Exceptions.ValidacionDNI;
+import org.example.Exceptions.ValidacionPA;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -112,13 +113,21 @@ public class Main {
                     System.out.println("Ahora inserte el codigo del vinilo que quieres alquilar");
                     String codigoViniloAL = sc.nextLine();
 
-                    int compra = SQLAccessVideoDaw.insertarCompra(dniAL, codigoViniloAL);
+                    try {
 
-                    if (compra > 0) {
-                        System.out.println("Comprado correctamente");
-                    } else {
-                        System.out.println("Error al realizar la compra");
+                        SQLAccessVideoDaw.validarCompra(dniAL,codigoViniloAL);
+                        int compra = SQLAccessVideoDaw.insertarCompra(dniAL, codigoViniloAL);
+
+                        if (compra > 0) {
+                            System.out.println("Comprado correctamente");
+                        } else {
+                            System.out.println("Error al realizar la compra");
+                        }
+
+                    }catch (ValidacionPA e){
+                        System.out.println(e.getMessage());
                     }
+
                     break;
                 case "4":
 
