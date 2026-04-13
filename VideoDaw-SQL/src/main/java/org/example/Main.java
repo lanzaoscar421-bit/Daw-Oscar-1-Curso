@@ -48,141 +48,26 @@ public class Main {
                     insertarVinilo(sc);
                     break;
                 case "2":
-                    String dniAdd;
-                    do {
-                        System.out.println("El DNI consta de 8 números + 1 letra ");
-                        System.out.println("Ejemplo: 12345678Z");
-                        System.out.println("El Dni no se puede repetir");
-                        dniAdd = sc.nextLine();
-                    }while (!PatronDNI(dniAdd));
-
-                    System.out.println("Inserte su nombre");
-                    String nombre = sc.nextLine();
-
-                    System.out.println("Inserte su direccion");
-                    String direccion = sc.nextLine();
-
-                    System.out.println("Inserte su fecha de Nacimiento");
-
-                    LocalDate fechaNacimiento = null;
-
-                    System.out.println("Inserte su fecha de nacimiento");
-                    System.out.println("Ejemplo de formato: 2007-12-06");
-
-                    while (fechaNacimiento == null) {
-                        try {
-                            fechaNacimiento = LocalDate.parse(sc.nextLine());
-
-                        } catch (Exception e) {
-                            System.out.println("Por favor, inserte bien el formato (YYYY-MM-DD)");
-                        }
-                    }
-
-                    int nextNuCliente = SQLAccessVideoDaw.contarClientes() + 1;
-                    String numClienteADD = String.format("SOC%03d", nextNuCliente);
-
-
-                    try {
-                        //Controlar el Dni que no se pueda repetir
-                        SQLAccessVideoDaw.validarDni(dniAdd);
-                        Cliente nuevoCliente = new Cliente(-1,dniAdd,nombre,direccion,fechaNacimiento,numClienteADD);
-                        int addCliente = SQLAccessVideoDaw.insertarCliente(nuevoCliente);
-                        System.out.println("Insertado Correctamente");
-                    }catch (ValidacionDNI e){
-                        System.out.println(e.getMessage());
-                    }
+                    //Insertar Clientes
+                    insertarClientes(sc);
                     break;
-
 
                 case "3":
 
-                    System.out.println("Inserte primero el Dni: ");
-
-                    verClientesDisponibles();
-
-                    String dniAL;
-                    do {
-                        System.out.println("El DNI consta de 8 números + 1 letra ");
-                        System.out.println("Ejemplo: 12345678Z");
-                        dniAL = sc.nextLine();
-                    }while (!PatronDNI(dniAL));
-
-
-                    verVinilosDisponibles();
-
-                    System.out.println("Ahora inserte el codigo del vinilo que quieres alquilar");
-                    String codigoViniloAL = sc.nextLine();
-
-                    try {
-
-                        SQLAccessVideoDaw.validarCompra(dniAL,codigoViniloAL);
-                        int compra = SQLAccessVideoDaw.insertarCompra(dniAL, codigoViniloAL);
-
-                        if (compra > 0) {
-                            System.out.println("Comprado correctamente");
-                        } else {
-                            System.out.println("Error al realizar la compra");
-                        }
-
-                    }catch (ValidacionPA e){
-                        System.out.println(e.getMessage());
-                    }
-
+                    //Compra de los vinilos
+                    metodoCompra(sc);
                     break;
                 case "4":
-
-                    verVinilosCompradosNoDevueltos();
-
-
-                    System.out.println("Inserte el Dni del cliente: ");
-                    String dniClienteDev = sc.nextLine();
-
-                    System.out.println("Inserte el codigo del vinilo: ");
-                    String codigoViniloDev = sc.nextLine();
-
-
-
-                    int devolucion = SQLAccessVideoDaw.devolverVinilo(dniClienteDev, codigoViniloDev);
-                    if (devolucion > 0) {
-                        System.out.println("Devolucion correctamente");
-                    }else {
-                        System.out.println("Error al devolver vinilo");
-                    }
-
+                    //Devolucion vinilo
+                    devolverVinilo(sc);
                     break;
-
                 case "5":
-                    //Dar de baja clientes
-                    verClientesDisponibles();
-                    System.out.println("Inserte el Dni del cliente que quieres dar de Baja");
-                    String dniClienteBaja = sc.nextLine();
-
-
-                    int bajaCliente =  SQLAccessVideoDaw.bajaCliente(dniClienteBaja);
-
-                    if (bajaCliente > 0) {
-                        System.out.println("Baja correctamente");
-                    }else{
-                        System.out.println("Error al baja cliente");
-                    }
-
-
+                    //Dar baja clientes
+                    bajaClientes(sc);
                     break;
                 case "6":
                     //Dar de baja Vinilos
-
-                    verClientesDisponibles();
-                    System.out.println("Inserte el codigo de vinilo que quieres dar de baja");
-                    String codigoViniloBaja = sc.nextLine();
-
-                    int bajaVinilo = SQLAccessVideoDaw.bajaVinilo(codigoViniloBaja);
-
-                    if (bajaVinilo > 0) {
-                        System.out.println("Baja correctamente");
-                    }else{
-                        System.out.println("Error al baja al vinilo");
-                    }
-
+                    bajaVinilo(sc);
 
                     break;
                 case "7":
@@ -205,6 +90,134 @@ public class Main {
                     break;
             }
         }while(!opcion.equals("10"));
+    }
+
+    private static void devolverVinilo(Scanner sc) {
+        verVinilosCompradosNoDevueltos();
+
+
+        System.out.println("Inserte el Dni del cliente: ");
+        String dniClienteDev = sc.nextLine();
+
+        System.out.println("Inserte el codigo del vinilo: ");
+        String codigoViniloDev = sc.nextLine();
+
+
+        int devolucion = SQLAccessVideoDaw.devolverVinilo(dniClienteDev, codigoViniloDev);
+        if (devolucion > 0) {
+            System.out.println("Devolucion correcta");
+        }else {
+            System.out.println("Error al devolver vinilo");
+        }
+    }
+
+    private static void bajaClientes(Scanner sc) {
+        //Dar de baja clientes
+        verClientesDisponibles();
+        System.out.println("Inserte el Dni del cliente que quieres dar de Baja");
+        String dniClienteBaja = sc.nextLine();
+
+
+        int bajaCliente =  SQLAccessVideoDaw.bajaCliente(dniClienteBaja);
+
+        if (bajaCliente > 0) {
+            System.out.println("Baja correctamente");
+        }else{
+            System.out.println("Error al baja cliente");
+        }
+    }
+
+    private static void bajaVinilo(Scanner sc) {
+        verClientesDisponibles();
+        System.out.println("Inserte el codigo de vinilo que quieres dar de baja");
+        String codigoViniloBaja = sc.nextLine();
+
+        int bajaVinilo = SQLAccessVideoDaw.bajaVinilo(codigoViniloBaja);
+
+        if (bajaVinilo > 0) {
+            System.out.println("Baja correctamente");
+        }else{
+            System.out.println("Error al baja al vinilo");
+        }
+    }
+
+    private static void metodoCompra(Scanner sc) {
+        System.out.println("Inserte primero el Dni: ");
+
+        verClientesDisponibles();
+
+        String dniAL;
+        do {
+            System.out.println("El DNI consta de 8 números + 1 letra ");
+            System.out.println("Ejemplo: 12345678Z");
+            dniAL = sc.nextLine();
+        }while (!PatronDNI(dniAL));
+
+
+        verVinilosDisponibles();
+
+        System.out.println("Ahora inserte el codigo del vinilo que quieres alquilar");
+        String codigoViniloAL = sc.nextLine();
+
+        try {
+
+            SQLAccessVideoDaw.validarCompra(dniAL,codigoViniloAL);
+            int compra = SQLAccessVideoDaw.insertarCompra(dniAL, codigoViniloAL);
+
+            if (compra > 0) {
+                System.out.println("Comprado correctamente");
+            } else {
+                System.out.println("Error al realizar la compra");
+            }
+
+        }catch (ValidacionPA e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void insertarClientes(Scanner sc) {
+        String dniAdd;
+        do {
+            System.out.println("El DNI consta de 8 números + 1 letra ");
+            System.out.println("Ejemplo: 12345678Z");
+            System.out.println("El Dni no se puede repetir");
+            dniAdd = sc.nextLine();
+        }while (!PatronDNI(dniAdd));
+
+        System.out.println("Inserte su nombre");
+        String nombre = sc.nextLine();
+
+        System.out.println("Inserte su direccion");
+        String direccion = sc.nextLine();
+
+
+        LocalDate fechaNacimiento = null;
+
+        System.out.println("Inserte su fecha de nacimiento");
+        System.out.println("Ejemplo de formato: 2007-12-06");
+
+        while (fechaNacimiento == null) {
+            try {
+                fechaNacimiento = LocalDate.parse(sc.nextLine());
+
+            } catch (Exception e) {
+                System.out.println("Por favor, inserte bien el formato (YYYY-MM-DD)");
+            }
+        }
+
+        int nextNuCliente = SQLAccessVideoDaw.contarClientes() + 1;
+        String numClienteADD = String.format("SOC%03d", nextNuCliente);
+
+
+        try {
+            //Controlar el Dni que no se pueda repetir
+            SQLAccessVideoDaw.validarDni(dniAdd);
+            Cliente nuevoCliente = new Cliente(-1,dniAdd,nombre,direccion,fechaNacimiento,numClienteADD);
+            int addCliente = SQLAccessVideoDaw.insertarCliente(nuevoCliente);
+            System.out.println("Insertado Correctamente");
+        }catch (ValidacionDNI e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void verVinilosCompradosNoDevueltos() {

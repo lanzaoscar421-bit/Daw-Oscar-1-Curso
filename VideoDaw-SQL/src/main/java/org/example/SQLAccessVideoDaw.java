@@ -119,7 +119,10 @@ public class SQLAccessVideoDaw {
 
         List<Vinilo> vinilos = new ArrayList<>();
 
-        String sql = "SELECT * FROM vinilos WHERE isComprada = false AND fechaBaja IS NULL";
+        String sql = "SELECT * \n" +
+                "FROM vinilos \n" +
+                "WHERE (isComprada = false OR isComprada IS NULL)\n" +
+                "AND fechaBaja IS NULL;";
 
         try (Connection connection = SQLDataManager.getConnection();
              Statement statement = connection.createStatement();
@@ -579,7 +582,7 @@ public class SQLAccessVideoDaw {
 
     public static void validarCompra(String dni, String codigoVinilo) throws ValidacionPA {
 
-        String sql = "SELECT c.fechaNacimiento, v.pa " +
+        String sql = "SELECT c.fechaNacimiento, v.pa, c.fechaBaja AS bajaCliente, v.fechaBaja AS bajaVinilo " +
                 "FROM clientes c, vinilos v " +
                 "WHERE c.dni = ? AND v.codigo = ?";
 
@@ -594,6 +597,17 @@ public class SQLAccessVideoDaw {
             if (rs.next()) {
                 LocalDate fechaNacimiento = rs.getDate("fechaNacimiento").toLocalDate();
                 boolean pa = rs.getBoolean("pa");
+
+                Date bajaCliente = rs.getDate("bajaCliente");
+                Date bajaVinilo = rs.getDate("bajaVinilo");
+
+                if (bajaCliente != null) {
+                    throw new ValidacionPA("El cliente está dado de baja");
+                }
+
+                if (bajaVinilo != null) {
+                    throw new ValidacionPA("El vinilo está dado de baja");
+                }
 
                 int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
 
