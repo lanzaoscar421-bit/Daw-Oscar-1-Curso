@@ -98,7 +98,7 @@ public class Main {
 
                     System.out.println("Inserte primero el Dni: ");
 
-                    verClientes();
+                    verClientesDisponibles();
 
                     String dniAL;
                     do {
@@ -108,7 +108,7 @@ public class Main {
                     }while (!PatronDNI(dniAL));
 
 
-                    verVinilos();
+                    verVinilosDisponibles();
 
                     System.out.println("Ahora inserte el codigo del vinilo que quieres alquilar");
                     String codigoViniloAL = sc.nextLine();
@@ -153,7 +153,7 @@ public class Main {
 
                 case "5":
                     //Dar de baja clientes
-                    verClientes();
+                    verClientesDisponibles();
                     System.out.println("Inserte el Dni del cliente que quieres dar de Baja");
                     String dniClienteBaja = sc.nextLine();
 
@@ -171,7 +171,7 @@ public class Main {
                 case "6":
                     //Dar de baja Vinilos
 
-                    verVinilos();
+                    verClientesDisponibles();
                     System.out.println("Inserte el codigo de vinilo que quieres dar de baja");
                     String codigoViniloBaja = sc.nextLine();
 
@@ -288,6 +288,23 @@ public class Main {
         List <Vinilo> vinilos = SQLAccessVideoDaw.getVinilos();
         for(Vinilo v : vinilos) {
             System.out.println(v + "\n");
+        }
+    }
+
+    private static void verVinilosDisponibles(){
+        System.out.println("VinilosDisponibles: ");
+
+        List<Vinilo> vinilos = SQLAccessVideoDaw.getVinilosDisponibles();
+        for(Vinilo v : vinilos) {
+            System.out.println(v + "\n");
+        }
+    }
+
+    private static void verClientesDisponibles(){
+        System.out.println("ClientesDisponibles: ");
+        List<Cliente> clientes = SQLAccessVideoDaw.getClientesActivos();
+        for(Cliente c : clientes) {
+            System.out.println(c + "\n");
         }
     }
 

@@ -42,6 +42,38 @@ public class SQLAccessVideoDaw {
             throw new RuntimeException(e);
         }
 
+        return clientes;
+    }
+
+    // Ver todo los Clientes activos
+    public static List<Cliente> getClientesActivos() {
+
+        List<Cliente> clientes = new ArrayList<>();
+
+        String sql = "SELECT * FROM clientes WHERE fechaBaja IS NULL";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            while (rs.next()) {
+
+                int id = rs.getInt(1);
+                String dni = rs.getString(2);
+                String nombre = rs.getString(3);
+                String direccion = rs.getString(4);
+                LocalDate fechaNacimiento = rs.getDate(5).toLocalDate();
+                String numSocio = rs.getString(6);
+
+                java.sql.Date fechaBajaSQL = rs.getDate(7);
+                LocalDate fechaBaja = (fechaBajaSQL != null) ? fechaBajaSQL.toLocalDate() : null;
+
+                clientes.add(new Cliente(id, dni, nombre, direccion, fechaNacimiento, numSocio, fechaBaja));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         return clientes;
     }
@@ -81,6 +113,41 @@ public class SQLAccessVideoDaw {
 
         return vinilos;
     }
+
+    //Ver todos los vinilos Disponibles
+    public static List<Vinilo> getVinilosDisponibles() {
+
+        List<Vinilo> vinilos = new ArrayList<>();
+
+        String sql = "SELECT * FROM vinilos WHERE isComprada = false AND fechaBaja IS NULL";
+
+        try (Connection connection = SQLDataManager.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
+            while (rs.next()) {
+
+                int id = rs.getInt(1);
+                String codigo = rs.getString(2);
+                String banda = rs.getString(3);
+                String titulo = rs.getString(4);
+                int genero = rs.getInt(5);
+                boolean pa = rs.getBoolean(6);
+                boolean isComprada = rs.getBoolean(7);
+                java.sql.Date fechaBajaSQL = rs.getDate(8);
+                LocalDate fechaBaja = (fechaBajaSQL != null) ? fechaBajaSQL.toLocalDate() : null;
+
+                vinilos.add(new Vinilo(id, codigo, banda, titulo, genero, pa, isComprada, fechaBaja));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return vinilos;
+
+    }
+
     //Ver todos los alquileres
     public static List<String> getCompras() {
         List<String> compras = new ArrayList<>();
