@@ -51,7 +51,6 @@ public class Main {
                     //Insertar Clientes
                     insertarClientes(sc);
                     break;
-
                 case "3":
 
                     //Compra de los vinilos
