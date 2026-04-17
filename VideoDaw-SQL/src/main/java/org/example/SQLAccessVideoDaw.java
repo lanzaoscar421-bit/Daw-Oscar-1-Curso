@@ -480,6 +480,7 @@ public class SQLAccessVideoDaw {
     public static int bajaVinilo(String codigo) {
         int response = -1;
 
+
         int codigoVin = getViniloCodigo(codigo);
         if (codigoVin == -1) {
             System.out.println("Vinilo no encontrado");
