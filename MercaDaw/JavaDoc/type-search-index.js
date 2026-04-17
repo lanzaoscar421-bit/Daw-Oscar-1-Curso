@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.example","l":"Main"},{"p":"org.example","l":"Product"},{"p":"org.example","l":"RefException"},{"p":"org.example","l":"SQLAccessMercaDaw"},{"p":"org.example","l":"SQLDataManager"}];updateSearchResults();

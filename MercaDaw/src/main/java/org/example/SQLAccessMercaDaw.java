@@ -1,20 +1,33 @@
 package org.example;
 
-import java.sql.ClientInfoStatus;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.sql.*;
 
+/**
+ * Clase de acceso a datos (DAO) del sistema MercaDaw.
+ *
+ * Esta clase se encarga de gestionar todas las operaciones
+ * relacionadas con la base de datos MySQL:
+ * - Consultas SELECT
+ * - Inserciones
+ * - Actualizaciones
+ * - Eliminaciones
+ *
+ * Trabaja con la tabla products y tipos.
+ */
 public class SQLAccessMercaDaw {
 
-
-    //Metodo para ver todos los productos
-    public static List<Product>getProductos(){
+    /**
+     * Obtiene todos los productos almacenados en la base de datos.
+     *
+     * @return Lista de productos
+     */
+    public static List<Product> getProductos() {
 
         List<Product> productos = new LinkedList<>();
 
-        //Consulta Sql
         String SQLproducts = "SELECT * FROM products";
 
         try (Connection connection = SQLDataManager.getConnection();
@@ -43,12 +56,15 @@ public class SQLAccessMercaDaw {
         return productos;
     }
 
-    //Ver todos los tipos que hay
+    /**
+     * Obtiene todos los tipos de productos disponibles.
+     *
+     * @return Lista de tipos en formato "id - nombre"
+     */
     public static List<String> getTipos() {
 
         List<String> tipos = new LinkedList<>();
-        String sql = "SELECT * FROM tipos\n" +
-                "ORDER BY id DESC;";
+        String sql = "SELECT * FROM tipos ORDER BY id DESC;";
 
         try (Connection con = SQLDataManager.getConnection();
              Statement statement = con.createStatement();
@@ -65,15 +81,20 @@ public class SQLAccessMercaDaw {
         return tipos;
     }
 
-    //Metodo para buscar Producto por referencia
-    public static Product getProductoREF(String referencia){
+    /**
+     * Busca un producto por su referencia exacta.
+     *
+     * @param referencia Referencia del producto
+     * @return Producto encontrado o null si no existe
+     */
+    public static Product getProductoREF(String referencia) {
+
         Product producto = null;
 
-        //Consulta MySql
         String sqlProductosREF = "SELECT * FROM products WHERE referencia = ?";
 
         try (Connection connection = SQLDataManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlProductosREF)){
+             PreparedStatement statement = connection.prepareStatement(sqlProductosREF)) {
 
             statement.setString(1, referencia);
             ResultSet resultSet = statement.executeQuery();
@@ -90,9 +111,8 @@ public class SQLAccessMercaDaw {
                 int iva = resultSet.getInt(9);
                 boolean aplicarDTO = resultSet.getBoolean(10);
 
-                producto = new Product(id,ref,tipo,name,description,cantidad,price,descuento,iva, aplicarDTO);
+                producto = new Product(id, ref, tipo, name, description, cantidad, price, descuento, iva, aplicarDTO);
             }
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -101,17 +121,20 @@ public class SQLAccessMercaDaw {
         return producto;
     }
 
-    //Buscar por tipo
+    /**
+     * Obtiene todos los productos filtrados por tipo.
+     *
+     * @param tipo ID del tipo de producto
+     * @return Lista de productos filtrados
+     */
+    public static List<Product> getProductoTipo(int tipo) {
 
-    public static List <Product> getProductoTipo(int tipo){
         List<Product> productos = new ArrayList<>();
 
-
-        //Consulta MYSql
         String sqlTipo = "SELECT * FROM products WHERE tipo = ?";
 
         try (Connection connection = SQLDataManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlTipo)){
+             PreparedStatement statement = connection.prepareStatement(sqlTipo)) {
 
             statement.setInt(1, tipo);
             ResultSet resultSet = statement.executeQuery();
@@ -122,34 +145,36 @@ public class SQLAccessMercaDaw {
                 int tipo2 = resultSet.getInt(3);
                 String name = resultSet.getString(4);
                 String description = resultSet.getString(5);
-                int cantidad1 = resultSet.getInt(6);
+                int cantidad = resultSet.getInt(6);
                 double price = resultSet.getDouble(7);
                 int descuento = resultSet.getInt(8);
                 int iva = resultSet.getInt(9);
                 boolean aplicarDTO = resultSet.getBoolean(10);
 
-                productos.add( new Product(id,ref,tipo2,name,description,cantidad1,price,descuento,iva, aplicarDTO));
+                productos.add(new Product(id, ref, tipo2, name, description, cantidad, price, descuento, iva, aplicarDTO));
             }
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         return productos;
-
     }
 
-    //Buscar producto por cantidad.
+    /**
+     * Obtiene productos filtrados por cantidad exacta.
+     *
+     * @param cantidad Cantidad a buscar
+     * @return Lista de productos
+     */
+    public static List<Product> getProductoCantatidad(int cantidad) {
 
-    public static List <Product> getProductoCantatidad(int cantidad){
         List<Product> productos = new ArrayList<>();
 
-        //Consulta MySql
-        String sqlProductosREF = "SELECT * FROM products WHERE cantidad = ?";
+        String sql = "SELECT * FROM products WHERE cantidad = ?";
 
         try (Connection connection = SQLDataManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlProductosREF)){
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, cantidad);
             ResultSet resultSet = statement.executeQuery();
@@ -166,9 +191,8 @@ public class SQLAccessMercaDaw {
                 int iva = resultSet.getInt(9);
                 boolean aplicarDTO = resultSet.getBoolean(10);
 
-                productos.add( new Product(id,ref,tipo,name,description,cantidad1,price,descuento,iva, aplicarDTO));
+                productos.add(new Product(id, ref, tipo, name, description, cantidad1, price, descuento, iva, aplicarDTO));
             }
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -177,16 +201,21 @@ public class SQLAccessMercaDaw {
         return productos;
     }
 
-
-    //Insertar Producto
-
+    /**
+     * Inserta un nuevo producto en la base de datos.
+     *
+     * @param product Producto a insertar
+     * @return número de filas afectadas
+     */
     public static int insertarProducto(Product product) {
+
         int response = -1;
 
-        String sqlStatement = "INSERT INTO products (referencia, nombre, tipo, descripcion, cantidad, precio, descuento, iva, aplicarDto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = SQLDataManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sqlStatement)){
+        String sqlStatement =
+                "INSERT INTO products (referencia, nombre, tipo, descripcion, cantidad, precio, descuento, iva, aplicarDto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
 
             statement.setString(1, product.getReferencia());
             statement.setString(2, product.getName());
@@ -199,6 +228,7 @@ public class SQLAccessMercaDaw {
             statement.setBoolean(9, product.isAplicarDTO());
 
             response = statement.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -206,16 +236,22 @@ public class SQLAccessMercaDaw {
         return response;
     }
 
+    /**
+     * Elimina un producto por su referencia.
+     *
+     * @param ref referencia del producto
+     * @return número de filas afectadas
+     */
     public static int delProductRef(String ref) {
 
         int elements = -1;
+
         String sqlStatement = "DELETE FROM products WHERE referencia = ?";
 
         try (Connection connection = SQLDataManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlStatement)){
-             statement.setString(1, ref);
+             PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
 
-
+            statement.setString(1, ref);
 
             elements = statement.executeUpdate();
 
@@ -226,16 +262,21 @@ public class SQLAccessMercaDaw {
         return elements;
     }
 
+    /**
+     * Actualiza un producto existente.
+     *
+     * @param product producto con los nuevos datos
+     * @return número de filas afectadas
+     */
     public static int updateProducto(Product product) {
+
         int response = -1;
 
-        //Actualizamos todos
-
-        // (descripción, cantidad, precio, descuento, AplicarDto)
-        String sqlStatment = "UPDATE products set descripcion = ?," + "cantidad = ?, precio = ?, descuento = ?,aplicarDTO = ? WHERE id = ?";
+        String sqlStatment =
+                "UPDATE products set descripcion = ?, cantidad = ?, precio = ?, descuento = ?, aplicarDTO = ? WHERE id = ?";
 
         try (Connection connection = SQLDataManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlStatment)){
+             PreparedStatement statement = connection.prepareStatement(sqlStatment)) {
 
             statement.setString(1, product.getDescription());
             statement.setInt(2, product.getCantidad());
@@ -250,24 +291,35 @@ public class SQLAccessMercaDaw {
             throw new RuntimeException(e);
         }
 
-
         return response;
     }
 
-
+    /**
+     * Valida que la referencia no exista ya en la base de datos.
+     *
+     * @param referencia referencia a comprobar
+     * @return true si es válida
+     * @throws RefException si la referencia ya existe
+     */
     public static boolean validarReferencia(String referencia) throws RefException {
-        boolean resultado = false;
 
-        for (Product product : getProductos()){
-            if (product.getReferencia().equals(referencia)){
+        for (Product product : getProductos()) {
+            if (product.getReferencia().equals(referencia)) {
                 throw new RefException("");
             }
         }
 
-        return resultado;
+        return false;
     }
 
+    /**
+     * Busca un producto por referencia (sin SQL).
+     *
+     * @param ref referencia del producto
+     * @return producto encontrado o null
+     */
     public static Product buscarProducto(String ref) {
+
         List<Product> productos = getProductos();
 
         for (Product producto : productos) {
@@ -279,19 +331,25 @@ public class SQLAccessMercaDaw {
         return null;
     }
 
-
-
+    /**
+     * Inserta un nuevo tipo de producto.
+     *
+     * @param nombre nombre del tipo
+     * @return filas afectadas
+     */
     public static int insertarTipo(String nombre) {
+
         int response = -1;
 
         String sqlStatement = "INSERT INTO tipos (nombre) VALUES (?)";
-        try (Connection connection = SQLDataManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlStatement)){
 
+        try (Connection connection = SQLDataManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
 
             statement.setString(1, nombre);
 
             response = statement.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
