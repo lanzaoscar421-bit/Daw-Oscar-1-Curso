@@ -11,7 +11,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("main-view.fxml")); //El fichero que tiene que apuntar
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240); //Este carga la escena y enseña el tamaño
+        Scene scene = new Scene(fxmlLoader.load(), 640, 640); //Este carga la escena y enseña el tamaño
         stage.setTitle("Hello!");//El titulo
         stage.setScene(scene);
         stage.show();
