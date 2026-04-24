@@ -8,7 +8,7 @@ import org.example.apppersonasfx.model.Persona;
 
 public class PersonasController {
 
-    Persona pp;
+    private Persona pp;
     private ObservableList<Persona> personas = FXCollections.observableArrayList();
 
 

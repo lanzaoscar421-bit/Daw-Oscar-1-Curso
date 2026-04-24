@@ -110,6 +110,4 @@ public class Persona {
         return new PersonaBuilder();
     }
 
-
-
 }
