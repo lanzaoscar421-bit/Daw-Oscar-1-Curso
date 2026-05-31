@@ -1,0 +1,5 @@
+DRIVER = 'com.mysql.cj.jdbc.Driver'
+URL = 'jdbc:mysql://localhost:3306/'
+SCHEMA = 'UsuariosMAN'
+USUARIO = 'root'
+CLAVE = '2006'
