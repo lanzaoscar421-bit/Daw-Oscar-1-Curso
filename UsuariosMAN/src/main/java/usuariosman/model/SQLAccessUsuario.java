@@ -5,6 +5,7 @@ import usuariosman.configuration.SQLDataBaseManager;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,6 +80,78 @@ public class SQLAccessUsuario {
             statement.execute();
             result = true;
         }catch (SQLException e){
+            System.out.println("Error" + "\n" + e.getMessage());
+        }
+
+        return result;
+    }
+
+
+    public static List<Usuario> getUsuariosByNameContains(String nombre){
+
+        List<Usuario> usuarios = new LinkedList<>();
+
+
+        //SentenciaUsuarios
+        String sqlGetUsuarios = "SELECT * FROM usuario WHERE nombre LIKE ?";
+
+        try (Connection connection = SQLDataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlGetUsuarios)){
+
+            statement.setString(1, nombre + "%");
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()){
+                int usuariosID  = resultSet.getInt(1);
+                String nombreB = resultSet.getString(2);
+                String apellido = resultSet.getString(3);
+                String dniB = resultSet.getString(4);
+                LocalDate fechaNacimiento = resultSet.getDate(5).toLocalDate();
+
+                Usuario u = Usuario.builder()
+                        .id_usuario(usuariosID)
+                        .nombre(nombreB)
+                        .apellido(apellido)
+                        .dni(dniB)
+                        .fecha_nacimiento(fechaNacimiento)
+                        .build();
+
+                usuarios.add(u);
+            }
+        }catch (SQLException e){
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+
+
+        return usuarios;
+    }
+
+    public static boolean updateUsuario(Usuario usuario) {
+
+        boolean result = false;
+
+        String sql = """
+            UPDATE usuario
+            SET nombre = ?,
+                apellido = ?,
+                dni = ?,
+                fecha_nacimiento = ?
+            WHERE id_usuario = ?
+            """;
+
+        try (Connection connection = SQLDataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, usuario.getNombre());
+            statement.setString(2, usuario.getApellido());
+            statement.setString(3, usuario.getDni());
+            statement.setDate(4, Date.valueOf(usuario.getFecha_nacimiento()));
+            statement.setInt(5, usuario.getId_usuario());
+
+            statement.execute();
+            result = true;
+
+        } catch (SQLException e) {
             System.out.println("Error" + "\n" + e.getMessage());
         }
 

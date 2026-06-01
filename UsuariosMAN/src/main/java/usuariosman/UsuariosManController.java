@@ -5,10 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import usuariosman.model.SQLAccessUsuario;
 import usuariosman.model.Usuario;
@@ -33,6 +30,8 @@ public class UsuariosManController {
     @FXML
     private AnchorPane delView;
 
+    @FXML
+    private AnchorPane listadoView;
 
     @FXML
     public void initialize() {
@@ -110,6 +109,32 @@ public class UsuariosManController {
             }
         });
 
+        this.listadoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+
+            this.us = newValue;
+            if(newValue != null) {
+                this.eliminarListViewButton.setDisable(false);
+            }else   {
+                this.eliminarListViewButton.setDisable(true);
+            }
+        });
+
+        this.buscarNombreTF.textProperty().addListener((observable, oldValue, newValue) -> {
+
+            this.usuarios.clear();
+
+            if(newValue.isEmpty()) {
+                this.usuarios.setAll(SQLAccessUsuario.getAllUsuarios());
+            }else  {
+
+                this.usuarios.setAll(SQLAccessUsuario.getUsuariosByNameContains(newValue));
+            }
+
+            this.listadoListView.setItems(this.usuarios);
+
+        });
+
     }
 
 
@@ -120,12 +145,16 @@ public class UsuariosManController {
         Platform.exit();
     }
 
+    @FXML
+    public Label labelFormTitle;
+
         //Panel Principal Insertar button
 
     @FXML
     public void onInsertButtonClick(ActionEvent actionEvent) {
 
-        this.clearFieldTexts();
+        this.isNewPerson = true;
+        this.configureFormView();
         this.selectPanelVisible(1);
     }
 
@@ -133,6 +162,12 @@ public class UsuariosManController {
     public void onEliminarButton(ActionEvent actionEvent) {
         this.loadPersonInListView();
         this.selectPanelVisible(2);
+    }
+
+    @FXML
+    public void onListadoButton (ActionEvent actionEvent) {
+        this.loadPersonInListView();
+        this.selectPanelVisible(3);
     }
 
 
@@ -172,16 +207,28 @@ public class UsuariosManController {
 
         // Guardamos Formulario E insertamos Datos en la base de datos
 
-        this.us = Usuario.builder()
-                .nombre(nombreTextF.getText())
-                .apellido(apellidosTextF.getText())
-                .dni(dniTextF.getText())
-                .fecha_nacimiento(fechaNacimientoTextf.getValue())
-                .build();
+        if (isNewPerson) {
 
-        SQLAccessUsuario.createUsuario(this.us);
+            this.us = Usuario.builder()
+                    .nombre(nombreTextF.getText())
+                    .apellido(apellidosTextF.getText())
+                    .dni(dniTextF.getText())
+                    .fecha_nacimiento(fechaNacimientoTextf.getValue())
+                    .build();
 
-        this.clearFieldTexts();
+            SQLAccessUsuario.createUsuario(this.us);
+
+        }else {
+            this.us.setNombre(nombreTextF.getText());
+            this.us.setApellido(apellidosTextF.getText());
+            this.us.setDni(dniTextF.getText());
+            this.us.setFecha_nacimiento(fechaNacimientoTextf.getValue());
+
+            SQLAccessUsuario.updateUsuario(this.us);
+        }
+        loadPersonInListView();
+        clearFieldTexts();
+        selectPanelVisible(0);
 
     }
 
@@ -240,13 +287,41 @@ public class UsuariosManController {
         this.usuarios.addAll(misUsuarios);
 
         this.usuariosListView.setItems(this.usuarios);
+        this.listadoListView.setItems(this.usuarios);
     }
 
 
 
+    //Panel Buscar lista
 
 
+    @FXML
+    private ListView<Usuario> listadoListView;
 
+    @FXML
+    private TextField buscarNombreTF;
+
+    @FXML
+    public void onCancelListadoListViewButton (){
+
+        selectPanelVisible(0);
+
+    }
+
+
+    // Editar Usuario
+
+    public void onEditarListViewButton(){
+
+        if(this.us != null){
+            // Cargar datos en el formulario y configurar que estamos en editar
+            this.isNewPerson = false;
+            this.configureFormView();
+            this.selectPanelVisible(1);
+
+        }
+
+    }
 
 
     //Limpiar Campos
@@ -278,29 +353,30 @@ public class UsuariosManController {
         switch (panel){
             case 0: //panel principal
                 this.mainView.setVisible(true);
-//                this.listView.setVisible(false);
                 this.formView.setVisible(false);
                 this.delView.setVisible(false);
+                this.listadoView.setVisible(false);
                 break;
 
             case 1: //panel formulario
                 this.mainView.setVisible(false);
-//                this.listView.setVisible(false);
                 this.formView.setVisible(true);
                 this.delView.setVisible(false);
+                this.listadoView.setVisible(false);
                 break;
 
             case 2: //panel Eliminar
                 this.mainView.setVisible(false);
-//                this.listView.setVisible(true);
                 this.formView.setVisible(false);
                 this.delView.setVisible(true);
+                this.listadoView.setVisible(false);
                 break;
 
-            case 3: //panel formulario
+            case 3: //panel Listado
                 this.mainView.setVisible(false);
-//                this.listView.setVisible(false);
                 this.formView.setVisible(false);
+                this.delView.setVisible(false);
+                this.listadoView.setVisible(true);
                 break;
 
             default:
@@ -310,4 +386,23 @@ public class UsuariosManController {
 
         }
     }
+
+
+    private void configureFormView() {
+        if (isNewPerson) {
+            this.labelFormTitle.setText("Insertar nueva Persona");
+        } else {
+            this.labelFormTitle.setText("Editar nueva Persona");
+
+            if(us != null){
+                this.nombreTextF.setText(us.getNombre());
+                this.apellidosTextF.setText(us.getApellido());
+                this.dniTextF.setText(us.getDni());
+                this.fechaNacimientoTextf.setValue(us.getFecha_nacimiento());
+            }
+        }
+
+    }
+
+
 }

@@ -36,7 +36,7 @@
                   </HBox>
                   <HBox prefHeight="49.0" prefWidth="142.0">
                      <children>
-                        <Button mnemonicParsing="false" styleClass="my-button" text="Button" />
+                        <Button fx:id="listadoButton" mnemonicParsing="false" onAction="#onListadoButton" styleClass="my-button" text="Listado" />
                         <Button fx:id="btn_salir" mnemonicParsing="false" onAction="#onSalirButtonClick" styleClass="my-button" text="Salir" />
                      </children>
                   </HBox>
@@ -44,9 +44,9 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="formView" prefHeight="200.0" prefWidth="200.0" styleClass="my-background" visible="false">
+      <AnchorPane fx:id="formView" prefHeight="200.0" prefWidth="200.0" styleClass="my-background">
          <children>
-            <Label alignment="CENTER" layoutX="170.0" layoutY="14.0" prefHeight="49.0" prefWidth="397.0" styleClass="mi-title-view" text="Insertar Usuarios" textAlignment="CENTER" textFill="#c9bfbf">
+            <Label fx:id="labelFormTitle" alignment="CENTER" layoutX="170.0" layoutY="14.0" prefHeight="49.0" prefWidth="397.0" styleClass="mi-title-view" text="Insertar Usuarios" textAlignment="CENTER" textFill="#c9bfbf">
                <font>
                   <Font size="40.0" />
                </font>
@@ -102,7 +102,7 @@
                </children>
             </VBox>
          </children></AnchorPane>
-      <AnchorPane fx:id="delView" prefHeight="200.0" prefWidth="200.0" styleClass="my-background">
+      <AnchorPane fx:id="delView" prefHeight="200.0" prefWidth="200.0" styleClass="my-background" visible="false">
          <children>
             <Label alignment="CENTER" layoutX="170.0" layoutY="36.0" prefHeight="49.0" prefWidth="397.0" styleClass="mi-title-view" text="Eliminar Usuarios" textAlignment="CENTER" textFill="#c9bfbf">
                <font>
@@ -119,6 +119,29 @@
                   </HBox>
                   <HBox prefHeight="93.0" prefWidth="196.0" />
                   <Button fx:id="cancelListViewButton" mnemonicParsing="false" onAction="#onCancelListViewButton" prefHeight="106.0" prefWidth="196.0" styleClass="my-button" text="Salir" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listadoView" prefHeight="200.0" prefWidth="200.0" styleClass="my-background" visible="false">
+         <children>
+            <Label alignment="CENTER" layoutX="170.0" layoutY="36.0" prefHeight="49.0" prefWidth="397.0" styleClass="mi-title-view" text="Listado Usuarios" textAlignment="CENTER" textFill="#c9bfbf">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
+            <ListView fx:id="listadoListView" layoutX="30.0" layoutY="114.0" prefHeight="448.0" prefWidth="463.0" />
+            <VBox layoutX="532.0" layoutY="128.0" prefHeight="448.0" prefWidth="196.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="134.0" text="Buscar por nombre" />
+                        <TextField fx:id="buscarNombreTF" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="93.0" prefWidth="196.0" />
+                  <Button fx:id="cancelListadoListViewButton" mnemonicParsing="false" onAction="#onCancelListadoListViewButton" prefHeight="106.0" prefWidth="196.0" styleClass="my-button" text="Salir" />
+                  <Button fx:id="editarListViewButton" mnemonicParsing="false" onAction="#onEditarListViewButton" prefHeight="106.0" prefWidth="196.0" styleClass="my-button" text="Editar" />
                </children>
             </VBox>
          </children>
