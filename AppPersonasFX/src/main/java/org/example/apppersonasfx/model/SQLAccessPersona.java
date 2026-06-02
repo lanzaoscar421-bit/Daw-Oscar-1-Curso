@@ -131,7 +131,7 @@ public class SQLAccessPersona {
     }
 
     //Metodo Crear Persona
-    public boolean creatPersona(Persona persona){
+    public static boolean creatPersona(Persona persona){
         boolean result = false;
 
         //Setencia
@@ -158,7 +158,7 @@ public class SQLAccessPersona {
     }
 
     //Metodo para eliminar personas
-    public boolean deletePersonaByDni(String dni){
+    public static boolean deletePersonaByDni(String dni){
         boolean result = false;
 
         String sql = "DELETE FROM PERSON WHERE dni = ?";
@@ -178,7 +178,7 @@ public class SQLAccessPersona {
     }
 
     //Metodo para actualizar los datos de las personas
-    public boolean updatePersona(Persona persona){
+    public static boolean updatePersona(Persona persona){
         boolean result = false;
 
         String sql = "UPDATE person set name = ?, surname = ?, email = ?, age = ?, phone = ?, WHERE dni = ?";

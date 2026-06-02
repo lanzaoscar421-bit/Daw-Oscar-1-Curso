@@ -14,6 +14,7 @@ public class PersonasApp extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 640, 640);
         stage.setTitle("App Administracion Personas!");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
